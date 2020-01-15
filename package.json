@@ -1,0 +1,124 @@
+{
+  "name": "corteza-vue",
+  "description": "Corteza Vue.js JavaScript/TypeScript libs",
+  "version": "2020.3.0-alpha.0",
+  "license": "Apache-2.0",
+  "author": "Denis Arh <denis.arh@crust.tech>",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint src/** --ext .js,.ts",
+    "test:unit": "mocha",
+    "test:unit:cc": "nyc mocha"
+  },
+  "gitHooks": {
+    "pre-commit": "yarn lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
+    "bootstrap-vue": "^2.2.1",
+    "corteza-js": "cortezaproject/corteza-js.git#master",
+    "qs": "^6.9.1",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "1.0.1",
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-node-resolve": "^7.0.0",
+    "@types/chai": "^4.2.6",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/lodash": "^4.14.149",
+    "@types/mocha": "^5.2.7",
+    "@types/qs": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
+    "@vue/cli-plugin-babel": "4.1.2",
+    "@vue/cli-plugin-eslint": "4.1.2",
+    "@vue/cli-service": "^4.1.2",
+    "@vue/eslint-config-standard": "5.1.0",
+    "@vue/test-utils": "^1.0.0-beta.25",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^6.7.2",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "6.1.2",
+    "esm": "^3.2.25",
+    "mocha": "7.0.0",
+    "node-sass": "4.13.0",
+    "node-watch": "^0.6.3",
+    "nodemon": "2.0.2",
+    "nyc": "15.0.0",
+    "postcss": "^7.0.26",
+    "rollup": "^1.29.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-vue": "^5.1.5",
+    "sinon": "8.0.4",
+    "source-map-support": "^0.5.16",
+    "ts-node": "^8.6.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.4",
+    "vue-property-decorator": "^8.3.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "stylelint": {
+    "plugins": [
+      "stylelint-scss"
+    ],
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "color-hex-case": null,
+      "color-hex-length": null,
+      "no-empty-source": null,
+      "selector-list-comma-newline-after": null
+    }
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "require": [
+      "ts-node/register"
+    ],
+    "all": true,
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 90,
+    "functions": 90,
+    "statements": 90,
+    "reporter": [
+      "text",
+      "lcov"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ]
+  },
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
