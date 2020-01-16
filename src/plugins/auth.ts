@@ -1,5 +1,5 @@
 import { Make } from '../libs/url'
-import { system, apiClients } from 'corteza-js'
+import { system, apiClients } from '@cortezaproject/corteza-js'
 import { PluginFunction } from 'vue'
 
 const lsAuthJWTKey = 'auth.jwt'

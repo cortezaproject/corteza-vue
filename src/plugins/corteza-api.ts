@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import { apiClients } from 'corteza-js'
+import { apiClients } from '@cortezaproject/corteza-js'
 import { PluginFunction } from 'vue'
 
 interface JWTFetcher {
