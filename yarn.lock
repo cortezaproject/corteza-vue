@@ -768,7 +768,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@2020.3.0-alpha.2":
+"@cortezaproject/corteza-js@>2020.3.0-alpha":
   version "2020.3.0-alpha.2"
   resolved "https://npm.pkg.github.com/download/@cortezaproject/corteza-js/2020.3.0-alpha.2/b9e39bfdcddbceedb57759522c52454fc66d3fd633e890b11c495c4183e21aa4#f2e72271a12dd548f4dfe3bf31e4e6e924b27771"
   integrity sha512-GOFd+cIU/Xn8Q1qzJoitXfofSGYOPHvH8RKpC41MFOqfKoBfgz5YwcrnUZ+f0iJMHYLAgdZx87T+JPaFPf52Ww==
