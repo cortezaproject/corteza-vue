@@ -13,7 +13,7 @@ interface AuthCheckResult {
   jwt: string;
 }
 
-export class AuthHelper {
+export class Auth {
   [jwt]?: string
   [user]?: system.User
 
@@ -116,8 +116,8 @@ export class AuthHelper {
   }
 }
 
-export function Auth (api: apiClients.System): PluginFunction<object> {
+export default function (api: apiClients.System): PluginFunction<object> {
   return function (Vue): void {
-    Vue.prototype.$auth = new AuthHelper(api)
+    Vue.prototype.$auth = new Auth(api)
   }
 }

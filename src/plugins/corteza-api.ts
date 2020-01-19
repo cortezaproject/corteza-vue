@@ -23,7 +23,7 @@ function getJWT (): string|null {
  *
  * @constructor
  */
-export function CortezaAPI (service: string, opt: Options = {}): PluginFunction<object> {
+export default function (service: string, opt: Options = {}): PluginFunction<object> {
   service = service.substring(0, 1).toUpperCase() + service.substring(1)
 
   if (!opt.baseURL) {
