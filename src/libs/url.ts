@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import qs from 'qs'
 
 const baseQsConfig = {
-  // arrayFormat: 'brackets',
+  arrayFormat: 'brackets',
   encode: false,
 }
 
@@ -28,6 +29,8 @@ export function Make ({ url = '', query = {}, hash = '', ref = window.location.t
     u.hash = hash
   }
 
+  // TypeScript somehow thinks that 'brackets' is not a string.
+  // @ts-ignore
   u.search = qs.stringify(query, {
     ...baseQsConfig,
     ...config,

@@ -1,4 +1,3 @@
-import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { Make } from './url'
 
@@ -11,7 +10,7 @@ const hash = 'hash'
 
 const ref = `${pr}://www.ref.tld`
 
-describe('/src/lib/url.js', () => {
+describe(__filename, () => {
   describe('make url', () => {
     it('entire url provided', () => {
       const test = Make({ url: `${pr}://${hs}${pt}`, ref })
