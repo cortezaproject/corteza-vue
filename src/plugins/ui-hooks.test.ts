@@ -3,7 +3,7 @@ import { UIHooks } from './ui-hooks'
 
 describe(__filename, () => {
   it('should convert script to button', () => {
-    const hooks = new UIHooks()
+    const hooks = new UIHooks('test')
 
     hooks.Register(
       {
@@ -15,13 +15,15 @@ describe(__filename, () => {
           weight: 42,
           ui: [
             { name: 'variant', value: 'danger' },
+            { name: 'app', value: 'test' },
+            { name: 'page', value: 'index' },
             { name: 'slot', value: 'header' },
           ],
         }],
       },
     )
 
-    const bb = hooks.Find('system', 'header')
+    const bb = hooks.Find('system', 'index', 'header')
 
     expect(bb).to.have.lengthOf(1)
     const b = bb[0]

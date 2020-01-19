@@ -34,6 +34,7 @@ export class Button {
   resourceType: string
   weight: number
   variant?: string
+  page?: string
   slot?: string
 
   constructor (s: Script, t: Trigger) {
@@ -51,8 +52,9 @@ export class Button {
     this.script = s.name
     this.weight = t.weight || 0
     this.resourceType = t.resourceTypes[0]
-    this.variant = ui.variant
+    this.page = ui.page
     this.slot = ui.slot
+    this.variant = ui.variant
   }
 }
 
@@ -60,7 +62,12 @@ export class Button {
  * Consumes explciitly triggered scripts and converts it to list of buttons
  */
 export class UIHooks {
+  readonly app: string
   protected set: Button[] = []
+
+  constructor (app: string) {
+    this.app = app
+  }
 
   /**
    * Takes one or more scripts and converts them to buttons
@@ -74,6 +81,11 @@ export class UIHooks {
           return
         }
 
+        if (opt2map(t.ui).app !== this.app) {
+          // Ignore triggers that do not belong to this app.
+          return
+        }
+
         this.set.push(new Button(s, t))
       })
     })
@@ -82,14 +94,36 @@ export class UIHooks {
     this.set.sort(sorter)
   }
 
-  Find (resourceType: string, slot?: string): Button[] {
+  /**
+   * Searches for buttons that match the requirements
+   *
+   * @param resourceType
+   * @param page
+   * @param slot
+   * @constructor
+   */
+  Find (resourceType: string|string[], page: string, slot: string): Button[] {
+    if (!resourceType) {
+      resourceType = []
+    } else if (typeof resourceType === 'string') {
+      resourceType = [resourceType]
+    }
+
+    resourceType.push('ui:' + this.app)
+
     return this.set
-      .filter(b => b.resourceType === resourceType && b.slot === slot)
+      .filter(b => {
+        if (!resourceType.includes(b.resourceType)) {
+          return false
+        }
+
+        return page === b.page && slot === b.slot
+      })
   }
 }
 
-export default function (): PluginFunction<object> {
+export default function (app: string): PluginFunction<object> {
   return function (Vue): void {
-    Vue.prototype.$UIHooks = new UIHooks()
+    Vue.prototype.$UIHooks = new UIHooks(app)
   }
 }

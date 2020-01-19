@@ -1,7 +1,7 @@
 <template>
   <b-button-group>
     <b-button
-      v-for="(b, i) in $UIHooks.Find(resourceType, uiSlot)"
+      v-for="(b, i) in buttons"
       :key="i"
       :variant="b.variant || defaultVariant"
       :class="buttonClass"
@@ -15,12 +15,14 @@
 <script>
 export default {
   props: {
-    resourceType: {
+    resourceType: {},
+
+    uiSlot: {
       type: String,
       required: true,
     },
 
-    uiSlot: {
+    uiPage: {
       type: String,
       required: true,
     },
@@ -34,6 +36,12 @@ export default {
       type: String,
       default: () => 'mr-1'
     },
+  },
+
+  computed: {
+    buttons () {
+      return this.$UIHooks.Find(this.resourceType, this.uiPage, this.uiSlot)
+    }
   }
 }
 </script>
