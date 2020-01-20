@@ -40,11 +40,11 @@ export class Button {
   constructor (s: Script, t: Trigger) {
     const ui = opt2map(t.ui)
 
-    if (!t.eventTypes || !t.eventTypes.includes('onManual')) {
+    if (!t.eventTypes?.includes('onManual')) {
       throw new Error('expecting onManual event type')
     }
 
-    if (!t.resourceTypes || t.resourceTypes.length !== 1) {
+    if (t.resourceTypes?.length !== 1) {
       throw new Error('expecting exactly one resource type on trigger')
     }
 
@@ -72,23 +72,22 @@ export class UIHooks {
   /**
    * Takes one or more scripts and converts them to buttons
    */
-  Register (...ss: Script[]): void {
-    ss.forEach(s => {
-      // @todo remove all buttons with this script
-      s.triggers.forEach(t => {
-        if (!t.eventTypes || !t.eventTypes.includes('onManual')) {
-          // Manual events is all we're interested in.
-          return
-        }
+  Register (...scripts: Script[]): void {
+    scripts
+      .filter(s => s.triggers)
+      .forEach(s => {
+        // @todo remove all buttons with this script
+        s.triggers
+          .filter(t => t.eventTypes?.includes('onManual'))
+          .forEach(t => {
+            if (opt2map(t.ui).app !== this.app) {
+              // Ignore triggers that do not belong to this app.
+              return
+            }
 
-        if (opt2map(t.ui).app !== this.app) {
-          // Ignore triggers that do not belong to this app.
-          return
-        }
-
-        this.set.push(new Button(s, t))
+            this.set.push(new Button(s, t))
+          })
       })
-    })
 
     // Keep buttons sorted
     this.set.sort(sorter)
