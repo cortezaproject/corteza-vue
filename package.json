@@ -10,9 +10,6 @@
   "files": [
     "dist/"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint src/** --ext .js,.ts",
