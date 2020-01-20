@@ -71,12 +71,16 @@ export class UIHooks {
 
   /**
    * Takes one or more scripts and converts them to buttons
+   *
+   * With every script added it removes ALL
+   * buttons that use the same script
    */
   Register (...scripts: Script[]): void {
     scripts
       .filter(s => s.triggers)
       .forEach(s => {
-        // @todo remove all buttons with this script
+        this.Unregister(s)
+
         s.triggers
           .filter(t => t.eventTypes?.includes('onManual'))
           .forEach(t => {
@@ -91,6 +95,15 @@ export class UIHooks {
 
     // Keep buttons sorted
     this.set.sort(sorter)
+  }
+
+  /**
+   * Remove all buttons that match a script
+   * @param name
+   * @constructor
+   */
+  Unregister ({ name }: Script): void {
+    this.set = this.set.filter(({ script }) => name !== script)
   }
 
   /**

@@ -33,4 +33,36 @@ describe(__filename, () => {
     expect(b).to.have.property('slot').equal('header')
     expect(b).to.have.property('variant').equal('danger')
   })
+
+  it('should remove existing scripts', () => {
+    const hooks = new UIHooks('test')
+    const s = {
+      name: 'scriptName',
+      label: 'btnLabel',
+      triggers: [{
+        resourceTypes: ['system'],
+        eventTypes: ['onManual'],
+        ui: [
+          { name: 'app', value: 'test' },
+          { name: 'page', value: 'index' },
+          { name: 'slot', value: 'header' },
+        ],
+      }],
+    }
+
+    let bb
+
+    hooks.Register(s)
+    bb = hooks.Find('system', 'index', 'header')
+    expect(bb).to.have.lengthOf(1)
+    hooks.Register(s)
+    bb = hooks.Find('system', 'index', 'header')
+    expect(bb).to.have.lengthOf(1)
+    hooks.Register(s, { ...s, name: 'anotherScript' })
+    bb = hooks.Find('system', 'index', 'header')
+    expect(bb).to.have.lengthOf(2)
+    hooks.Register(s)
+    bb = hooks.Find('system', 'index', 'header')
+    expect(bb).to.have.lengthOf(2)
+  })
 })
