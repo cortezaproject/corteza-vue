@@ -16,11 +16,6 @@ export default {
         /**
          * Process all known automation scripts
          */
-        // @todo API changes:
-        // @todo provide scriptName prop on script
-        // @todo this will not work until we change props on triggers:
-        //       resources => resourceTypes
-        //       events    => eventTypes
         // @todo add ui prop on trigger
         this.$UIHooks.Register(...set)
 
