@@ -93,12 +93,10 @@ export default {
 
   methods: {
     onUpdate (access) {
-      console.log('Updating rule to', this.current)
       this.emit(access)
     },
 
     onReset () {
-      console.log('Resetting rule to', this.current)
       this.emit(this.current)
     },
 

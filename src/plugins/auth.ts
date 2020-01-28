@@ -43,7 +43,8 @@ export class Auth {
       throw new Error('jwt undefined')
     }
 
-    return this.api.setJWT(_jwt).authCheck().then(({ user, jwt = _jwt }: AuthCheckResult) => {
+    return this.api.setJWT(_jwt).authCheck().then(r => {
+      const { user, jwt = _jwt } = (r as unknown) as AuthCheckResult
       if (!user) {
         throw new Error('unexpected auth check response')
       }
