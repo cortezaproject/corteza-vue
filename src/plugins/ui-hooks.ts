@@ -72,11 +72,17 @@ export class Button {
  */
 export class UIHooks {
   readonly app: string
-  protected set: Button[] = []
-  protected verbose = false
+  readonly verbose = false
 
-  constructor (app: string) {
-    this.app = app
+  protected set: Button[] = []
+
+  constructor (opt: string|Partial<UIHooks>) {
+    if (typeof opt === 'string') {
+      opt = { app: opt }
+    }
+
+    this.app = opt.app || ''
+    this.verbose = !!opt?.verbose
   }
 
   /**
@@ -148,7 +154,7 @@ export class UIHooks {
   }
 }
 
-export default function (app: string): PluginFunction<object> {
+export default function (app: string|Partial<UIHooks>): PluginFunction<object> {
   return function (Vue): void {
     Vue.prototype.$UIHooks = new UIHooks(app)
   }
