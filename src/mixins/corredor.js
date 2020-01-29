@@ -5,12 +5,11 @@
 export default {
   methods: {
     /**
-     * Creates a function for registering automation scripts to UIHooks and EventBus plugins
+     * Creates a function for registering server automation scripts to UIHooks and EventBus plugins
      *
-     * @param {function} serverScriptHandler translates onManual events to API calls
-     * @returns {function(...[*]=)}
+     * API should be corteza API Client class that is passed as a first arg to serverScriptHandler
      */
-    makeAutomationScriptsRegistrator (serverScriptHandler) {
+    makeAutomationScriptsRegistrator (api, serverScriptHandler) {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       return ({ set }) => {
         /**
@@ -31,7 +30,15 @@ export default {
             s.triggers
               .filter(({ eventTypes = [] }) => eventTypes.includes('onManual'))
               .forEach(t => {
-                this.$EventBus.Register(ev => serverScriptHandler(this.$SystemAPI, ev, s.name), t)
+                // We are (ab)using eventbus for dispatching onManual scripts as well
+                // and since it does not know about script structs (only triggers), we need
+                // to modify trigger we're passing to it by adding script name
+                t.scriptName = s.name
+                try {
+                  this.$EventBus.Register(ev => serverScriptHandler(api, ev, s.name), t)
+                } catch (e) {
+                  console.error(e)
+                }
               })
           })
       }

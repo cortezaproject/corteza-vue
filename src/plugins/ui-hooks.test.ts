@@ -13,7 +13,8 @@ describe(__filename, () => {
           resourceTypes: ['system'],
           eventTypes: ['onManual'],
           weight: 42,
-          ui: [
+          constraints: [],
+          uiProps: [
             { name: 'variant', value: 'danger' },
             { name: 'app', value: 'test' },
             { name: 'page', value: 'index' },
@@ -42,7 +43,8 @@ describe(__filename, () => {
       triggers: [{
         resourceTypes: ['system'],
         eventTypes: ['onManual'],
-        ui: [
+        constraints: [],
+        uiProps: [
           { name: 'app', value: 'test' },
           { name: 'page', value: 'index' },
           { name: 'slot', value: 'header' },
