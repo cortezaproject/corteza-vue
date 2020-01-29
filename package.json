@@ -20,13 +20,15 @@
     "pre-commit": "yarn lint"
   },
   "dependencies": {
-    "@cortezaproject/corteza-js": ">2020.3.0-alpha",
+    "@cortezaproject/corteza-js": "^2020.3.0-alpha.8",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "bootstrap-vue": "2.2.2",
     "moment": "^2.24.0",
+    "pdfjs-dist": "^2.2.228",
     "qs": "^6.9.1",
+    "v-photoswipe": "^1.0.3-1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@types/chai": "^4.2.6",
     "@types/chai-as-promised": "^7.1.2",
     "@types/lodash": "^4.14.149",
+    "@types/mime-types": "^2.1.0",
     "@types/mocha": "^5.2.7",
     "@types/qs": "^6.9.0",
     "@typescript-eslint/eslint-plugin": "^2.11.0",
