@@ -1,5 +1,5 @@
 <script lang="js">
-import { getComponent } from 'corteza-vue/src/libs/preview-file.ts'
+import { getComponent } from './index.js'
 
 export default {
   inheritAttrs: false,

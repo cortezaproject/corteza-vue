@@ -23,12 +23,12 @@
 
 <script lang="js">
 import { LightboxIMG as IMG, PDF } from './common/types'
-import Lightbox from '../lightbox'
+import { CLightbox } from '../lightbox/index.ts'
 import base from './common/base.vue'
 
 export default {
   components: {
-    Lightbox,
+    CLightbox,
     IMG,
     PDF,
   },

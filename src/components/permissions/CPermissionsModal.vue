@@ -18,13 +18,13 @@
 </template>
 <script lang="js">
 import { modalOpenEventName } from './def.ts'
-import PermissionsForm from './PermissionsForm.vue'
+import CPermissionsForm from './CPermissionsForm.vue'
 
 export default {
   name: 'permissions-modal',
 
   components: {
-    PermissionsForm,
+    CPermissionsForm,
   },
 
   data () {
