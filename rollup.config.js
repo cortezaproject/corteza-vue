@@ -3,6 +3,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 import babel from 'rollup-plugin-babel'
+import json from 'rollup-plugin-json'
 
 import pkg from './package.json'
 
@@ -30,6 +31,7 @@ export default {
     resolve({
       main: true,
       browser: true,
+      preferBuiltins: true,
     }),
     typescript({
       typescript: require('typescript'),
@@ -47,6 +49,7 @@ export default {
     babel({
       exclude: 'node_modules/**',
     }),
+    json(),
   ],
 
   watch: {

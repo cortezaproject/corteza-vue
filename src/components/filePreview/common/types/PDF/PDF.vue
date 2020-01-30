@@ -52,9 +52,12 @@ import pdfjs from 'pdfjs-dist'
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 import base from '../base.vue'
 import { makePlaceholder, makeFailedPage, Page, Document } from './helpers'
-import { sleep } from 'corteza-webapp-common/src/lib/utils'
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
+
+function sleep (t) {
+  return new Promise(resolve => setTimeout(resolve, t))
+}
 
 export default {
   extends: base,
@@ -290,19 +293,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$white: white !default;
+$danger: red !default;
+
 .doc-msg {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
-  background-color: white;
+  background-color: $white;
 }
 .doc-err {
   cursor: pointer;
 
   .err-message {
-    //color: $danger;
+    color: $danger;
   }
 }
 

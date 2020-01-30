@@ -1,49 +1,51 @@
 import {
-  CorredorManualButtons,
+  CCorredorManualButtons,
 } from './corredor'
 
 import {
-  PreviewInline,
-  PreviewLightbox,
+  CPreviewInline,
+  CPreviewLightbox,
+  canPreview,
 } from './filePreview'
 
 import {
-  Confirm,
-  DateTime,
-  Interval,
+  CConfirm,
+  CDateTime,
+  CInterval,
 } from './input'
 
 import {
-  Lightbox,
+  CLightbox,
 } from './lightbox'
 
 import {
-  PermissionsButton,
-  PermissionsForm,
-  PermissionsModal,
+  CPermissionsButton,
+  CPermissionsForm,
+  CPermissionsModal,
 } from './permissions'
 
 import {
-  HamburgerMenu,
-  Sidebar,
+  CHamburgerMenu,
+  CSidebar,
 } from './sidebar'
 
 import {
-  Toaster,
+  CToaster,
 } from './toaster'
 
 export {
-  CorredorManualButtons,
-  PreviewInline,
-  PreviewLightbox,
-  Confirm,
-  DateTime,
-  Interval,
-  Lightbox,
-  PermissionsButton,
-  PermissionsForm,
-  PermissionsModal,
-  HamburgerMenu,
-  Sidebar,
-  Toaster,
+  CCorredorManualButtons,
+  CPreviewInline,
+  CPreviewLightbox,
+  canPreview,
+  CConfirm,
+  CDateTime,
+  CInterval,
+  CLightbox,
+  CPermissionsButton,
+  CPermissionsForm,
+  CPermissionsModal,
+  CHamburgerMenu,
+  CSidebar,
+  CToaster,
 }

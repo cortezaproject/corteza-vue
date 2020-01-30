@@ -1,1 +1,1 @@
-export { default as CorredorManualButtons } from './CorredorManualButtons.vue'
+export { default as CCorredorManualButtons } from './CCorredorManualButtons.vue'

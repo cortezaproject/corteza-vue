@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="sidebar d-flex flex-column vh-100"
+    class="CSidebar d-flex flex-column vh-100"
     :class="[ position, visible ? 'visible' : null ]"
     :style="getStyle"
   >
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
+.CSidebar {
   transition: margin .3s;
 }
 </style>
