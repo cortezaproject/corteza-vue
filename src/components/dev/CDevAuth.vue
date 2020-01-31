@@ -51,61 +51,6 @@
 
     <hr>
 
-    <b-row>
-      <b-col
-        cols="12"
-      >
-        <p
-          class="mb-1"
-        >
-          Due to some limitations in the dev env, please copy your JWT manually. Go to the webapp where you are logged-in
-          and find it in your local-storage or by running <code>localStorage.getItem('auth.jwt')</code> in the browser
-          console and paste it to the input box below.
-        </p>
-      </b-col>
-    </b-row>
-
-    <b-row>
-      <b-col
-        cols="2"
-      >
-        Manage your JWT here:
-      </b-col>
-      <b-col
-        cols="10"
-      >
-        <textarea
-          v-model.trim="newJWT"
-          class="w-100"
-          placeholder="Your JWT string"
-          rows="3"
-        />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col
-        cols="10"
-        offset="2"
-        class="mt-2"
-      >
-        <b-button
-          :disabled="!newJWT"
-          @click="check"
-        >
-          Check & store
-        </b-button>
-        &nbsp; <code v-html="checkRsp" />
-      </b-col>
-    </b-row>
-
-    <hr>
-    <div
-      class="text-center h1"
-    >
-      <code>OR</code>
-    </div>
-    <hr>
-
     <b-form
       class="login-form"
       @submit.prevent="login"
@@ -151,6 +96,63 @@
         &nbsp; <code v-html="checkLogin" />
       </b-form-group>
     </b-form>
+
+    <hr>
+    <div
+      class="text-center h1"
+    >
+      <code>OR</code>
+    </div>
+    <hr>
+
+    <b-row>
+      <b-col
+        cols="12"
+      >
+        <p
+          class="mb-1"
+        >
+          Due to some limitations in the dev env, please copy your JWT manually. Go to the webapp where you are logged-in
+          and find it in your local-storage or by running <code>localStorage.getItem('auth.jwt')</code> in the browser
+          console and paste it to the input box below.
+        </p>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col
+        cols="2"
+      >
+        Manage your JWT here:
+      </b-col>
+      <b-col
+        cols="10"
+      >
+        <textarea
+          v-model.trim="newJWT"
+          class="w-100"
+          placeholder="Your JWT string"
+          rows="3"
+        />
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col
+        cols="10"
+        offset="2"
+        class="mt-2"
+      >
+        <b-button
+          :disabled="!newJWT"
+          @click="check"
+        >
+          Check & store
+        </b-button>
+        &nbsp; <code v-html="checkRsp" />
+      </b-col>
+    </b-row>
+
 
     <hr>
 
@@ -243,9 +245,9 @@ export default {
           }
           this.countdown--
         }, 1000)
-      }).catch((e) => {
+      }).catch(({ message }) => {
         console.error(e)
-        this.checkLogin = e
+        this.checkLogin = message
       })
     },
   },
