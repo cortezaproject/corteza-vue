@@ -16,7 +16,7 @@
   </b-form-group>
 </template>
 <script lang="js">
-import base from './base/base.vue'
+import base from './base.vue'
 import moment from 'moment'
 
 export default {

@@ -21,7 +21,7 @@
         </b-card-text>
 
         <b-card-text v-if="t.payload.link">
-          <t-link :toast="t" />
+          <c-toaster-link :toast="t" />
         </b-card-text>
 
         <component
@@ -39,11 +39,11 @@
 
 <script lang="js">
 import * as actions from './actions'
-import { TLink } from './display'
+import CToasterLink from './CToasterLink.vue'
 
 export default {
   components: {
-    TLink,
+    CToasterLink,
   },
 
   props: {

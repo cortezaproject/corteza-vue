@@ -1,3 +1,3 @@
-export { default as CConfirm } from './CConfirm.vue'
-export { default as CDateTime } from './CDateTime.vue'
-export { default as CInterval } from './CInterval.vue'
+export { default as CInputConfirm } from './CInputConfirm.vue'
+export { default as CInputDateTime } from './CInputDateTime.vue'
+export { default as CInputInterval } from './CInputInterval.vue'

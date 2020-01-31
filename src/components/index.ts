@@ -1,56 +1,39 @@
-import {
+export {
   CCorredorManualButtons,
 } from './corredor'
 
-import {
+export {
   CDevAuth,
 } from './dev'
 
-import {
+export {
   CPreviewInline,
   CPreviewLightbox,
   canPreview,
 } from './filePreview'
 
-import {
-  CConfirm,
-  CDateTime,
-  CInterval,
+export {
+  CInputConfirm,
+  CInputDateTime,
+  CInputInterval,
 } from './input'
 
-import {
+export {
   CLightbox,
 } from './lightbox'
 
-import {
+export {
   CPermissionsButton,
   CPermissionsForm,
   CPermissionsModal,
 } from './permissions'
 
-import {
+export {
   CHamburgerMenu,
   CSidebar,
 } from './sidebar'
 
-import {
-  CToaster,
-} from './toaster'
-
 export {
-  CCorredorManualButtons,
-  CDevAuth,
-  CPreviewInline,
-  CPreviewLightbox,
-  canPreview,
-  CConfirm,
-  CDateTime,
-  CInterval,
-  CLightbox,
-  CPermissionsButton,
-  CPermissionsForm,
-  CPermissionsModal,
-  CHamburgerMenu,
-  CSidebar,
   CToaster,
-}
+  CToasterLink,
+} from './toaster'

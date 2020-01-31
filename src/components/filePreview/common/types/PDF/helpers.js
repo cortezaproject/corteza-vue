@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /**
  * Represents a PDF's page + system metadata
  */
@@ -6,7 +7,7 @@ export class Page {
     this.merge(params)
   }
 
-  merge ({ index, page, loading, loaded, rendered, failed, node, retries }) {
+  merge ({ index, page, loading, loaded, rendered, failed, node }) {
     this.index = index !== undefined ? index : this.index
     this.page = page !== undefined ? page : this.page
     this.loading = !!loading !== undefined ? loading : this.loading
