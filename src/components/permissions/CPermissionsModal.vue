@@ -21,8 +21,6 @@ import { modalOpenEventName } from './def.ts'
 import CPermissionsForm from './CPermissionsForm.vue'
 
 export default {
-  name: 'permissions-modal',
-
   components: {
     CPermissionsForm,
   },
