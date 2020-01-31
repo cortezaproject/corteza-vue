@@ -1,1 +1,1 @@
-export const modalOpenEventName = 'permissions-modal-open'
+export const modalOpenEventName = 'c-permissions-modal-open'

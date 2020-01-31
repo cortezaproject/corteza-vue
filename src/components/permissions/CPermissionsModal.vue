@@ -8,7 +8,7 @@
       lazy
       @hide="onHide"
     >
-      <permissions-form
+      <c-permissions-form
         v-if="resource"
         :resource="resource"
         :target="title"
