@@ -13,6 +13,10 @@ interface AuthCheckResult {
   jwt: string;
 }
 
+interface PluginOpts {
+  api: apiClients.System;
+}
+
 export class Auth {
   [jwt]?: string
   [user]?: system.User
@@ -117,8 +121,12 @@ export class Auth {
   }
 }
 
-export default function (api: apiClients.System): PluginFunction<object> {
-  return function (Vue): void {
-    Vue.prototype.$auth = new Auth(api)
+export default function (): PluginFunction<PluginOpts> {
+  return function (Vue, opts): void {
+    if (opts === undefined) {
+      opts = { api: Vue.prototype.$SystemAPI }
+    }
+
+    Vue.prototype.$auth = new Auth(opts.api)
   }
 }
