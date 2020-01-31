@@ -3,6 +3,10 @@ import {
 } from './corredor'
 
 import {
+  CDevAuth,
+} from './dev'
+
+import {
   CPreviewInline,
   CPreviewLightbox,
   canPreview,
@@ -35,6 +39,7 @@ import {
 
 export {
   CCorredorManualButtons,
+  CDevAuth,
   CPreviewInline,
   CPreviewLightbox,
   canPreview,
