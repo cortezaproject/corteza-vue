@@ -769,9 +769,9 @@
     to-fast-properties "^2.0.0"
 
 "@cortezaproject/corteza-js@>2020.3.0-alpha":
-  version "2020.3.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-alpha.8.tgz#04e94f54a303d3dc6a483705bd78ff43c3bf407f"
-  integrity sha512-V4biaxiIBtOXNXIndNeUO1QckEIojRbbFJNmmVlk8YNH0XX51K78kyqC/123n7aSv0+lfuREDdLkk4DzwxAhTA==
+  version "2020.3.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-alpha.9.tgz#d802dc7e1ac112e5310b255979b81717f037ab4f"
+  integrity sha512-fM3n/IT4irhPdHiFWd56BtDwDRVREgdxjhRRbyr5w/NKFH3aOaNDwIi2uDvP+T+EvsI3n1UyfJfs6BzREfjhhQ==
   dependencies:
     axios "^0.19.1"
     hex-rgb "^4.1.0"
