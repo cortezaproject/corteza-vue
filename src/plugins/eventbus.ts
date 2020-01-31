@@ -1,8 +1,8 @@
 import { PluginFunction } from 'vue'
 import { eventbus } from '@cortezaproject/corteza-js'
 
-export default function (options: object): PluginFunction<object> {
-  return function (Vue): void {
-    Vue.prototype.$EventBus = new eventbus.EventBus(options)
+export default function (): PluginFunction<Partial<eventbus.Options>> {
+  return function (Vue, opts): void {
+    Vue.prototype.$EventBus = new eventbus.EventBus(opts)
   }
 }

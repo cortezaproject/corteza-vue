@@ -27,6 +27,7 @@ export class Auth {
 
   constructor (api: apiClients.System, { location, localStorage } = window) {
     this.api = api
+    console.log(api)
     this.location = location
     this.localStorage = localStorage
   }

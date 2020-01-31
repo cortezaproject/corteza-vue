@@ -154,8 +154,8 @@ export class UIHooks {
   }
 }
 
-export default function (app: string|Partial<UIHooks>): PluginFunction<object> {
-  return function (Vue): void {
-    Vue.prototype.$UIHooks = new UIHooks(app)
+export default function (): PluginFunction<Partial<UIHooks>> {
+  return function (Vue, opts): void {
+    Vue.prototype.$UIHooks = new UIHooks(opts || {})
   }
 }

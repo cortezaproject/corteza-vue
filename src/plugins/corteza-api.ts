@@ -23,7 +23,7 @@ function getJWT (): string|null {
  *
  * @constructor
  */
-export default function (service: string, opt: Options = {}): PluginFunction<object> {
+export default function (service: string, opt: Options = {}): PluginFunction<Options> {
   service = service.substring(0, 1).toUpperCase() + service.substring(1)
 
   if (!opt.baseURL) {
