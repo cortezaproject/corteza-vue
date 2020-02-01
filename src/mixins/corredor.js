@@ -15,7 +15,6 @@ export default {
         /**
          * Process all known automation scripts
          */
-        // @todo add ui prop on trigger
         this.$UIHooks.Register(...set)
 
         /**
@@ -42,6 +41,28 @@ export default {
               })
           })
       }
+    },
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    loadClientScriptBundle ({ bundle, type = 'scripts', ext = 'js', verbose = false } = {}) {
+      const ep = this.$SystemAPI.automationBundleEndpoint({ bundle, type, ext })
+
+      return this.$SystemAPI.api().get(ep).then(({ data }) => {
+        if (!data) {
+          if (verbose) {
+            console.debug('bundle empty', { bundle, type, ext })
+          }
+          return
+        }
+
+        // eslint-disable-next-line no-new-func
+        (new Function(data))()
+        window.composeClientScripts.Register({
+          verbose,
+          eventbus: this.$EventBus,
+          uiHooks: this.UIHooks,
+        })
+      })
     },
   },
 }
