@@ -4,6 +4,7 @@
       <h1>
         Hello Crust developer.
       </h1>
+      <br>
 
       <p>
         It looks like you need to login
@@ -17,6 +18,7 @@
       <p>
         You can either login with your email and password or you can manually copy your JWT.
       </p>
+      <br>
     </div>
 
     <hr>
@@ -29,7 +31,9 @@
     <hr>
 
     <div>
+      <br>
       <h2>Login</h2>
+      <br>
 
       Email:<br>
       <input
@@ -49,7 +53,6 @@
         autocomplete="password"
       >
       <br>
-      <br>
 
       <button
         type="submit"
@@ -59,16 +62,21 @@
         Login
       </button>
       &nbsp; <b>{{ checkLogin }}</b>
+      <br>
+      <br>
     </div>
 
     <hr>
 
+    <br>
     <h2>Check JWT</h2>
+    <br>
     <p>
       Due to some limitations in the dev env, please copy your JWT manually.<br>
       Go to the webapp where you are logged-in and find it in your local-storage or by running <b>localStorage.getItem('auth.jwt')</b> in the browser
       console and paste it to the input box below.
     </p>
+    <br>
 
     Manage your JWT here:
     <br>
@@ -77,7 +85,6 @@
       rows="3"
       cols="100"
     />
-    <br>
     <br>
 
     <button
@@ -88,6 +95,8 @@
       Check & store
     </button>
     &nbsp; <b>{{ checkJWT }}</b>
+    <br>
+    <br>
 
     <hr>
 
@@ -152,7 +161,7 @@ export default {
       this.$auth.check(this.newJWT).then((user) => {
         this.countdown = 2
         let h = setInterval(() => {
-          this.checkJWT = ` &check; Valid JWT, redirecting in ${this.countdown} seconds`
+          this.checkJWT = ` Valid JWT, redirecting in ${this.countdown} seconds`
           if (this.countdown === 0) {
             window.location = '/'
             clearInterval(h)
