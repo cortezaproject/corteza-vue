@@ -149,7 +149,7 @@
         >
           Check & store
         </b-button>
-        &nbsp; <code v-html="checkRsp" />
+        &nbsp; <code v-html="checkJWT" />
       </b-col>
     </b-row>
 
@@ -179,7 +179,7 @@ export default {
     return {
       countdown: 3,
 
-      checkRsp: '',
+      checkJWT: '',
       checkLogin: '',
 
       newJWT: '',
@@ -213,20 +213,19 @@ export default {
   methods: {
     check () {
       this.newJWT = this.newJWT.replace(/["']+/, '')
-      this.checkRsp = `  ... verifying JWT`
+      this.checkJWT = `  ... verifying JWT`
       this.$auth.check(this.newJWT).then((user) => {
         this.countdown = 2
         let h = setInterval(() => {
-          this.checkRsp = ` &check; Valid JWT, redirecting in ${this.countdown} seconds`
+          this.checkJWT = ` &check; Valid JWT, redirecting in ${this.countdown} seconds`
           if (this.countdown === 0) {
             window.location = '/'
             clearInterval(h)
           }
           this.countdown--
         }, 1000)
-      }).catch((e) => {
-        console.error(e)
-        this.checkRsp = e
+      }).catch((message) => {
+        this.checkJWT = message
       })
     },
 
@@ -246,7 +245,6 @@ export default {
           this.countdown--
         }, 1000)
       }).catch(({ message }) => {
-        console.error(e)
         this.checkLogin = message
       })
     },

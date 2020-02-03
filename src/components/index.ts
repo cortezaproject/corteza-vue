@@ -4,6 +4,7 @@ export {
 
 export {
   CDevAuth,
+  CDevAuthLite,
 } from './dev'
 
 export {
