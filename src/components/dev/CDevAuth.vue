@@ -217,7 +217,7 @@ export default {
       this.$auth.check(this.newJWT).then((user) => {
         this.countdown = 2
         let h = setInterval(() => {
-          this.checkJWT = ` &check; Valid JWT, redirecting in ${this.countdown} seconds`
+          this.checkJWT = ` Valid JWT, redirecting in ${this.countdown} seconds`
           if (this.countdown === 0) {
             window.location = '/'
             clearInterval(h)
@@ -237,7 +237,7 @@ export default {
         this.$auth.JWT = jwt
         this.$auth.user = user
         let h = setInterval(() => {
-          this.checkLogin = ` &check; Valid login, redirecting in ${this.countdown} seconds`
+          this.checkLogin = ` Valid login, redirecting in ${this.countdown} seconds`
           if (this.countdown === 0) {
             window.location = '/'
             clearInterval(h)

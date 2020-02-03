@@ -117,81 +117,10 @@
     <a href="/">&laquo; Back</a>
   </div>
 </template>
+
 <script>
+import CDevAuth from './CDevAuth.vue'
 export default {
-  data () {
-    return {
-      countdown: 3,
-
-      checkJWT: '',
-      checkLogin: '',
-
-      newJWT: '',
-      form: {
-        email: '',
-        password: '',
-      },
-    }
-  },
-
-  computed: {
-    backend () {
-      return window.SystemAPI
-    },
-
-    frontendVersion () {
-      /* eslint-disable no-undef */
-      return VERSION
-    },
-  },
-
-  created () {
-    if (process.env.NODE_ENV !== 'development') {
-      // Not in development mode, move away from here
-      this.$auth.open()
-    }
-
-    this.newJWT = this.$auth.JWT
-  },
-
-  methods: {
-    check () {
-      this.newJWT = this.newJWT.replace(/["']+/, '')
-      this.checkJWT = `  ... verifying JWT`
-      this.$auth.check(this.newJWT).then((user) => {
-        this.countdown = 2
-        let h = setInterval(() => {
-          this.checkJWT = ` Valid JWT, redirecting in ${this.countdown} seconds`
-          if (this.countdown === 0) {
-            window.location = '/'
-            clearInterval(h)
-          }
-          this.countdown--
-        }, 1000)
-      }).catch((message) => {
-        this.checkJWT = message
-      })
-    },
-
-    login () {
-      this.checkLogin = `  ... verifying login`
-      this.$SystemAPI.authInternalLogin(this.form).then(({ jwt, user } = {}) => {
-        this.countdown = 2
-        this.newJWT = jwt
-        this.$auth.JWT = jwt
-        this.$auth.user = user
-        let h = setInterval(() => {
-          this.checkLogin = ` Valid login, redirecting in ${this.countdown} seconds`
-          if (this.countdown === 0) {
-            window.location = '/'
-            clearInterval(h)
-          }
-          this.countdown--
-        }, 1000)
-      }).catch(({ message }) => {
-        this.checkLogin = message
-      })
-    },
-  },
+  extends: CDevAuth,
 }
 </script>
