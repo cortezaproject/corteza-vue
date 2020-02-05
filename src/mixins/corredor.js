@@ -47,22 +47,26 @@ export default {
     loadClientScriptBundle ({ bundle, type = 'scripts', ext = 'js', verbose = false } = {}) {
       const ep = this.$SystemAPI.automationBundleEndpoint({ bundle, type, ext })
 
-      return this.$SystemAPI.api().get(ep).then(({ data }) => {
-        if (!data) {
-          if (verbose) {
-            console.debug('bundle empty', { bundle, type, ext })
+      return this.$SystemAPI.api().get(ep)
+        .then(({ data }) => {
+          if (!data) {
+            if (verbose) {
+              console.debug('bundle empty', { bundle, type, ext })
+            }
+            return
           }
-          return
-        }
 
-        // eslint-disable-next-line no-new-func
-        (new Function(data))()
-        window.composeClientScripts.Register({
-          verbose,
-          eventbus: this.$EventBus,
-          uiHooks: this.UIHooks,
+          // eslint-disable-next-line no-new-func
+          (new Function(data))()
+          window.composeClientScripts.Register({
+            verbose,
+            eventbus: this.$EventBus,
+            uiHooks: this.UIHooks,
+          })
         })
-      })
+        .catch(({ message }) => {
+          console.warn(`could not load client scripts bundle (bundle: ${bundle}, type: ${type}): ${message}`)
+        })
     },
   },
 }
