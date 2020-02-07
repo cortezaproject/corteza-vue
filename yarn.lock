@@ -769,12 +769,13 @@
     to-fast-properties "^2.0.0"
 
 "@cortezaproject/corteza-js@>2020.3.0-alpha":
-  version "2020.3.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-alpha.9.tgz#d802dc7e1ac112e5310b255979b81717f037ab4f"
-  integrity sha512-fM3n/IT4irhPdHiFWd56BtDwDRVREgdxjhRRbyr5w/NKFH3aOaNDwIi2uDvP+T+EvsI3n1UyfJfs6BzREfjhhQ==
+  version "2020.3.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-alpha.10.tgz#f6bdc9ba174ab68d830635a0dd3b2f42841e739e"
+  integrity sha512-qjdNjA4SLRcgUZ0J3yemi23fbPJQrSH5sbhJd6yJMfmrUlkBh85jfoEBifrJBv9MNhQwwWOhTH7VQsXWhB4Lgg==
   dependencies:
     axios "^0.19.1"
     hex-rgb "^4.1.0"
+    lodash "^4.17.15"
     minimatch "^3.0.4"
     moment "^2.24.0"
     numeral "^2.0.6"
