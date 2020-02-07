@@ -66,6 +66,8 @@ export default {
     reloadBrokenImage (ev) {
       if (ev.target && ev.target.src) {
         window.setTimeout(() => {
+          if (!ev.target && !ev.target.src) return
+
           // This forces Vue to re-try image download
           // eslint-disable-next-line
           ev.target.src = ev.target.src
