@@ -1,5 +1,5 @@
 <template>
-  <lightbox v-on="$listeners">
+  <c-lightbox v-on="$listeners">
     <!-- Proxy slots -->
     <template
       v-for="(_, slot) of $scopedSlots"
@@ -18,7 +18,7 @@
       v-bind="$attrs"
       v-on="$listeners"
     />
-  </lightbox>
+  </c-lightbox>
 </template>
 
 <script lang="js">
