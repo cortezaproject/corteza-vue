@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { compose, apiClients, corredor } from '@cortezaproject/corteza-js'
 import ComposeUIHelper from './compose-ui'
+import pino from 'pino'
 
 interface Vue {
   $SystemAPI: apiClients.System;
@@ -27,7 +28,7 @@ export default class ComposeCtx extends corredor.Ctx {
   // @todo remove ts-ignore flags
   constructor (args: corredor.BaseArgs, vue: Vue) {
     // @ts-ignore
-    super(args, console, {})
+    super(args, pino(), {})
 
     this.vue = vue
 
