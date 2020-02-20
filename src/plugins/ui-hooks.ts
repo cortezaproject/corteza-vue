@@ -68,7 +68,7 @@ export class Button {
 }
 
 /**
- * Consumes explciitly triggered scripts and converts it to list of buttons
+ * Consumes explicitly triggered scripts and converts it to list of buttons
  */
 export class UIHooks {
   readonly app: string
