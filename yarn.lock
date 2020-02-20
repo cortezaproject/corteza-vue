@@ -769,9 +769,9 @@
     to-fast-properties "^2.0.0"
 
 "@cortezaproject/corteza-js@^2020.3.0-rc":
-  version "2020.3.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-rc.1.tgz#77730d2fd25b672a63ec1b552d5773b8babb4809"
-  integrity sha512-LhY4IaN5eHzt3GsCkpZf8kM6NIrtCGc46+fm+5s9KKjRg8Oy69c1vVi3G5CLUSVe7mp57OC8GTzQCz+hkq65Sw==
+  version "2020.3.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-rc.2.tgz#ff9a91b7361506873ad2e1df28dc8efdbdce2b7e"
+  integrity sha512-IeChSazCqhED2wmKcWAGciYP/arrFkobIjqh6pf9SgXxN1iXWRpYuulNjKLeof3LIXGWlyNqxIJkjBWGk1zP8A==
   dependencies:
     axios "^0.19.1"
     hex-rgb "^4.1.0"
@@ -920,7 +920,14 @@
   dependencies:
     estree-walker "^0.6.1"
 
-"@sinonjs/commons@^1", "@sinonjs/commons@^1.3.0", "@sinonjs/commons@^1.4.0", "@sinonjs/commons@^1.6.0", "@sinonjs/commons@^1.7.0":
+"@sinonjs/commons@^1", "@sinonjs/commons@^1.3.0", "@sinonjs/commons@^1.4.0", "@sinonjs/commons@^1.7.0":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.1.tgz#da5fd19a5f71177a53778073978873964f49acf1"
+  integrity sha512-Debi3Baff1Qu1Unc3mjJ96MgpbwTn43S1+9yJ0llWygPwDNu2aaWBD6yc9y/Z8XDRNhx7U+u2UDg2OGQXkclUQ==
+  dependencies:
+    type-detect "4.0.8"
+
+"@sinonjs/commons@^1.6.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.0.tgz#f90ffc52a2e519f018b13b6c4da03cbff36ebed6"
   integrity sha512-qbk9AP+cZUsKdW1GJsBpxPKFmCJ0T8swwzVje3qFd+AkQb74Q/tiuzrdfFg8AD2g5HH/XbE/I8Uc1KYHVYWfhg==
@@ -994,7 +1001,12 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai@*", "@types/chai@^4.2.6":
+"@types/chai@*":
+  version "4.2.9"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.9.tgz#194332625ed2ae914aef00b8d5ca3b77e7924cc6"
+  integrity sha512-NeXgZj+MFL4izGqA4sapdYzkzQG+MtGra9vhQ58dnmDY++VgJaRUws+aLVV5zRJCYJl/8s9IjMmhiUw1WsKSmw==
+
+"@types/chai@^4.2.6":
   version "4.2.7"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.7.tgz#1c8c25cbf6e59ffa7d6b9652c78e547d9a41692d"
   integrity sha512-luq8meHGYwvky0O7u0eQZdA7B4Wd9owUCqvbw2m3XCrCU8mplYOujMBbvyS547AxJkC+pGnd0Cm15eNxEUNU8g==
@@ -1069,9 +1081,9 @@
   integrity sha512-HU0q9GXazqiKwviVxg9SI/+t/nAsGkvLDkIdxz+ObejG2nX6Si00TeLqHMoS+a/1tjH7a8YpKVQwtgHuMQsldg==
 
 "@types/node@^11.15.4":
-  version "11.15.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.15.6.tgz#b4b525cc760e4efe614c5819c29232edc4241fa4"
-  integrity sha512-QylJmcJXqKCOhx1VE29kKA2wDjzVBQuKzoSJPykpelTmNQX/GAlPXgT1ZiIc6+sL81z66vXbrDexGale/JVIsQ==
+  version "11.15.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.15.7.tgz#97559c6d7f8b15dcf275365512799f405c20cd4e"
+  integrity sha512-3c3Kc7VIdE5UpqpmztRy7FU+turZgIurGnwpGFy/fRFOirfPc7ZnoFL83qVoqEDENJENqDhtGyQZ5fkXNQ6Qkw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
