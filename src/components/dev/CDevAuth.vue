@@ -251,3 +251,8 @@ export default {
   },
 }
 </script>
+<style>
+html {
+  overflow: auto !important;
+}
+</style>
