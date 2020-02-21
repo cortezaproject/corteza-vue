@@ -15,6 +15,7 @@ interface Trigger {
 interface Script {
   name: string;
   label: string;
+  description?: string;
   errors?: string[];
   triggers: Trigger[];
 }
@@ -37,6 +38,7 @@ function prop2map (uiprops: UIProp[]): KV {
 
 export class Button {
   readonly label: string
+  readonly description?: string
   readonly script: string
   readonly resourceType: string
   readonly weight: number
@@ -57,6 +59,7 @@ export class Button {
     }
 
     this.label = uiProps.label ?? s.label
+    this.description = s.description
     this.script = s.name
     this.weight = t.weight || 0
     this.resourceType = t.resourceTypes[0]
