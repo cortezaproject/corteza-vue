@@ -71,7 +71,10 @@ export class Button {
 }
 
 /**
- * Consumes explicitly triggered scripts and converts it to list of buttons
+ * Consumes scripts that can be triggered manually and converts it to list of buttons
+ *
+ * These buttons can put manually to various compose page block or
+ * positioned automatically on designated pages & slots
  */
 export class UIHooks {
   readonly app: string
