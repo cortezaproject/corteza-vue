@@ -101,7 +101,7 @@ export class UIHooks {
     scripts
       .filter(s => s.triggers && s.triggers.length > 0 && (!s.errors || s.errors.length === 0))
       .forEach(s => {
-        if (this.verbose) console.debug('UIHooks: processing script', { script: s })
+        if (this.verbose) console.debug('UIHooks: processing script', s.name, { script: s })
         this.Unregister(s)
 
         s.triggers
@@ -157,6 +157,10 @@ export class UIHooks {
 
         return page === b.page && slot === b.slot
       })
+  }
+
+  FindByScript (script: string): Button | undefined {
+    return this.set.find(b => b.script === script)
   }
 }
 
