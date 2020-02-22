@@ -8,8 +8,11 @@
         :class="[ borderless && 'border-0' ]"
         @click.prevent="onPrompt"
       >
-
-        <slot />
+        <slot>
+          <font-awesome-icon
+            :icon="['far', 'trash-alt']"
+          />
+        </slot>
       </b-button>
 
     </span>
@@ -23,7 +26,10 @@
         @click.prevent="onConfirmation()"
       >
 
-        <slot name="yes" />
+        <slot name="yes">
+          <font-awesome-icon
+            :icon="['fas', 'check']"
+          /></slot>
       </b-button>
       <b-button
         :variant="variantCancel"
@@ -33,7 +39,10 @@
         @click.prevent="onCancel()"
       >
 
-        <slot name="no" />
+        <slot name="no">
+          <font-awesome-icon
+            :icon="['fas', 'times']"
+          /></slot>
       </b-button>
     </span>
   </span>
