@@ -44,9 +44,9 @@ export default class ComposeCtx extends corredor.Ctx {
 
       pages: vue.$store.getters['page/set'],
       // @ts-ignore
-      emitter: (name, params) => vue.$emit(name, params),
+      emitter: (name, params): void => vue.$emit(name, params),
       // @ts-ignore
-      routePusher: (params) => vue.$router.push(params),
+      routePusher: (params): void => vue.$router.push(params),
     })
   }
 
