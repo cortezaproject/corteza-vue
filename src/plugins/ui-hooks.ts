@@ -135,6 +135,11 @@ export class UIHooks {
   /**
    * Searches for buttons that match the requirements
    *
+   * This is used in 2 kinds of places:
+   *  - currated list of buttons in compose blocks where admin can
+   *    picks, reorder, name and style scripts by hand
+   *  - different slots on pages where scripts are automatically placed
+   *
    * @param resourceType
    * @param page
    * @param slot
