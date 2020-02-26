@@ -48,6 +48,14 @@ export default class ComposeCtx extends corredor.Ctx {
       // @ts-ignore
       routePusher: (params): void => vue.$router.push(params),
     })
+
+    if (!this.config) {
+      this.config = {}
+    }
+
+    this.config.frontend = {
+      baseURL: `${window.location.protocol}://${window.location.host}`,
+    }
   }
 
   /**
