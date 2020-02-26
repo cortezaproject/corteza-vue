@@ -17,13 +17,13 @@ interface Vue {
  * Extends corredor exec context with compose UI helper
  */
 export default class ComposeCtx extends corredor.Ctx {
-  protected readonly emitter: unknown
-  protected readonly routePusher: unknown
-  protected readonly pages: Array<compose.Page> = []
+  protected emitter: unknown
+  protected routePusher: unknown
+  protected pages: Array<compose.Page> = []
 
-  protected readonly composeUI: ComposeUIHelper
+  protected composeUI: ComposeUIHelper
 
-  protected readonly vue: Vue
+  protected vue: Vue
 
   // @todo remove ts-ignore flags
   constructor (args: corredor.BaseArgs, vue: Vue) {
