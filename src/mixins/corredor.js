@@ -20,6 +20,10 @@ export default {
     makeAutomationScriptsRegistrator (serverScriptHandler) {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       return ({ set }) => {
+        if (!set || !Array.isArray(set) || set.length === 0) {
+          return
+        }
+
         /**
          * Process all known automation scripts
          */
