@@ -105,7 +105,7 @@ export class Auth {
   }
 
   get user (): system.User|undefined {
-    if (this[user] === null) {
+    if (!this[user]) {
       const userJson = this.localStorage.getItem(lsAuthUserKey)
       if (!userJson) {
         return
