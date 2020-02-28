@@ -39,12 +39,19 @@ export class Auth {
    *
    * We're explicitly passing systemAPI to minimize plugin initialization complexity
    */
-  async check (_jwt: string | undefined = this.JWT): Promise<system.User> {
+  async check (_jwt: string | undefined = this.JWT): Promise<system.User|undefined> {
     if (!_jwt) {
       // purge stored jwt and user if any
       this[user] = undefined
       this[jwt] = undefined
-      throw new Error('jwt undefined')
+
+      if (this.JWT) {
+        // Raise error only when internal JWT is set
+        // and someone wants to change it to undefined
+        throw new Error('jwt undefined')
+      }
+
+      return
     }
 
     return this.api.setJWT(_jwt).authCheck().then((r: unknown) => {
