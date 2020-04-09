@@ -92,7 +92,7 @@ export default {
           window[`${bundle}ClientScripts`].Register({
             verbose,
             eventbus: this.$EventBus,
-            uiHooks: this.UIHooks,
+            uiHooks: this.$UIHooks,
 
             // Generic event handler
             exec: (script, ev) => {
