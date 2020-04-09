@@ -28,16 +28,11 @@ export default {
         }
 
         /**
-         * Process all known automation scripts
+         * Register only server-side scripts (!bundle) and only triggers with onManual eventType
+         *
+         *  1. client-scripts (bundled) are registered in the bundle's boot loader
+         *  2. onManual only -- other kinds (implicit, deferred) are handled directly in/by the Corteza API backend
          */
-        this.$UIHooks.Register(...set)
-
-        // /**
-        //  * Register only server-side scripts (!bundle) and only triggers with onManual eventType
-        //  *
-        //  *  1. client-scripts (bundled) are registered in the bundle's boot loader
-        //  *  2. onManual only -- other kinds (implicit, deferred) are handled directly in/by the Corteza API backend
-        //  */
         set
           .filter(({ name }) => name.substring(0, serverScriptPrefix.length) === serverScriptPrefix)
           .forEach(s => {
@@ -55,6 +50,11 @@ export default {
                 }
               })
           })
+
+        /**
+         * Register all
+         */
+        this.$UIHooks.Register(...set)
       }
     },
 
@@ -78,31 +78,48 @@ export default {
         .then(({ data }) => {
           if (!data) {
             if (verbose) {
-              console.debug('bundle empty', { bundle, type, ext })
+              console.debug('corredor.loadBundle: empty', { bundle, type, ext })
             }
             return
           }
 
           if (verbose) {
-            console.debug('bundle loaded', { bundle, type, ext })
+            console.debug('corredor.loadBundle: loaded', { bundle, type, ext })
           }
 
           // eval loaded bundle
           // eslint-disable-next-line no-new-func
           (new Function(data))()
 
-          // call script registrator on bundle
-          window[`${bundle}ClientScripts`].Register({
-            verbose,
-            eventbus: this.$EventBus,
-            uiHooks: this.$UIHooks,
+          if (!window[`${bundle}ClientScripts`]) {
+            console.warn(`corredor.loadBundle: window[${bundle}ClientScripts] not defined`)
+            return
+          }
 
-            // Generic event handler, this will registered on
-            // eventbus' (see above)
-            exec: (script, ev) => {
-              const args = new corredor.Args(ev.args)
-              corredor.Exec(script, args, ctx.withArgs(args))
-            },
+          const scripts = window[`${bundle}ClientScripts`].scripts || []
+
+          console.debug('corredor.loadBundle:', scripts.length, 'client scripts found')
+
+          scripts.forEach((script) => {
+            script.triggers.forEach((trigger) => {
+              // Assign script name to handler/trigger:
+              // when triggering scripts manually we always trigger a specific script
+              trigger.scriptName = script.name
+              try {
+                this.$EventBus.Register(
+                  // Event handler for client-scripts,
+                  // convert event arguments and prepare
+                  // context for script's execution
+                  (ev) => {
+                    const args = new corredor.Args(ev.args)
+                    corredor.Exec(script, args, ctx.withArgs(args))
+                  },
+                  trigger,
+                )
+              } catch (e) {
+                console.error(e)
+              }
+            })
           })
         })
         .catch(({ message }) => {

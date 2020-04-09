@@ -105,17 +105,15 @@ export class UIHooks {
 
         s.triggers
           .filter(t => t.eventTypes?.includes('onManual'))
-          .forEach(t => {
-            if (this.verbose) console.debug('UIHooks: processing onManual trigger for script', s.name, { trigger: t })
-            if (prop2map(t.uiProps).app !== this.app) {
+          .forEach(trigger => {
+            if (prop2map(trigger.uiProps).app !== this.app) {
               // Ignore triggers that do not belong to this app.
               return
             }
 
-            const button = new Button(s, t)
-
-            if (this.verbose) console.debug('UIHooks: registering button', { button })
+            const button = new Button(s, trigger)
             this.set.push(button)
+            if (this.verbose) console.debug('UIHooks: registering button', s.name, { button, trigger })
           })
       })
 
