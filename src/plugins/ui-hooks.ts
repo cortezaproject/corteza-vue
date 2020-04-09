@@ -101,12 +101,12 @@ export class UIHooks {
     scripts
       .filter(s => s.triggers && s.triggers.length > 0 && (!s.errors || s.errors.length === 0))
       .forEach(s => {
-        if (this.verbose) console.debug('UIHooks: processing script', s.name, { script: s })
         this.Unregister(s)
 
         s.triggers
           .filter(t => t.eventTypes?.includes('onManual'))
           .forEach(t => {
+            if (this.verbose) console.debug('UIHooks: processing onManual trigger for script', s.name, { trigger: t })
             if (prop2map(t.uiProps).app !== this.app) {
               // Ignore triggers that do not belong to this app.
               return

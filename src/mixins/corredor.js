@@ -16,6 +16,9 @@ export default {
      * Creates a function for registering server automation scripts to UIHooks and EventBus plugins
      *
      * API should be corteza API Client class that is passed as a first arg to serverScriptHandler
+     * See:
+     *  - TriggerComposeServerScriptOnManual
+     *  - TriggerSystemServerScriptOnManual
      */
     makeAutomationScriptsRegistrator (serverScriptHandler) {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -29,12 +32,12 @@ export default {
          */
         this.$UIHooks.Register(...set)
 
-        /**
-         * Register only server-side scripts (!bundle) and only triggers with onManual eventType
-         *
-         *  1. client-scripts (bundled) are registered in the bundle's boot loader
-         *  2. onManual only -- other kinds (implicit, deferred) are handled directly in/by the Corteza API backend
-         */
+        // /**
+        //  * Register only server-side scripts (!bundle) and only triggers with onManual eventType
+        //  *
+        //  *  1. client-scripts (bundled) are registered in the bundle's boot loader
+        //  *  2. onManual only -- other kinds (implicit, deferred) are handled directly in/by the Corteza API backend
+        //  */
         set
           .filter(({ name }) => name.substring(0, serverScriptPrefix.length) === serverScriptPrefix)
           .forEach(s => {
@@ -94,7 +97,8 @@ export default {
             eventbus: this.$EventBus,
             uiHooks: this.$UIHooks,
 
-            // Generic event handler
+            // Generic event handler, this will registered on
+            // eventbus' (see above)
             exec: (script, ev) => {
               const args = new corredor.Args(ev.args)
               corredor.Exec(script, args, ctx.withArgs(args))
