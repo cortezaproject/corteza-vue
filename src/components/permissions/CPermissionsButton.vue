@@ -46,11 +46,18 @@ export default {
       type: String,
       default: modalOpenEventName,
     },
+
+    target: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
 
   methods: {
     onClick () {
       this.$root.$emit(this.modalOpenEvent, {
+        target: this.target,
         resource: this.resource,
         title: this.title,
       })

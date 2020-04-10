@@ -11,7 +11,7 @@
       <c-permissions-form
         v-if="resource"
         :resource="resource"
-        :target="title"
+        :target="target"
       />
     </b-modal>
   </div>
@@ -29,6 +29,7 @@ export default {
     return {
       resource: undefined,
       title: undefined,
+      target: undefined,
     }
   },
 
@@ -65,9 +66,10 @@ export default {
   },
 
   mounted () {
-    this.$root.$on(modalOpenEventName, ({ resource, title }) => {
+    this.$root.$on(modalOpenEventName, ({ resource, title, target }) => {
       this.resource = resource
       this.title = title
+      this.target = target
     })
   },
 
@@ -83,6 +85,7 @@ export default {
     clear () {
       this.resource = undefined
       this.title = undefined
+      this.target = undefined
     },
   },
 }
