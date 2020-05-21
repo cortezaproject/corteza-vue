@@ -111,7 +111,7 @@ export default {
                   // convert event arguments and prepare
                   // context for script's execution
                   (ev) => {
-                    const args = new corredor.Args(ev.args)
+                    const args = new corredor.ArgsProxy(ev.args)
                     corredor.Exec(script, args, ctx.withArgs(args))
                   },
                   trigger,
