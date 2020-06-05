@@ -768,15 +768,16 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@^2020.3.0-rc.32":
-  version "2020.3.0-rc.32"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-rc.32.tgz#2a46068faf1355fb613284be09756c102359eafd"
-  integrity sha512-hHPIWYgh6nv2rOec0uEDloPKrSzcGi2/HYX8j06H+tke4i9Ozr9LRTS3h3DZEzYQrNoD/RYVNWZhrm0Mkj5C8A==
+"@cortezaproject/corteza-js@^2020.3.0-rc.33":
+  version "2020.3.0-rc.33"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2020.3.0-rc.33.tgz#37f393371c3d2544f46fdf9467c5e0731675a4da"
+  integrity sha512-SF8o2g+EpBZ4rlOsQhKwHzBdqnwQFIhW53eFbXPnDXKKUh1ehril+clUh7NC64h6GjsFTuNd/u6sKYXZlIpigQ==
   dependencies:
     axios "^0.19.1"
     chart.js "^2.7.3"
     hex-rgb "^4.1.0"
     lodash "^4.17.15"
+    minimalist "^1.0.0"
     minimatch "^3.0.4"
     moment "^2.24.0"
     numeral "^2.0.6"
@@ -6699,6 +6700,11 @@ mini-css-extract-plugin@^0.8.0:
     normalize-url "1.9.1"
     schema-utils "^1.0.0"
     webpack-sources "^1.1.0"
+
+minimalist@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/minimalist/-/minimalist-1.0.0.tgz#66bfe4fd625b568cc16acc9421154e66bfcd7218"
+  integrity sha1-Zr/k/WJbVozBasyUIRVOZr/Nchg=
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
