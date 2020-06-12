@@ -3,10 +3,10 @@
     <main>
       <component
         :is="previewType"
-        inline
         v-bind="$attrs"
         :max-pages="1"
-        :initial-scale="2"
+        :inline="inline"
+        :initial-scale="1.5"
         v-on="$listeners"
       />
     </main>
