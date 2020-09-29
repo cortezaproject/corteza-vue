@@ -11,7 +11,7 @@ function intervalToMS (from, to) {
   if (!from || !to) {
     throw new Error('intervalToMS.invalidArgs')
   }
-  return to.diff(from)
+  return to - from
 }
 
 export class ReminderService {
@@ -119,8 +119,8 @@ export class ReminderService {
   findNextProcessTime (set = [], time = null) {
     let changed = false
     set.forEach(r => {
-      if (!time || r.remindAtTime.isBefore(time)) {
-        time = r.remindAtTime
+      if (!time || r.remindAt < time) {
+        time = r.remindAt
         changed = true
       }
     })
@@ -134,7 +134,7 @@ export class ReminderService {
    * @param {Moment} now Ref to now; used for tests
    * @private
    */
-  scheduleReminderProcess (at, now = moment()) {
+  scheduleReminderProcess (at, now = new Date()) {
     // Determine ms until next reminder should be processed
     const t = intervalToMS(now, at)
 
@@ -150,19 +150,19 @@ export class ReminderService {
    * @param {Moment} now Ref to now; used for tests
    * @private
    */
-  processQueue (now = moment()) {
+  processQueue (now = new Date()) {
     let nextRemindAt = null
 
     this.set.forEach(r => {
-      if (now.isSameOrAfter(r.remindAtTime)) {
+      if (now >= r.remindAt) {
         if (this.emitter) {
           this.emitter.$emit('reminder.show', r)
         } else {
           throw new Error('pool.noEmitter')
         }
         r.processed = true
-      } else if (now.isBefore(r.remindAtTime) && (!nextRemindAt || r.remindAtTime.isBefore(nextRemindAt))) {
-        nextRemindAt = r.remindAtTime
+      } else if (now < r.remindAt && (!nextRemindAt || r.remindAt < nextRemindAt)) {
+        nextRemindAt = r.remindAt
       }
     })
 
