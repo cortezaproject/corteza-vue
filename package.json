@@ -29,7 +29,7 @@
     "bootstrap-vue": "2.2.2",
     "kind-of": "^6.0.3",
     "moment": "^2.24.0",
-    "pdfjs-dist": "^2.2.228",
+    "pdfjs-dist": "2.2.228",
     "pino": "^5.16.0",
     "qs": "^6.9.1",
     "v-photoswipe": "^1.0.3-1",
