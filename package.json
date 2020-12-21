@@ -89,6 +89,7 @@
   "resolutions": {
     "**/**/yargs-parser": "^13.1.2",
     "**/**/minimist": "^0.2.1",
+    "**/**/highlight.js": "^10.4.1",
     "**/**/moment": "2.25.3"
   },
   "stylelint": {
