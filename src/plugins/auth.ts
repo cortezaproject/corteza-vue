@@ -1,32 +1,40 @@
+import axios from 'axios'
 import { Make } from '../libs/url'
-import { system, apiClients } from '@cortezaproject/corteza-js'
+import { system } from '@cortezaproject/corteza-js'
 import { PluginFunction } from 'vue'
 
 const lsAuthJWTKey = 'auth.jwt'
 const lsAuthUserKey = 'auth.user'
+const lsAuthRefreshTokenKey = 'auth.refreshToken'
 
 const jwt = Symbol('jwt')
 const user = Symbol('user')
+const refreshToken = Symbol('refreshToken')
 
 interface AuthCheckResult {
   user: object;
   jwt: string;
+  refreshToken: string;
 }
 
 interface PluginOpts {
-  api: apiClients.System;
+  baseURL: string;
+  redirectURI: string;
 }
 
 export class Auth {
   [jwt]?: string
   [user]?: system.User
+  [refreshToken]?: string
 
-  private api: apiClients.System
+  private baseURL: string
+  private redirectURI: string
   private location: Location
   private localStorage: Storage
 
-  constructor (api: apiClients.System, { location, localStorage } = window) {
-    this.api = api
+  constructor (baseURL: string, redirectURI: string, { location, localStorage } = window) {
+    this.baseURL = baseURL
+    this.redirectURI = redirectURI
     this.location = location
     this.localStorage = localStorage
   }
@@ -44,46 +52,86 @@ export class Auth {
       // purge stored jwt and user if any
       this[user] = undefined
       this[jwt] = undefined
+      this[refreshToken] = undefined
 
       if (this.JWT) {
         // Raise error only when internal JWT is set
         // and someone wants to change it to undefined
         throw new Error('jwt undefined')
       }
-
-      return
     }
 
-    return this.api.setJWT(_jwt).authCheck().then((r: unknown) => {
-      const { user, jwt = _jwt } = (r as unknown) as AuthCheckResult
-      if (!user) {
-        throw new Error('unexpected auth check response')
-      }
-
-      this.JWT = jwt
-      this.user = new system.User(user)
-
-      return this.user
+    return axios.get(`${this.baseURL}/oauth2/info`, {
+      params: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        access_token: _jwt,
+      },
+    }).then(({ data }) => {
+      this.user = new system.User({
+        userID: data.sub.split(' ')[0],
+        name: data.name,
+        email: data.email,
+        username: data.username,
+      })
+      return data
     })
   }
 
-  async logout (): Promise<unknown> {
-    return this.api.setJWT(this.JWT).authLogout().finally(() => {
-      this.JWT = undefined
-      this.user = undefined
-    })
+  logout (): void {
+    this.JWT = undefined
+    this.user = undefined
+
+    this.location.assign(Make({ url: `${this.baseURL}/logout` }))
   }
 
   is (): boolean {
     return !!this.JWT
   }
 
-  goto (url = '/auth', ref = this.location.toString()): void {
-    this.location.replace(Make({ url, ref }))
+  goto (url = '', ref = this.location.toString()): void {
+    if (url) {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      this.location.assign(Make({ url, query: { redirect_uri: this.redirectURI }, ref }))
+    }
   }
 
   open (): void {
-    this.goto('/auth')
+    this.location.assign(Make({
+      url: `${this.baseURL}/oauth2/default-client`,
+      query: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        redirect_uri: this.redirectURI,
+        scope: 'profile api',
+      },
+    }))
+  }
+
+  async useCode (code = ''): Promise<unknown> {
+    return axios.post(`${this.baseURL}/oauth2/default-client`, null, {
+      params: {
+        code,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        redirect_uri: this.redirectURI,
+        scope: 'profile api',
+      },
+    }).then(({ data }) => {
+      this.JWT = data.access_token
+      this.refreshToken = data.refresh_token
+      return data
+    })
+  }
+
+  async refresh (refreshToken: string | undefined = this.refreshToken): Promise<unknown> {
+    return axios.post(`${this.baseURL}/oauth2/default-client`, null, {
+      params: {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        refresh_token: refreshToken,
+      },
+    }).then(({ data }) => {
+      this.JWT = data.access_token
+      this.refreshToken = data.refresh_token
+      return data
+    })
   }
 
   get JWT (): string|undefined {
@@ -126,14 +174,30 @@ export class Auth {
       this.localStorage.setItem(lsAuthUserKey, JSON.stringify(u))
     }
   }
+
+  get refreshToken (): string|undefined {
+    if (!this[refreshToken]) {
+      this[refreshToken] = this.localStorage.getItem(lsAuthRefreshTokenKey) || undefined
+    }
+
+    return this[refreshToken]
+  }
+
+  set refreshToken (rt: string|undefined) {
+    if (!rt) {
+      this[refreshToken] = undefined
+      this.localStorage.removeItem(lsAuthRefreshTokenKey)
+    } else if (this[refreshToken] !== rt) {
+      this[refreshToken] = rt
+      this.localStorage.setItem(lsAuthRefreshTokenKey, rt)
+    }
+  }
 }
 
 export default function (): PluginFunction<PluginOpts> {
   return function (Vue, opts): void {
-    if (opts === undefined) {
-      opts = { api: Vue.prototype.$SystemAPI }
+    if (opts) {
+      Vue.prototype.$auth = new Auth(opts.baseURL, opts.redirectURI)
     }
-
-    Vue.prototype.$auth = new Auth(opts.api)
   }
 }
