@@ -8,11 +8,7 @@ interface JWTFetcher {
 
 interface Options {
   baseURL?: string;
-  jwt?: string|JWTFetcher;
-}
-
-function getJWT (): string|null {
-  return window.localStorage.getItem('auth.jwt')
+  accessTokenFn?: () => string | undefined;
 }
 
 /**
@@ -24,22 +20,29 @@ function getJWT (): string|null {
  * @constructor
  */
 export default function (service: string, opt: Options = {}): PluginFunction<Options> {
-  service = service.substring(0, 1).toUpperCase() + service.substring(1)
-
   if (!opt.baseURL) {
     // @ts-ignore
-    opt.baseURL = window[`${service}API`]
-  }
+    if (!window.CortezaAPI) {
+      throw new Error('config.js missing or window.CortezaAPI not set')
+    }
 
-  if (!opt.jwt) {
-    opt.jwt = getJWT() || ''
-  } else if (typeof opt.jwt === 'function') {
-    opt.jwt = opt.jwt() || ''
+    // @ts-ignore
+    opt.baseURL = `${window.CortezaAPI}/${service}`
   }
 
   return function (Vue): void {
+    service = service.substring(0, 1).toUpperCase() + service.substring(1)
+
+    if (!opt.accessTokenFn) {
+      /**
+       * Checking if auth plugin was initialized before and
+       * hooking on to it's accessTokenFn
+       */
+      opt.accessTokenFn = Vue.prototype.$auth.accessTokenFn
+    }
+
     // @ts-ignore
-    // make  Vue.$<service>API (Vue.$SystemAPI, Vue.$CompsoeAPI, Vue.$MessagingAPI) available
+    // makes Vue.$<service>API (Vue.$SystemAPI, Vue.$ComposeAPI, Vue.$FederationAPI) available
     Vue.prototype[`$${service}API`] = new apiClients[service](opt)
   }
 }
