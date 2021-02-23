@@ -3,11 +3,6 @@ export {
 } from './corredor'
 
 export {
-  CDevAuth,
-  CDevAuthLite,
-} from './dev'
-
-export {
   CPreviewInline,
   CPreviewLightbox,
   canPreview,
