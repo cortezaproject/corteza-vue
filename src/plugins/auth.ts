@@ -427,13 +427,13 @@ export default function (): PluginFunction<PluginOpts> {
       const { CortezaAPI = undefined, CortezaAuth = undefined } = window
 
       switch (true) {
-        case CortezaAuth:
+        case !!CortezaAuth:
           /**
            * Corteza authentication endpoints location is set explicitly:
            */
           cortezaAuthURL = CortezaAuth
           break
-        case CortezaAPI && /\/api$/.test(CortezaAPI):
+        case !!CortezaAPI && /\/api$/.test(CortezaAPI):
           /**
            * Corteza API base-url is explicitly set and string ends with /api,
            * do a leap of faith and replace it with /auth, so that
@@ -441,7 +441,7 @@ export default function (): PluginFunction<PluginOpts> {
            */
           cortezaAuthURL = CortezaAPI.replace('/api', '/auth')
           break
-        case CortezaAPI:
+        case !!CortezaAPI:
           /**
            * Corteza API base-url is explicitly set. Since it does not end with /api
            * we will assume api is served directly on root of that domain and we'll just append the /auth suffix
