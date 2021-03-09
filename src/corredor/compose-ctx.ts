@@ -6,7 +6,6 @@ import pino from 'pino'
 interface Vue {
   $SystemAPI: apiClients.System;
   $ComposeAPI: apiClients.Compose;
-  $MessagingAPI: apiClients.Messaging;
 
   $store: { getters: { [_: string]: Array<compose.Page> } };
   $emit: unknown;
@@ -36,8 +35,6 @@ export default class ComposeCtx extends corredor.Ctx {
     this.systemAPI = vue.$SystemAPI
     // @ts-ignore
     this.composeAPI = vue.$ComposeAPI
-    // @ts-ignore
-    this.messagingAPI = vue.$MessagingAPI
 
     this.composeUI = new ComposeUIHelper({
       ...this.args,
