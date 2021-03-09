@@ -414,8 +414,6 @@ export default function (): PluginFunction<PluginOpts> {
       localStorage = window.localStorage,
     } = (opts || {}) as Partial<AuthCtor>
 
-    console.log(localStorage)
-
     if (!cortezaAuthURL) {
       /**
        * cortezaAuthURL not explicitly set, try to auto-configure from properties set on window variable
