@@ -3,6 +3,7 @@ import * as mixins from './mixins'
 import * as components from './components'
 import * as corredor from './corredor'
 import * as filters from './filters'
+import * as store from './store'
 import * as url from './libs/url'
 
 export {
@@ -11,5 +12,6 @@ export {
   components,
   corredor,
   filters,
+  store,
   url,
 }

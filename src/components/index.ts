@@ -24,6 +24,8 @@ export {
   CPermissionsModal,
 } from './permissions'
 
+export * from './prompts'
+
 export {
   CHamburgerMenu,
   CSidebar,

@@ -42,7 +42,7 @@ export default function (service: string, opt: Options = {}): PluginFunction<Opt
     }
 
     // @ts-ignore
-    // makes Vue.$<service>API (Vue.$SystemAPI, Vue.$ComposeAPI, Vue.$FederationAPI) available
+    // makes Vue.$<service>API (Vue.$SystemAPI, Vue.$ComposeAPI, Vue.$FederationAPI, Vue.$AutomationAPI) available
     Vue.prototype[`$${service}API`] = new apiClients[service](opt)
   }
 }
