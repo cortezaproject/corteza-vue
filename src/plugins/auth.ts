@@ -186,24 +186,22 @@ export class Auth {
    *   if user is authorized, continue with execution
    */
   async handle (req: URL = new URL(window.location.toString())): Promise<AuthInfo | null> {
-    if (!/\/auth\/callback$/.test(req.pathname)) {
-      return this.check()
+    if (/\/auth\/callback$/.test(req.pathname)) {
+      this.log.info('handling authentication callback')
+
+      const params = new URLSearchParams(req.search)
+      if (params.has('error')) {
+        throw new Error(params.get('error') || 'authentication flow failed with error')
+      }
+
+      if (params.has('code')) {
+        const code = params.get('code') || ''
+        this.log.info('authorization code received', code)
+        return this.exchangeCode(code)
+      }
     }
 
-    this.log.info('handling authentication callback')
-
-    const params = new URLSearchParams(req.search)
-    if (params.has('error')) {
-      throw new Error(params.get('error') || 'authentication flow failed with error')
-    }
-
-    if (params.has('code')) {
-      const code = params.get('code') || ''
-      this.log.info('authorization code received', code)
-      return this.exchangeCode(code)
-    }
-
-    throw new Error('unexpected or missing authentication callback parameters')
+    return this.check()
   }
 
   /**
