@@ -11,7 +11,12 @@
     :variant="buttonVariant"
     @click="onClick"
   >
-    <slot><font-awesome-icon :icon="['fas', 'lock']" /></slot>
+    <slot>
+      <font-awesome-icon :icon="['fas', 'lock']" />
+      <span v-if="buttonLabel">
+        {{ buttonLabel }}
+      </span>
+    </slot>
   </b-button>
 </template>
 <script lang="js">
@@ -38,6 +43,11 @@ export default {
     },
 
     title: {
+      type: String,
+      default: undefined,
+    },
+
+    buttonLabel: {
       type: String,
       default: undefined,
     },
