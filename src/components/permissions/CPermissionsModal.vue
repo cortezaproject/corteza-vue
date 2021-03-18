@@ -6,6 +6,7 @@
       size="lg"
       :title="getTitle"
       lazy
+      scrollable
       @hide="onHide"
     >
       <c-permissions-form

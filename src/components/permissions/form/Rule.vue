@@ -5,7 +5,7 @@
   >
     <b-col
       cols="12"
-      lg="5"
+      lg="6"
       order="2"
       order-lg="1"
     >
@@ -19,6 +19,7 @@
       <b-button
         v-show="isChanged"
         variant="link"
+        class="pl-0"
         @click="onReset"
       >
         {{ $t('permission.resetBack', {current}) }}
@@ -26,8 +27,8 @@
     </b-col>
     <b-col
       cols="12"
-      lg="7"
-      class="mb-lg-4"
+      lg="6"
+      class="mb-lg-4 text-nowrap text-truncate"
       order="1"
       order-lg="2"
     >

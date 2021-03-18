@@ -4,18 +4,16 @@
       <b-col
         class="role-list"
         cols="12"
-        sm="6"
-        md="4"
         lg="3"
       >
-        <b-list-group class="d-none d-sm-block">
+        <b-list-group class="d-none d-lg-block">
           <b-list-group-item
             v-for="r in roles"
             :key="r.roleID"
             :active="r.roleID === currentRole.roleID"
             active-class="primary"
             variant="outline-primary"
-            class="text-break"
+            class="text-break pointer"
             @click="onRoleChange(r)"
           >
             {{ r.name || r.handle || r.roleID || $t('role.unnamed') }}
@@ -25,7 +23,7 @@
           key="roleID"
           v-model="currentRole"
           label="name"
-          class="mb-4 d-block d-sm-none"
+          class="mb-4 d-block d-lg-none"
           :clearable="false"
           :options="roles"
           @input="onRoleChange"
@@ -34,14 +32,13 @@
       <b-col
         class="rule-list"
         cols="12"
-        sm="6"
-        md="8"
         lg="9"
       >
         <rules :rules.sync="rules" />
       </b-col>
     </b-row>
-    <b-row class="footer mt-3">
+    <b-row class="footer mt-3"
+    >
       <b-col
         class="rule-list text-right"
         cols="9"
@@ -252,3 +249,8 @@ export default {
   },
 }
 </script>
+<style scoped lang="scss">
+.pointer {
+  cursor: pointer;
+}
+</style>
