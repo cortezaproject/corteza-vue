@@ -6,6 +6,7 @@
     >
       <b-button
         @click="$emit('submit', { confirmed: pRaw('buttonValue', true, 'Boolean') })"
+        :variant="pVal('buttonVariant', 'primary')"
         :disabled="loading"
       >
         {{ pVal('buttonLabel', 'OK') }}

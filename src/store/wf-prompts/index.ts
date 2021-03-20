@@ -1,13 +1,6 @@
 import { apiClients, automation } from '@cortezaproject/corteza-js'
 import { ActionContext, StoreOptions } from 'vuex'
 
-const lightPromptRefs = [
-  'alert',
-  'choice',
-  'input',
-  'options',
-]
-
 interface Options {
   api: apiClients.Automation;
   watchInterval: number;
@@ -87,10 +80,6 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
         } else {
           return active
         }
-      },
-
-      nextLight (state: State): automation.Prompt | undefined {
-        return state.prompts.find(({ ref }) => lightPromptRefs.includes(ref))
       },
     },
 

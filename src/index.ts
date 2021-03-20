@@ -5,7 +5,6 @@ import * as corredor from './corredor'
 import * as filters from './filters'
 import * as store from './store'
 import * as url from './libs/url'
-import * as prompts from './automation/prompts'
 
 export {
   plugins,
@@ -15,5 +14,4 @@ export {
   filters,
   store,
   url,
-  prompts,
 }

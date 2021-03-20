@@ -1,93 +1,97 @@
 <template>
   <div>
     <b-toast
-      id="wfPromptToast"
-      :visible="visible"
-      variant="primary"
+      v-for="({ prompt, component, passive }) in toasts"
+      :id="'wfPromptToast-'+prompt.stateID"
+      :key="'wfPromptToast-'+prompt.stateID"
+      :variant="pVal(prompt, 'variant', 'primary')"
+      :visible="!isActive"
       solid
-      no-auto-hide
-      no-close-button
+      :no-auto-hide="!passive"
+      :no-close-button="!passive"
     >
       <template #toast-title>
         <div class="d-flex flex-grow-1 align-items-baseline">
-          <strong class="mr-auto">{{ title }}</strong>
+          <strong class="mr-auto">{{ pVal(prompt, 'title', 'Workflow prompt') }}</strong>
           <b-button
             variant="link"
             size="sm"
+            v-if="!passive && waiting.length > 1"
             @click="activate(true)"
           >
-            {{ prompts.length }} waiting
+            {{ waiting.length }} waiting
           </b-button>
         </div>
       </template>
       <component
         v-if="component"
         :is="component"
-        :payload="nextLight.payload"
+        :payload="prompt.payload"
         :loading="isLoading"
-        @submit="resume({ input: $event, prompt: nextLight })"
+        @submit="resume({ input: $event, prompt })"
       />
-      <div
-        v-else-if="nextLight"
-        class="bg-danger"
-      >
-        Unknown prompt ref: {{ nextLight.ref }}
-      </div>
     </b-toast>
   </div>
 </template>
 <script>
-import CPromptChoice from './kinds/CPromptChoice.vue'
 import { mapGetters, mapActions } from 'vuex'
-import * as promptKinds from './kinds/index.ts'
+import definitions from './kinds/index.ts'
 import { pVal } from './utils.ts'
 
 export default {
   name: 'c-prompt-toast',
-  components: {
-    CPromptChoice
-  },
 
   computed: {
     ...mapGetters({
       prompts: 'wfPrompts/all',
       isActive: 'wfPrompts/isActive',
-      nextLight: 'wfPrompts/nextLight',
       isLoading: 'wfPrompts/isLoading',
     }),
 
-    /**
-     * Toast is visible when there is at least one prompt loading and modal is not open (active)
-     * @returns {boolean}
-     */
-    visible () {
-      return this.prompts.length > 0 && !this.isActive
+    withHandlers () {
+      return this.prompts
+        .filter(({ ref }) => !!definitions[ref] && !!definitions[ref].handler)
+        .map(prompt => ({ ...definitions[prompt.ref], prompt }))
     },
 
-    component () {
-      if (!this.nextLight) {
-        return
-      }
-
-      switch (this.nextLight.ref) {
-        case 'alert':
-          return promptKinds.CPromptAlert
-        case 'choice':
-          return promptKinds.CPromptChoice
-        case 'input':
-          return promptKinds.CPromptInput
-        case 'options':
-          return promptKinds.CPromptOptions
-      }
+    withComponents () {
+      return this.prompts
+        .filter(({ ref }) => !!definitions[ref] && !!definitions[ref].component)
+        .map(prompt => ({ ...definitions[prompt.ref], prompt }))
     },
 
     /**
-     * Toast title frmo payload (if set)
-     * @returns {string}
+     * Display all toasts that can be displayed:
+     *   - show only prompts with components
+     *   - show passive components first
+     *   - show only one non-passive component (at the end
      */
-    title () {
-      return pVal(this.nextLight, 'title', 'Workflow prompt')
+    toasts () {
+      const pp = this.withComponents.filter(({ passive }) => passive)
+      const nonPassive = this.withComponents.find(({ passive }) => !passive)
+      if (!!nonPassive) {
+        pp.unshift(nonPassive)
+      }
+
+      return pp
     },
+
+    waiting () {
+      return this.withComponents.filter(({ passive }) => !passive)
+    },
+  },
+
+  watch: {
+    // watch prompts with handlers and when a new one arrives
+    // shift it from the stack, resume the prompt and handle it
+    withHandlers (hh) {
+      if (hh.length > 0) {
+        const { handler, prompt } = hh.shift()
+        this.resume({ input: {}, prompt }).then(() => {
+          handler.call(this, prompt.payload)
+        })
+      }
+    }
   },
 
   methods: {
@@ -95,6 +99,10 @@ export default {
       resume: 'wfPrompts/resume',
       activate: 'wfPrompts/activate',
     }),
+
+    pVal (prompt, k, def = undefined) {
+      return pVal(prompt.payload, k, def)
+    },
   },
 }
 </script>

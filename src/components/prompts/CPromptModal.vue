@@ -4,28 +4,18 @@
     size="lg"
     lazy
     :hide-footer="!current"
-    :title="title"
+    :title="current ? current.title : 'Workflow prompts'"
     :busy="isLoading"
 
     @hide="deactivate()"
   >
-    <div
+    <component
       v-if="current"
-    >
-      <component
-        v-if="component"
-        :is="component"
-        :payload="current.payload"
-        :loading="isLoading"
-        @submit="resume({ input: $event, prompt: current })"
-      />
-      <div
-        v-else
-        class="bg-danger"
-      >
-        Unknown prompt ref: {{ ref }}
-      </div>
-    </div>
+      :is="current.component"
+      :payload="current.prompt.payload"
+      :loading="isLoading"
+      @submit="resume({ input: $event, prompt: current.prompt })"
+    />
     <div
       v-else
     >
@@ -70,7 +60,7 @@
 </template>
 <script lang="js">
 import { mapGetters, mapActions } from 'vuex'
-import * as promptKinds from './kinds/index.ts'
+import definitions from './kinds/index.ts'
 import { pVal } from './utils.ts'
 import moment from 'moment'
 
@@ -80,8 +70,7 @@ export default {
     ...mapGetters({
       isLoading: 'wfPrompts/isLoading',
       isActive: 'wfPrompts/isActive',
-      current: 'wfPrompts/current',
-      all: 'wfPrompts/all',
+      prompts: 'wfPrompts/all',
     }),
 
     isOpened: {
@@ -99,38 +88,26 @@ export default {
     },
 
     list () {
-      return this.all.map((prompt) => ({
-        key: prompt.stateID,
-        title: pVal(prompt.payload, 'title', 'Workflow prompt'),
-        age: moment(prompt.createdAt).fromNow(),
-        prompt,
-      }))
+      return this.prompts
+        .filter(({ ref }) => !!definitions[ref] && !!definitions[ref].component)
+        .map(prompt => ({ ...definitions[prompt.ref], prompt }))
+        .filter(({ passive }) => !passive)
+        .map(p => ({
+          key: p.prompt.stateID,
+          title: pVal(p.prompt.payload, 'title', 'Workflow prompt'),
+          age: moment(p.prompt.createdAt).fromNow(),
+          ...p,
+        }))
     },
 
-    component () {
-      if (!this.current) {
-        return
+    current () {
+      const c = this.$store.getters['wfPrompts/current']
+      if (!c) {
+        return undefined
       }
 
-      switch (this.current.ref) {
-        case 'alert':
-          return promptKinds.CPromptAlert
-        case 'choice':
-          return promptKinds.CPromptChoice
-        case 'input':
-          return promptKinds.CPromptInput
-        case 'options':
-          return promptKinds.CPromptOptions
-      }
-    },
-
-    title () {
-      if (!this.current) {
-        return 'Workflow prompts'
-      }
-
-      return pVal(this.current, 'title', 'Workflow prompt')
-    },
+      return this.list.find(({ prompt }) => prompt.stateID === c.stateID)
+    }
   },
 
   methods: {

@@ -5,7 +5,8 @@
       class="text-center m-2"
     >
       <b-button
-        @click="$emit('submit', { confirmed: pRaw('rejectButtonValue', true, 'Boolean') })"
+        @click="$emit('submit', { confirmed: pRaw('confirmButtonValue', true, 'Boolean') })"
+        :variant="pVal('confirmButtonVariant', 'primary')"
         :disabled="loading"
       >
         {{ pVal('confirmButtonLabel', 'Yes') }}
@@ -13,6 +14,7 @@
       <b-button
         @click="$emit('submit', { confirmed: pRaw('rejectButtonValue', false, 'Boolean') })"
         :disabled="loading"
+        :variant="pVal('rejectButtonVariant', 'primary')"
       >
         {{ pVal('rejectButtonLabel', 'No') }}
       </b-button>
