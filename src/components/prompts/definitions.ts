@@ -19,6 +19,16 @@ export const prompts = Object.freeze([{
     { name: 'delay', types: ['Integer'], meta: { description: 'Redirection delay in seconds' } },
   ],
 }, {
+  ref: 'recordPage',
+  meta: { short: 'Redirect user to the record page' },
+  parameters: [
+    { name: 'module', types: ['ID', 'Handle', 'ComposeModule'] },
+    { name: 'namespace', types: ['ID', 'Handle', 'ComposeNamespace'] },
+    { name: 'record', types: ['ID', 'ComposeRecord'] },
+    { name: 'edit', types: ['Boolean'] },
+    { name: 'delay', types: ['Integer'], meta: { description: 'Redirection delay in seconds' } },
+  ],
+}, {
   ref: 'notification',
   meta: { short: 'Show non-blocking message to user' },
   parameters: [
