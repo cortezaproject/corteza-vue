@@ -35,7 +35,6 @@ export const prompts = Object.freeze([{
     { name: 'title', types: ['String'] },
     { name: 'message', types: ['String'], required: true },
     { name: 'variant', types: ['String'], meta: { visual: { variants } } },
-    { name: 'sticky', types: ['Boolean'], meta: { description: 'Disallow user to close the notification. If timeout parameter is omitted this parameter is ignored' } },
     { name: 'timeout', types: ['Integer'], meta: { description: 'How long do we show the notification in seconds' } },
   ],
 }, {

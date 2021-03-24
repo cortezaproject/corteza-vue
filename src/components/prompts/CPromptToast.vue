@@ -8,7 +8,9 @@
       :visible="!isActive"
       solid
       :no-auto-hide="!passive"
+      :auto-hide-delay="pVal(prompt, 'timeout', 7) * 1000"
       :no-close-button="!passive"
+      @hidden="resume({ input: {}, prompt })"
     >
       <template #toast-title>
         <div class="d-flex flex-grow-1 align-items-baseline">
