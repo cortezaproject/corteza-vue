@@ -10,7 +10,6 @@
       :no-auto-hide="!passive"
       :auto-hide-delay="pVal(prompt, 'timeout', 7) * 1000"
       :no-close-button="!passive"
-      @hidden="resume({ input: {}, prompt })"
     >
       <template #toast-title>
         <div class="d-flex flex-grow-1 align-items-baseline">
@@ -30,7 +29,7 @@
         :is="component"
         :payload="prompt.payload"
         :loading="isLoading"
-        @submit="resume({ input: $event, prompt })"
+        @submit="resumeToast({ input: $event, prompt })"
       />
     </b-toast>
   </div>
@@ -42,6 +41,12 @@ import { pVal } from './utils.ts'
 
 export default {
   name: 'c-prompt-toast',
+
+  data () {
+    return {
+      toasts: []
+    }
+  },
 
   computed: {
     ...mapGetters({
@@ -68,7 +73,7 @@ export default {
      *   - show passive components first
      *   - show only one non-passive component (at the end
      */
-    toasts () {
+    newToasts () {
       const pp = this.withComponents.filter(({ passive }) => passive)
       const nonPassive = this.withComponents.find(({ passive }) => !passive)
       if (!!nonPassive) {
@@ -93,6 +98,19 @@ export default {
           handler.call(this, prompt.payload)
         })
       }
+    },
+
+    newToasts: {
+      immediate: true,
+      handler (newToasts = []) {
+        // Add prompts with unique stateIDs to toasts
+        const stateIDs = new Set([...this.toasts.map(({ prompt }) => prompt.stateID)]) 
+        newToasts.forEach(toast => {
+          if (!stateIDs.has(toast.prompt.stateID)) {
+            this.toasts.push(toast)
+          }
+        })
+      }
     }
   },
 
@@ -101,6 +119,18 @@ export default {
       resume: 'wfPrompts/resume',
       activate: 'wfPrompts/activate',
     }),
+
+    resumeToast (values) {
+      // Only reset input if prompt is kept open
+      if (values.input && values.input.keep) {
+        values.input = {}
+      } else {
+        // Otherwise remove prompt from toasts
+        this.toasts = this.toasts.filter(({ prompt }) => prompt.stateID !== values.prompt.stateID)
+      }
+
+      this.resume(values)
+    },
 
     pVal (prompt, k, def = undefined) {
       return pVal(prompt.payload, k, def)
