@@ -2,10 +2,10 @@
   <div>
     <p v-html="message"></p>
     <b-form-group
-      :label="type"
+      :label="label"
     >
       <b-input
-        :type="pVal('type', 'text')"
+        :type="type"
         :disabled="loading"
         v-model="value"
       />
@@ -54,6 +54,10 @@ export default {
 
       return t
     },
+
+    label () {
+      return this.pVal('label', '')
+    }
   },
 
 }
