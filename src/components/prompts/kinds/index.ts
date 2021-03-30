@@ -162,10 +162,19 @@ const definitions: Record<string, PromptDefinition> = {
         if (!edit) {
           name = 'page.record'
         }
+
+        // If name and params match, make sure to refresh page instead of push
+        // @ts-ignore
+        const reloadPage = name === this.$route.name && slug === this.$route.params.slug && pageID === this.$route.params.pageID && recordID === this.$route.params.recordID
+
         setTimeout(() => {
           console.debug('reroute to %s via prompt in %d sec', name, delay, { namespaceID, slug, moduleID, recordID })
-          // @ts-ignore
-          this.$router.push({ name, params: { recordID, pageID, slug } })
+          if (reloadPage) {
+            window.location.reload()
+          } else {
+            // @ts-ignore
+            this.$router.push({ name, params: { recordID, pageID, slug } })
+          }
         }, delay * 1000)
       } else {
         // @ts-ignore
