@@ -336,13 +336,19 @@ export class Auth {
       timeout,
     })
 
+    // Schedule next refresh
     this.refreshTimeout = window.setTimeout(() => {
       this.log.debug('refreshing token')
-      try {
-        this.exchangeRefresh(oa2tkn.refresh_token)
-      } catch (err) {
-        this.log.error('refresh token exchange failed', err)
-      }
+      this.exchangeRefresh(oa2tkn.refresh_token)
+        .catch((err) => {
+          this.log.error('refresh token exchange failed', err)
+
+          /**
+           * @todo this should be reimplemented in a way that does not
+           *       cause a browser page refresh
+           */
+          this.startAuthenticationFlow()
+        })
     }, 1000 * timeout)
 
     this.localStorage.setItem(this.localStoreageKey(lsAuthRefreshTokenKey), oa2tkn.refresh_token)
