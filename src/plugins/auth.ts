@@ -195,9 +195,36 @@ export class Auth {
       }
 
       if (params.has('code')) {
+        let finalLocation: string | null = null
+
+        if (params.has('state')) {
+          const state = params.get('state') || ''
+          const lsKey = this.localStoreageKey(`state.${state}.location`)
+          this.log.info('state received', state)
+
+          finalLocation = this.localStorage.getItem(lsKey)
+          if (!finalLocation) {
+            throw Error('state does not match')
+          }
+
+          if (/\/auth\/callback/.test(finalLocation)) {
+            // if by some coincidence we got callback URL to finalLocation
+            // we'll silently ignore it
+            finalLocation = null
+          } else {
+            this.log.info('location before auth flow start', finalLocation)
+          }
+
+          this.localStorage.removeItem(lsKey)
+        }
+
         const code = params.get('code') || ''
         this.log.info('authorization code received', code)
-        return this.exchangeCode(code)
+        await this.exchangeCode(code)
+
+        if (finalLocation) {
+          this.location.assign(finalLocation)
+        }
       }
     }
 
@@ -269,17 +296,30 @@ export class Auth {
     }))
   }
 
+  /**
+   * Starts new authentication flow
+   *
+   * It generates simple rand state to harden security and to
+   * keep track of before-flow-start location of the user
+   */
   startAuthenticationFlow (): void {
+    const state = Math.random().toString(36).substring(2)
+    this.localStorage.setItem(this.localStoreageKey(`state.${state}.location`), this.location.toString())
+
     this.location.assign(Make({
       url: `${this.cortezaAuthURL}` + oauth2FlowURL,
       query: {
         // eslint-disable-next-line @typescript-eslint/camelcase
         redirect_uri: this.callbackURL,
         scope: oauth2Scope,
+        state,
       },
     }))
   }
 
+  /**
+   * Exchanges authorization code for access and refresh tokens
+   */
   private async exchangeCode (code = ''): Promise<AuthInfo> {
     return this.oauth2token({
       code: code,
@@ -337,16 +377,11 @@ export class Auth {
     })
 
     // Schedule next refresh
-    this.refreshTimeout = window.setTimeout(() => {
+    this.refreshTimeout = window.setTimeout(async () => {
       this.log.debug('refreshing token')
       this.exchangeRefresh(oa2tkn.refresh_token)
         .catch((err) => {
           this.log.error('refresh token exchange failed', err)
-
-          /**
-           * @todo this should be reimplemented in a way that does not
-           *       cause a browser page refresh
-           */
           this.startAuthenticationFlow()
         })
     }, 1000 * timeout)
