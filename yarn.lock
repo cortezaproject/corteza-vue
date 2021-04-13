@@ -769,9 +769,9 @@
     to-fast-properties "^2.0.0"
 
 "@cortezaproject/corteza-js@^2021.3.0":
-  version "2021.3.1"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2021.3.1.tgz#bdea1feded135cd299110bab1dca3ba78c1ca9dd"
-  integrity sha512-7C1iJR28ZOzmNNXIAmAbqs344BwRLQ7berCUS1ziJr0oEm0V3wgqjDeqrBx1IIOQJ/or0OxpxWmbTZ9j5oZDvg==
+  version "2021.3.2"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2021.3.2.tgz#7bf7b618c7f731e24398692a19fca963de466026"
+  integrity sha512-bPC8L9YiW/KxJVQGkrAz72TnLWNbTCAnHZqL8U9hGYWLDPdrM35k16k6XC4tYYkxL4OHMaOQMHrgBW8KG3+mlw==
   dependencies:
     axios "^0.21.1"
     chart.js "2.9.3"
