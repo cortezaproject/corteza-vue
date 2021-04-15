@@ -70,6 +70,12 @@ interface AuthCtor {
   localStorage: Storage;
 
   /**
+   * Static string with entry-point URL stored at app init
+   * so that there is no risk of changes when Vue router gets it's hands on it
+   */
+  entrypointURL: string;
+
+  /**
    * multiply factor for token expiration
    * this will tell internal refresh system how much
    * before the token expiration we'll refresh the access toke
@@ -110,12 +116,17 @@ export class Auth {
   readonly localStorage: Storage
 
   /**
+   * Application entrypoint URL
+   */
+  readonly entrypointURL: string
+
+  /**
    * Keeps track of timeout callback in case we re-run it before it timesout
    * @private
    */
   private refreshTimeout?: number
 
-  constructor ({ app, verbose, cortezaAuthURL, callbackURL, location, localStorage, refreshFactor }: AuthCtor) {
+  constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, localStorage, refreshFactor }: AuthCtor) {
     if (refreshFactor >= 1 || refreshFactor <= 0) {
       throw new Error('refreshFactor should be between 0 and 1')
     }
@@ -127,6 +138,7 @@ export class Auth {
     this.location = location
     this.localStorage = localStorage
     this.refreshFactor = refreshFactor
+    this.entrypointURL = entrypointURL
 
     this.log.debug('initialized auth plugin', {
       cortezaAuthURL,
@@ -185,7 +197,8 @@ export class Auth {
    *   if user is not authorized, redirect to the configured path to start oauth2 flow
    *   if user is authorized, continue with execution
    */
-  async handle (req: URL = new URL(window.location.toString())): Promise<AuthInfo | null> {
+  async handle (req: URL = new URL(this.entrypointURL)): Promise<AuthInfo | null> {
+    this.log.info('handling authentication')
     if (/\/auth\/callback$/.test(req.pathname)) {
       this.log.info('handling authentication callback')
 
@@ -207,7 +220,7 @@ export class Auth {
             throw Error('state does not match')
           }
 
-          if (/\/auth\/callback/.test(finalLocation)) {
+          if (/auth\/callback/.test(finalLocation)) {
             // if by some coincidence we got callback URL to finalLocation
             // we'll silently ignore it
             finalLocation = null
@@ -222,6 +235,7 @@ export class Auth {
         this.log.info('authorization code received', code)
         await this.exchangeCode(code)
 
+        console.log('going to final location, maybe?', { finalLocation })
         if (finalLocation) {
           this.location.assign(finalLocation)
         }
@@ -249,7 +263,7 @@ export class Auth {
     if (this[accessToken]) {
       this.log.info('access token found')
 
-      const headers = { Authorization: `Bearer: ${this[accessToken]}` }
+      const headers = { Authorization: `Bearer ${this[accessToken]}` }
 
       this.log.info('fetching authentication info from ' + oauth2InfoURL)
 
@@ -303,6 +317,7 @@ export class Auth {
    * keep track of before-flow-start location of the user
    */
   startAuthenticationFlow (): void {
+    this.log.debug('starting new authentication flow')
     const state = Math.random().toString(36).substring(2)
     this.localStorage.setItem(this.localStoreageKey(`state.${state}.location`), this.location.toString())
 
@@ -447,8 +462,9 @@ export default function (): PluginFunction<PluginOpts> {
       app = '',
       cortezaAuthURL = '',
       callbackURL = '',
-      verbose = false,
+      verbose = undefined,
       refreshFactor = 0.75,
+      entrypointURL = window.location.toString(),
       location = window.location,
       localStorage = window.localStorage,
     } = (opts || {}) as Partial<AuthCtor>
@@ -504,7 +520,9 @@ export default function (): PluginFunction<PluginOpts> {
 
     if (verbose === undefined) {
       // enable debug (when not expl. disabled on localhost)
-      verbose = location.hostname === 'localhost' || window.location.search.includes('verboseAuth')
+      verbose = location.hostname === 'localhost' ||
+        window.location.search.includes('verboseAuth') ||
+        !!window.localStorage.getItem('auth.verbose')
     }
 
     Vue.prototype.$auth = new Auth({
@@ -514,6 +532,7 @@ export default function (): PluginFunction<PluginOpts> {
       callbackURL,
       location,
       localStorage,
+      entrypointURL,
       refreshFactor,
     })
   }
