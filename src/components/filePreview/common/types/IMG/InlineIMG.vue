@@ -80,13 +80,11 @@ export default {
 
 <style scoped lang="scss">
 div {
-  margin: 0 auto;
   object-fit: contain;
   img {
     &.loaded {
       width: auto;
       height: auto;
-      margin: 0 auto;
       display: block;
     }
   }
