@@ -8,7 +8,7 @@
       :visible="!isActive"
       solid
       :no-auto-hide="!passive"
-      :auto-hide-delay="pVal(prompt, 'timeout', 7) * 1000"
+      :auto-hide-delay="pVal(prompt, 'timeout', defaultTimeout) * 1000"
       :no-close-button="!passive"
     >
       <template #toast-title>
@@ -17,10 +17,10 @@
           <b-button
             variant="link"
             size="sm"
-            v-if="!passive && waiting.length > 1"
+            v-if="!passive && active.length > 1"
             @click="activate(true)"
           >
-            {{ waiting.length }} waiting
+            {{ active.length }} waiting
           </b-button>
         </div>
       </template>
@@ -44,7 +44,7 @@ export default {
 
   data () {
     return {
-      toasts: []
+      passive: new Set(),
     }
   },
 
@@ -68,24 +68,28 @@ export default {
     },
 
     /**
-     * Display all toasts that can be displayed:
-     *   - show only prompts with components
-     *   - show passive components first
-     *   - show only one non-passive component (at the end
+     * All non-passive prompts with components
      */
-    newToasts () {
-      const pp = this.withComponents.filter(({ passive }) => passive)
-      const nonPassive = this.withComponents.find(({ passive }) => !passive)
-      if (!!nonPassive) {
-        pp.unshift(nonPassive)
-      }
-
-      return pp
-    },
-
-    waiting () {
+    active() {
       return this.withComponents.filter(({ passive }) => !passive)
     },
+
+    /**
+     * Returns list of prompts that we can interpret as toasts: display component is defined
+     *
+     * Toasts (prompts with components) are displayed in order received but
+     * passive (no feedback or input from user required) first and the rest later
+     */
+    toasts () {
+      return [
+        ...this.passive.values(),
+        ...this.active
+      ]
+    },
+
+    defaultTimeout () {
+      return 7
+    }
   },
 
   watch: {
@@ -100,18 +104,22 @@ export default {
       }
     },
 
-    newToasts: {
+    /**
+     * Make a copy of prompt if it is defined as passive
+     *
+     * We do this because we do not want it to be removed right away
+     * but through a toast component's timeout
+     */
+    prompts: {
       immediate: true,
-      handler (newToasts = []) {
-        // Add prompts with unique stateIDs to toasts
-        const stateIDs = new Set([...this.toasts.map(({ prompt }) => prompt.stateID)]) 
-        newToasts.forEach(toast => {
-          if (!stateIDs.has(toast.prompt.stateID)) {
-            this.toasts.push(toast)
+      handler () {
+        this.withComponents.forEach(p => {
+          if (p.passive) {
+            this.passive.add(p)
           }
         })
-      }
-    }
+      },
+    },
   },
 
   methods: {

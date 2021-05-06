@@ -3,6 +3,7 @@ import { ActionContext, StoreOptions } from 'vuex'
 
 interface Options {
   api: apiClients.Automation;
+  ws: WebSocket;
   watchInterval: number;
 }
 
@@ -17,9 +18,6 @@ interface State {
    *   false  = modal is closed
    */
   active: automation.Prompt | boolean;
-
-  // watch interval pointer
-  wiptr?: number;
 }
 
 interface ResumePayload {
@@ -50,7 +48,7 @@ function onlyFresh (existing: Array<automation.Prompt>, fresh: Array<automation.
   return fresh.filter(({ stateID = undefined }) => stateID && !index.includes(stateID))
 }
 
-export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<State> {
+export default function ({ api }: Options): StoreOptions<State> {
   return {
     strict: true,
 
@@ -58,7 +56,6 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
       loading: false,
       active: false,
       prompts: [],
-      wiptr: undefined,
     },
 
     getters: {
@@ -84,28 +81,6 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
     },
 
     actions: {
-      watch ({ state, commit, dispatch }: ActionContext<State, State>): void {
-        clearInterval(state.wiptr)
-        // dispatch update right away and if there are no problems
-        // init update interval fn
-        dispatch('update').then(() => {
-          commit(
-            'watching',
-            setInterval(() => {
-              dispatch('update')
-            }, watchInterval),
-          )
-        })
-      },
-
-      openModal ({ commit }: ActionContext<State, State>): void {
-        commit('showModal', true)
-      },
-
-      closeModal ({ commit }: ActionContext<State, State>): void {
-        commit('showModal', false)
-      },
-
       async activate ({ commit }: ActionContext<State, State>, m?: true | automation.Prompt): Promise<void> {
         commit('active', m ?? true)
       },
@@ -114,10 +89,10 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
         commit('active', false)
       },
 
-      unwatch ({ state, commit }: ActionContext<State, State>): void {
-        commit('watching', undefined)
-        clearInterval(state.wiptr)
-      },
+      // unwatch ({ state, commit }: ActionContext<State, State>): void {
+      //   commit('watching', undefined)
+      //   clearInterval(state.wiptr)
+      // },
 
       // fetch calls automation API endpoint and collects all states
       async update ({ commit, state }: ActionContext<State, State>): Promise<void> {
@@ -138,23 +113,33 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
           })
       },
 
-      async resume ({ commit, dispatch }: ActionContext<State, State>, { prompt, input }: ResumePayload): Promise<void> {
+      new ({ commit }: ActionContext<State, State>, prompt: automation.Prompt): void {
+        commit('update', [prompt])
+      },
+
+      async resume ({ commit }: ActionContext<State, State>, { prompt, input }: ResumePayload): Promise<void> {
         commit('loading')
         return resumeState(api, prompt, input)
           .then(() => commit('remove', prompt))
-          /**
-           * Recheck for new prompts right after we submit
-           * Later, we'll rely on websocket messages
-           */
-          .then(() => { setTimeout(() => { dispatch('update') }, 1000) })
           .finally(() => commit('loading', false))
       },
 
-      async remove ({ commit }: ActionContext<State, State>, prompt: automation.Prompt): Promise<void> {
+      /**
+       * Used when prompt is handled in this session and we need to
+       * send the cancellation state back to the API
+       */
+      async cancel ({ commit }: ActionContext<State, State>, prompt: automation.Prompt): Promise<void> {
         commit('loading')
         return cancelState(api, prompt)
           .then(() => commit('remove', prompt))
           .finally(() => commit('loading', false))
+      },
+
+      /**
+       * Used when prompt is handled in another session
+       */
+      clear ({ commit }: ActionContext<State, State>, prompt: automation.Prompt): void {
+        commit('remove', prompt)
       },
     },
 
@@ -163,9 +148,9 @@ export default function ({ api, watchInterval = 10000 }: Options): StoreOptions<
         state.loading = flag
       },
 
-      watching (state: State, ptr?: number): void {
-        state.wiptr = ptr
-      },
+      // watching (state: State, ptr?: number): void {
+      //   state.wiptr = ptr
+      // },
 
       active (state: State, m: boolean | automation.Prompt): void {
         state.active = m
