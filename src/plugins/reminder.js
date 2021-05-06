@@ -3,10 +3,6 @@
 import moment from 'moment'
 import { system } from '@cortezaproject/corteza-js'
 
-async function sleep (t) {
-  return new Promise(resolve => setTimeout(resolve, t))
-}
-
 function intervalToMS (from, to) {
   if (!from || !to) {
     throw new Error('intervalToMS.invalidArgs')
@@ -15,15 +11,14 @@ function intervalToMS (from, to) {
 }
 
 export class ReminderService {
-  constructor ({ api, poolInterval = 1000 * 60 * 5, resource = null, emitter } = {}) {
+  constructor ({ api, fetchOffset = 1000 * 60 * 5, resource = null, emitter } = {}) {
     if (!api) {
       throw new Error('reminderService.invalidParams')
     }
 
     this.emitter = emitter
     this.api = api
-    this.poolInterval = poolInterval
-    this.running = false
+    this.fetchOffset = fetchOffset
     this.resource = resource
 
     this.set = []
@@ -31,52 +26,48 @@ export class ReminderService {
     this.tHandle = null
   }
 
-  init ({ emitter, filter = {} }) {
+  init (emitter, { filter = {} }) {
     if (emitter) {
       this.emitter = emitter
     }
-    this.filter = filter
-    if (!this.emitter) {
-      throw new Error('pool.noEmitter')
-    }
-    this.pool()
-  }
 
-  stop () {
-    this.running = false
-    if (this.tHandle) {
-      window.clearTimeout(this.tHandle)
-      this.tHandle = null
+    this.filter = {
+      scheduledOnly: true,
+      excludeDismissed: true,
+      ...filter,
     }
+
+    this.prefetch().then(rr => {
+      this.enqueue(...rr)
+      this.emitter.$emit('reminders.pull')
+    })
   }
 
   /**
-   * Pools for reminders & schedules them
+   * Fetches all reminders that are supposed to go off to date (time)
+   *
+   * @returns {Promise<system.Reminder>}
    */
-  async pool () {
-    this.running = true
+  async prefetch () {
+    return this.api.reminderList({
+      limit: 0,
+      resource: this.resource,
+      toTime: moment().add(this.fetchOffset, 'min').toISOString(),
+      ...this.filter,
+    }).then(({ set }) => {
+      return set.map(r => new system.Reminder(r))
+    })
+  }
 
-    while (this.running) {
-      const { set = [] } = await this.api.reminderList({
-        limit: 0,
-        resource: this.resource,
-        toTime: moment().add(this.poolInterval, 'min').toISOString(),
-        ...this.filter,
-      }).catch(() => ({ set: [] }))
-
-      this.enqueue(set.map(r => new system.Reminder(r)))
-      await sleep(this.poolInterval)
-      if (this.emitter) {
-        this.emitter.$emit('reminders.pull')
-      }
-    }
+  enqueueRaw (raw) {
+    this.enqueue(new system.Reminder(raw))
   }
 
   /**
    * Enqueue a given set of reminders
-   * @param {<Reminder>Array} set Set of reminderIDs to enqueue
+   * @param {Array<Reminder>} set Set of reminderIDs to enqueue
    */
-  enqueue (set = []) {
+  enqueue (...set) {
     set.forEach(r => {
       // New or replace
       const i = this.set.findIndex(({ reminderID }) => reminderID === r.reminderID)

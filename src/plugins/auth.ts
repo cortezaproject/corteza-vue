@@ -126,6 +126,8 @@ export class Auth {
    */
   private refreshTimeout?: number
 
+  private $emit?: (event: string, ...args: unknown[]) => unknown
+
   constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, localStorage, refreshFactor }: AuthCtor) {
     if (refreshFactor >= 1 || refreshFactor <= 0) {
       throw new Error('refreshFactor should be between 0 and 1')
@@ -146,6 +148,11 @@ export class Auth {
       callbackURL,
       entrypointURL,
     })
+  }
+
+  vue (vue: Vue): Auth {
+    this.$emit = (event, ...args): void => { vue.$emit(event, ...args) }
+    return this
   }
 
   get axios (): AxiosInstance {
@@ -414,6 +421,13 @@ export class Auth {
     this[accessToken] = oa2tkn.access_token
     this[user] = u
 
+    if (this.$emit) {
+      this.$emit('auth-token-processed', {
+        user: u,
+        accessToken: this[accessToken],
+      })
+    }
+
     return {
       accessTokenFn: (): string | undefined => { return this[accessToken] },
       user: u,
@@ -550,6 +564,10 @@ export default function (): PluginFunction<PluginOpts> {
         window.location.search.includes('verboseAuth') ||
         !!window.localStorage.getItem('auth.verbose')
     }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    console.log(this)
 
     Vue.prototype.$auth = new Auth({
       app,
