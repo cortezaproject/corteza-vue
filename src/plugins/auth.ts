@@ -141,8 +141,10 @@ export class Auth {
     this.entrypointURL = entrypointURL
 
     this.log.debug('initialized auth plugin', {
+      app,
       cortezaAuthURL,
       callbackURL,
+      entrypointURL,
     })
   }
 
@@ -235,7 +237,6 @@ export class Auth {
         this.log.info('authorization code received', code)
         await this.exchangeCode(code)
 
-        console.log('going to final location, maybe?', { finalLocation })
         if (finalLocation) {
           this.location.assign(finalLocation)
         }
@@ -460,6 +461,7 @@ export default function (): PluginFunction<PluginOpts> {
   return function (Vue, opts): void {
     let {
       app = '',
+      rootApp = false,
       cortezaAuthURL = '',
       callbackURL = '',
       verbose = undefined,
@@ -467,7 +469,7 @@ export default function (): PluginFunction<PluginOpts> {
       entrypointURL = window.location.toString(),
       location = window.location,
       localStorage = window.localStorage,
-    } = (opts || {}) as Partial<AuthCtor>
+    } = (opts || {}) as Partial<AuthCtor & { rootApp: boolean }>
 
     if (!cortezaAuthURL) {
       /**
@@ -507,15 +509,39 @@ export default function (): PluginFunction<PluginOpts> {
       }
     }
 
-    // note: host contains port, hostname does not!
     if (!callbackURL) {
       if (!app) {
         throw new Error('can not construct callbackURL; specify \'callbackURL\' or \'app\' property')
       }
 
-      // construct redirect URL fallback from current location
-      const { protocol, host } = location
-      callbackURL = `${protocol}//${host}/${app}/auth/callback`
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      const { CortezaWebapp = undefined } = window
+      const callbackPath = 'auth/callback'
+
+      if (CortezaWebapp) {
+        // construct redirect URL fallback from configured corteza webapp
+        callbackURL = Make({ url: `${CortezaWebapp}` })
+      } else {
+        // Try to get callbackURL from <base> tag's href value
+        const baseTags = document.getElementsByTagName('base')
+        if (baseTags.length === 1) {
+          callbackURL = baseTags[0].href
+        }
+
+        if (!callbackURL) {
+          // construct redirect URL fallback from current location
+          // note: host contains port, hostname does not!
+          const { protocol, host } = location
+          callbackURL = `${protocol}//${host}`
+        }
+      }
+
+      if (!rootApp) {
+        callbackURL += `/${app}`
+      }
+
+      callbackURL += `/${callbackPath}`
     }
 
     if (verbose === undefined) {
