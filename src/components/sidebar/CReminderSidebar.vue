@@ -91,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.CSidebar {
+.CReminderSidebar {
   transition: margin .3s;
 }
 </style>

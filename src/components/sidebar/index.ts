@@ -1,2 +1,2 @@
 export { default as CHamburgerMenu } from './CHamburgerMenu.vue'
-export { default as CSidebar } from './CSidebar.vue'
+export { default as CReminderSidebar } from './CReminderSidebar.vue'

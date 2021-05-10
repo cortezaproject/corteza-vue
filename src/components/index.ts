@@ -27,11 +27,16 @@ export {
 export * from './prompts'
 
 export {
-  CHamburgerMenu,
+  CTopbar,
   CSidebar,
-} from './sidebar'
+} from './navigation'
 
 export {
   CToaster,
   CToasterLink,
 } from './toaster'
+
+export {
+  CHamburgerMenu,
+  CReminderSidebar,
+} from './sidebar'
