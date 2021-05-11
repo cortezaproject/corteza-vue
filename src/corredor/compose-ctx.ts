@@ -59,6 +59,7 @@ export default class ComposeCtx extends corredor.Ctx {
    * Clones context and uses new arguments
    */
   withArgs (args: corredor.BaseArgs): ComposeCtx {
+    Object.assign(args, this.args)
     return new ComposeCtx(args, this.vue)
   }
 
