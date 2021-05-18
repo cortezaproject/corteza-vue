@@ -565,9 +565,18 @@ export default function (): PluginFunction<PluginOpts> {
         !!window.localStorage.getItem('auth.verbose')
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    console.log(this)
+    if (verbose) {
+      console.debug({
+        app,
+        verbose,
+        cortezaAuthURL,
+        callbackURL,
+        location,
+        localStorage,
+        entrypointURL,
+        refreshFactor,
+      })
+    }
 
     Vue.prototype.$auth = new Auth({
       app,
