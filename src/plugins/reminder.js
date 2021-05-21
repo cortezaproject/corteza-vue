@@ -55,7 +55,7 @@ export class ReminderService {
       toTime: moment().add(this.fetchOffset, 'min').toISOString(),
       ...this.filter,
     }).then(({ set }) => {
-      return set.map(r => new system.Reminder(r))
+      return (set || []).map(r => new system.Reminder(r))
     })
   }
 
