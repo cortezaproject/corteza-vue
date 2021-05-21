@@ -3,6 +3,7 @@
  * Default websocket cofngiuration
  */
 import { Vue } from 'vue/types/vue'
+import { Make } from './url'
 
 export const config = {
   format: 'json',
@@ -27,9 +28,11 @@ export function endpoint (): string {
   // @ts-ignore
   let { CortezaAPI, CortezaWebsocket, location } = window
 
+  CortezaAPI = '/api'
+
   if (!CortezaWebsocket) {
     // Corteza websocket entrypoint not set, use API and append /websocket
-    CortezaWebsocket = `${CortezaAPI}/websocket`
+    CortezaWebsocket = Make({ url: `${CortezaAPI}/websocket` })
   }
 
   let proto: string
@@ -66,13 +69,20 @@ export function init (vue: Vue): void {
     }
   }
 
-  // update connection with new access token
-  // @ts-ignore
-  vue.$on('auth-token-processed', ({ accessToken }) => wsAuth(accessToken))
-
   // make sure that we send auth token as soon as we're connected
   // @ts-ignore
-  vue.$options.sockets.onopen = (): void => wsAuth(vue.$auth.accessTokenFn())
+  vue.$options.sockets.onopen = (): void => {
+    // @ts-ignore
+    wsAuth(vue.$auth.accessTokenFn())
+
+    // update connection with new access token
+    //
+    // If event listener is added before the connection is established
+    // we might try to send the message too early.
+    //
+    // @ts-ignore
+    vue.$on('auth-token-processed', ({ accessToken }) => wsAuth(accessToken))
+  }
 
   // @ts-ignore
   vue.$options.sockets.onmessage = (msg): void => vue.$emit('websocket-message', msg)
