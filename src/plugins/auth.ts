@@ -459,7 +459,7 @@ export class Auth {
   private pruneStore (): void {
     this[accessToken] = undefined
     this[user] = undefined
-    this.localStorage.removeItem(this.localStoreageKey(lsAuthRefreshTokenKey))
+    this.localStorage.clear()
   }
 
   get accessToken (): string | undefined {
