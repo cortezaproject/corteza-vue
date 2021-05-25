@@ -20,8 +20,8 @@
           </b-list-group-item>
         </b-list-group>
         <vue-select
-          key="roleID"
           v-model="currentRole"
+          key="roleID"
           label="name"
           class="mb-4 d-block d-lg-none"
           :clearable="false"
@@ -101,8 +101,8 @@ export default {
       // List of all available roles
       roles: [],
 
-      // ID of the current role
-      currentRole: {},
+      // Current role object
+      currentRole: undefined,
     }
   },
 
