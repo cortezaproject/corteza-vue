@@ -1,7 +1,7 @@
 <template>
-  <div class="header-navigation d-flex align-items-center justify-content-between sticky-top">
+  <div class="header-navigation d-flex align-items-center justify-content-between sticky-top pr-3 pl-5">
     <div
-      class="d-flex text-nowrap flex-grow-1 align-items-center header px-2"
+      class="d-flex text-nowrap flex-grow-1 align-items-center header"
     >
       <template>
         <div
@@ -12,21 +12,24 @@
         />
       </template>
       <h2
-        class="m-0 px-2 mr-auto"
+        class="m-0 mr-auto"
       >
         <slot name="title" />
       </h2>
-      <b-btn
-          variant="outline-light"
-          to="/"
-          size="lg"
-          class="text-dark border-0 nav-icon rounded-circle p-2"
+      <div>
+        <slot name="tools" />
+      </div>
+      <b-button
+        variant="outline-light"
+        to="/"
+        size="lg"
+        class="d-flex align-items-center justify-content-center text-dark border-0 nav-icon rounded-circle p-2 ml-2"
       >
         <font-awesome-icon
-            class="m-0 h5"
-            :icon="['fas', 'grip-horizontal']"
+          class="m-0 h5"
+          :icon="['fas', 'grip-horizontal']"
         />
-      </b-btn>
+      </b-button>
       <b-dropdown
         size="lg"
         variant="outline-light"
@@ -37,13 +40,17 @@
         no-caret
       >
         <template #button-content>
-          <font-awesome-icon
-            class="m-0 h5"
-            :icon="['far', 'question-circle']"
-          />
-          <span class="sr-only">
-            Help
-          </span>
+          <div
+            class="d-flex align-items-center justify-content-center"
+          >
+            <font-awesome-icon
+              class="m-0 h5"
+              :icon="['far', 'question-circle']"
+            />
+            <span class="sr-only">
+              Help
+            </span>
+          </div>
         </template>
         <b-dropdown-item
           href="https://forum.cortezaproject.org/"
@@ -65,8 +72,8 @@
         </b-dropdown-item>
         <b-dropdown-divider />
         <b-dropdown-item
-            disabled
-            class="small"
+          disabled
+          class="small"
         >
           {{ $t('navigation.help.version') }}
           <br>
@@ -83,13 +90,17 @@
         no-caret
       >
         <template #button-content>
-          <font-awesome-icon
-            class="m-0 h5"
-            :icon="['far', 'user']"
-          />
-          <span class="sr-only">
-            {{ $t('navigation.help.forum') }}
-          </span>
+          <div
+            class="d-flex align-items-center justify-content-center"
+          >
+            <font-awesome-icon
+              class="m-0 h5"
+              :icon="['far', 'user']"
+            />
+            <span class="sr-only">
+              {{ $t('navigation.help.forum') }}
+            </span>
+          </div>
         </template>
         <b-dropdown-text class="text-muted mb-2">
           {{ $t('navigation.userSettings.loggedInAs', { user: userLabel }) }}
@@ -184,14 +195,25 @@ $nav-user-icon-size: 50px;
 .header-navigation {
   width: 100vw;
   height: $header-height;
+
+  h2 {
+    padding-left: calc(0.5rem + 2px);
+  }
 }
 
 .spacer {
-  min-width: 77px;
-  transition: width 0.1s ease-in-out;
+  min-width: 0px;
+  -webkit-transition: min-width 0.15s ease-in-out;
+  -moz-transition: min-width 0.15s ease-in-out;
+  -o-transition: min-width 0.15s ease-in-out;
+  transition: min-width 0.15s ease-in-out;
 
   &.expanded {
-    min-width: $nav-width;
+    min-width: calc(#{$nav-width} - 42px);
+    -webkit-transition: min-width 0.2s ease-in-out;
+    -moz-transition: min-width 0.2s ease-in-out;
+    -o-transition: min-width 0.2s ease-in-out;
+    transition: min-width 0.2s ease-in-out;
   }
 }
 </style>
