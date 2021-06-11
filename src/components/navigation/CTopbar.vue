@@ -20,8 +20,9 @@
         <slot name="tools" />
       </div>
       <b-button
+        v-if="!hideAppSelector"
         variant="outline-light"
-        to="/"
+        :href="appSelectorURL"
         size="lg"
         class="d-flex align-items-center justify-content-center text-dark border-0 nav-icon rounded-circle p-2 ml-2"
       >
@@ -138,9 +139,19 @@ export default {
       required: true,
       default: false,
     },
+
+    hideAppSelector: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   computed: {
+    appSelectorURL () {
+      return window.location.origin
+    },
+
     user () {
       return this.$auth.user || {}
     },
