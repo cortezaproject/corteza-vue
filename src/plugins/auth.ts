@@ -552,10 +552,10 @@ export default function (): PluginFunction<PluginOpts> {
       }
 
       if (!rootApp) {
-        callbackURL += `/${app}`
+        callbackURL = callbackURL.replace(/\/$/, '') + `/${app}`
       }
 
-      callbackURL += `/${callbackPath}`
+      callbackURL = callbackURL.replace(/\/$/, '') + `/${callbackPath}`
     }
 
     if (verbose === undefined) {
