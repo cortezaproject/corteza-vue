@@ -444,7 +444,14 @@ export class Auth {
   private pruneStore (): void {
     this[accessToken] = undefined
     this[user] = undefined
-    this.localStorage.clear()
+
+    for (const k of Object.keys(this.localStorage)) {
+      if (k === 'permissionList.roles') {
+        continue
+      }
+
+      this.localStorage.removeItem(k)
+    }
   }
 
   get accessToken (): string | undefined {
