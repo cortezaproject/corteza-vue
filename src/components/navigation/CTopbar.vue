@@ -1,5 +1,5 @@
 <template>
-  <div class="header-navigation d-flex align-items-center justify-content-between sticky-top pr-3 pl-5">
+  <div class="header-navigation d-flex align-items-center justify-content-between sticky-top pr-3 pl-5 ">
     <div
       class="d-flex text-nowrap flex-grow-1 align-items-center header"
     >
@@ -11,14 +11,17 @@
           }"
         />
       </template>
+
       <h2
-        class="m-0 mr-auto"
+        class="mb-0 ml-2 mr-auto"
       >
         <slot name="title" />
       </h2>
+
       <div>
         <slot name="tools" />
       </div>
+
       <b-button
         v-if="!hideAppSelector"
         variant="outline-light"
@@ -31,6 +34,7 @@
           :icon="['fas', 'grip-horizontal']"
         />
       </b-button>
+
       <b-dropdown
         size="lg"
         variant="outline-light"
@@ -60,7 +64,7 @@
           {{ $t('navigation.help.forum') }}
         </b-dropdown-item>
         <b-dropdown-item
-          href="https://docs.cortezaproject.org/corteza-docs/2021.3/index.html"
+          :href="documentationURL"
           target="_blank"
         >
           {{ $t('navigation.help.documentation') }}
@@ -81,6 +85,7 @@
           {{ frontendVersion }}
         </b-dropdown-item>
       </b-dropdown>
+
       <b-dropdown
         size="lg"
         variant="outline-light"
@@ -206,6 +211,7 @@ $nav-user-icon-size: 50px;
 .header-navigation {
   width: 100vw;
   height: $header-height;
+  background-color: #F3F3F5 !important;
 
   h2 {
     padding-left: calc(0.5rem + 2px);

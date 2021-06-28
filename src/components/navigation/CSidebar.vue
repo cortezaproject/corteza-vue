@@ -90,13 +90,37 @@
     </div>
 
     <div
-      class="d-flex align-items-center justify-content center tab position-absolute p-2"
+      class="d-flex align-items-center justify-content-center tab position-absolute p-2"
     >
       <b-button
+        v-if="expandOnHover"
         variant="outline-light"
         size="lg"
-        class="px-3 py-2 icon-logo border-0"
+        class="d-flex align-items-center border-0"
         @mouseover="onHover(true)"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'bars']"
+          class="h4 mb-0 text-dark"
+        />
+      </b-button>
+
+      <b-button
+        v-else-if="!disabledRoutes.includes($route.name)"
+        variant="outline-light"
+        size="lg"
+        class="d-flex align-items-center p-2 border-0"
+        :to="{ name: 'root' }"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'home']"
+          class="h4 mb-0 text-primary"
+        />
+      </b-button>
+
+      <div
+        v-else
+        class="icon-logo border-0"
       />
     </div>
   </div>
@@ -118,6 +142,11 @@ export default {
     expandOnHover: {
       type: Boolean,
       default: false,
+    },
+
+    disabledRoutes: {
+      type: Array,
+      default: () => [],
     }
   },
 
@@ -139,6 +168,19 @@ export default {
 
       set (pinned) {
         this.$emit('update:pinned', pinned)
+      },
+    },
+  },
+
+  watch: {
+    '$route.name': {
+      immediate: true,
+      handler (name) {
+        // If sidebar should be disabled on route, close and unpin when navigating to route
+        if (this.disabledRoutes.includes(name)) {
+          this.isPinned = false
+          this.isExpanded = false
+        }
       },
     },
   },
@@ -167,6 +209,7 @@ $header-height: 64px;
   z-index: 1021;
   top: 0;
   height: $header-height;
+  width: 66px;
 }
 
 .icon-logo {
