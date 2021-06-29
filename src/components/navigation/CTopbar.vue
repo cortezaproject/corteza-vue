@@ -1,7 +1,7 @@
 <template>
   <div class="header-navigation d-flex align-items-center justify-content-between sticky-top pr-3 pl-5 ">
     <div
-      class="d-flex text-nowrap flex-grow-1 align-items-center header"
+      class="d-flex text-nowrap flex-grow-1 align-items-center header h-100"
     >
       <template>
         <div
@@ -13,7 +13,7 @@
       </template>
 
       <h2
-        class="mb-0 ml-2 mr-auto"
+        class="d-flex align-items-center mb-0 ml-2 mr-auto h-100"
       >
         <slot name="title" />
       </h2>
@@ -150,13 +150,14 @@ export default {
       required: false,
       default: false,
     },
+
+    appSelectorURL: {
+      type: String,
+      default: '/..'
+    }
   },
 
   computed: {
-    appSelectorURL () {
-      return window.location.origin
-    },
-
     user () {
       return this.$auth.user || {}
     },
