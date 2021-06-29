@@ -93,7 +93,7 @@
       class="d-flex align-items-center justify-content-center tab position-absolute p-2"
     >
       <b-button
-        v-if="expandOnHover"
+        v-if="expandOnHover && !disabledRoutes.includes($route.name)"
         variant="outline-light"
         size="lg"
         class="d-flex align-items-center border-0"
