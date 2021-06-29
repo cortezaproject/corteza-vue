@@ -5,7 +5,7 @@
         :variant="variant"
         :size="size"
         :disabled="disabled"
-        :class="[ borderless && 'border-0' ]"
+        :class="`${buttonClass} ${borderless ? 'border-0' : ''}`"
         @click.prevent="onPrompt"
       >
         <slot>
@@ -25,11 +25,11 @@
         :class="[ borderless && 'border-0' ]"
         @click.prevent="onConfirmation()"
       >
-
         <slot name="yes">
           <font-awesome-icon
             :icon="['fas', 'check']"
-          /></slot>
+          />
+        </slot>
       </b-button>
       <b-button
         :variant="variantCancel"
@@ -38,7 +38,6 @@
         :class="[ borderless && 'border-0' ]"
         @click.prevent="onCancel()"
       >
-
         <slot name="no">
           <font-awesome-icon
             :icon="['fas', 'times']"
@@ -50,12 +49,15 @@
 <script lang="js">
 export default {
   props: {
-    ctaClass: { type: String, default: 'btn-danger' },
     disabled: Boolean,
     okDisabled: Boolean,
     cancelDisabled: Boolean,
     noPrompt: Boolean,
 
+    buttonClass: {
+      type: String,
+      default: '',
+    },
     borderless: {
       type: Boolean,
       default: true,
@@ -86,16 +88,6 @@ export default {
     return {
       inConfirmation: false,
     }
-  },
-
-  computed: {
-    btnClass () {
-      if (this.disabled) {
-        return 'btn-disabled'
-      }
-
-      return this.ctaClass
-    },
   },
 
   methods: {
