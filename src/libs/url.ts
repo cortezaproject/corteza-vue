@@ -12,29 +12,29 @@ const baseQsConfig = {
  * We need it to handle relative URLs, especially ones w/o schema
  */
 export function Make ({ url = '', query = {}, hash = '', ref = window.location.toString(), config = {} }): string {
-  let u
+  let newUrl
 
   if (/^http(s)?:\/\//.test(url)) {
-    u = new URL(url)
+    newUrl = new URL(url)
   } else if (/^\/\//.test(url)) {
-    u = new URL(ref)
-    u.href = `${u.protocol}${url}`
+    newUrl = new URL(ref)
+    newUrl.href = `${newUrl.protocol}${url}`
   } else {
     // Construct full relative URL from path
-    u = new URL(ref)
-    u.pathname = url
+    newUrl = new URL(ref)
+    newUrl.pathname = url
   }
 
   if (hash) {
-    u.hash = hash
+    newUrl.hash = hash
   }
 
   // TypeScript somehow thinks that 'brackets' is not a string.
   // @ts-ignore
-  u.search = qs.stringify(query, {
+  newUrl.search = qs.stringify(query, {
     ...baseQsConfig,
     ...config,
   })
 
-  return u.toString()
+  return newUrl.toString()
 }

@@ -25,14 +25,5 @@ export default {
       default: () => ({}),
     },
   },
-
-  methods: {
-    fallbackLabel (resource = '') {
-      if (resource.toLowerCase().startsWith('compose:record')) {
-        return 'Record View'
-      }
-      return 'Link'
-    },
-  },
 }
 </script>

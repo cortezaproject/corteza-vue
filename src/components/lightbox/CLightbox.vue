@@ -29,7 +29,6 @@
   top: 0;
   right: 0;
   bottom: 0;
-
   background-color: #EEF1F3;
   z-index: 2000;
 }

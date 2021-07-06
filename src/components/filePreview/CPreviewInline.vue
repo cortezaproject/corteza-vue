@@ -14,7 +14,7 @@
 </template>
 
 <script lang="js">
-import { InlineIMG as IMG, PDF } from './common/types'
+import { InlineIMG as IMG, PDF } from './common/types/index.ts'
 import base from './common/base.vue'
 
 export default {

@@ -64,7 +64,7 @@ export default {
      */
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadBundle ({ bundle, type = 'client-scripts', ext = 'js', verbose = false, ctx = undefined } = {}) {
-      const ep = this.$SystemAPI.automationBundleEndpoint({ bundle, type, ext })
+      const endpoint = this.$SystemAPI.automationBundleEndpoint({ bundle, type, ext })
 
       if (ctx === undefined) {
         throw new Error('can not load bundle and register scripts without context')
@@ -74,7 +74,7 @@ export default {
         throw new Error('invalid context object, expecting withArgs function')
       }
 
-      return this.$SystemAPI.api().get(ep)
+      return this.$SystemAPI.api().get(endpoint)
         .then(({ data }) => {
           if (!data) {
             if (verbose) {

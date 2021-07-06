@@ -181,7 +181,7 @@ export class Auth {
    * Returns prefixed key
    * @param key
    */
-  localStoreageKey (key: string): string {
+  localStorageKey (key: string): string {
     return `${this.app}.${key}`
   }
 
@@ -221,7 +221,7 @@ export class Auth {
 
         if (params.has('state')) {
           const state = params.get('state') || ''
-          const lsKey = this.localStoreageKey(`state.${state}.location`)
+          const lsKey = this.localStorageKey(`state.${state}.location`)
           this.log.info('state received', state)
 
           finalLocation = this.localStorage.getItem(lsKey)
@@ -293,7 +293,7 @@ export class Auth {
       })
     }
 
-    const refreshToken = this.localStorage.getItem(this.localStoreageKey(lsAuthRefreshTokenKey))
+    const refreshToken = this.localStorage.getItem(this.localStorageKey(lsAuthRefreshTokenKey))
     if (refreshToken) {
       this.log.info('refresh token found, exchanging it for new access token')
 
@@ -327,7 +327,7 @@ export class Auth {
   startAuthenticationFlow (): void {
     this.log.debug('starting new authentication flow')
     const state = Math.random().toString(36).substring(2)
-    this.localStorage.setItem(this.localStoreageKey(`state.${state}.location`), this.location.toString())
+    this.localStorage.setItem(this.localStorageKey(`state.${state}.location`), this.location.toString())
 
     this.location.assign(Make({
       url: `${this.cortezaAuthURL}` + oauth2FlowURL,
@@ -409,9 +409,9 @@ export class Auth {
         })
     }, 1000 * timeout)
 
-    this.localStorage.setItem(this.localStoreageKey(lsAuthRefreshTokenKey), oa2tkn.refresh_token)
+    this.localStorage.setItem(this.localStorageKey(lsAuthRefreshTokenKey), oa2tkn.refresh_token)
 
-    const u = new system.User({
+    const newUser = new system.User({
       userID: oa2tkn.sub,
       name: oa2tkn.name,
       handle: oa2tkn.handle,
@@ -419,18 +419,18 @@ export class Auth {
     })
 
     this[accessToken] = oa2tkn.access_token
-    this[user] = u
+    this[user] = newUser
 
     if (this.$emit) {
       this.$emit('auth-token-processed', {
-        user: u,
+        user: newUser,
         accessToken: this[accessToken],
       })
     }
 
     return {
       accessTokenFn: (): string | undefined => { return this[accessToken] },
-      user: u,
+      user: newUser,
     }
   }
 

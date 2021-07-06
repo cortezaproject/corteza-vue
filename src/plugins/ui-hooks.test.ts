@@ -24,20 +24,20 @@ describe(__filename, () => {
       },
     )
 
-    const bb = hooks.Find('system', 'index', 'header')
+    const buttons = hooks.Find('system', 'index', 'header')
 
-    expect(bb).to.have.lengthOf(1)
-    const b = bb[0]
-    expect(b).to.have.property('label').equal('btnLabel')
-    expect(b).to.have.property('script').equal('scriptName')
-    expect(b).to.have.property('resourceType').equal('system')
-    expect(b).to.have.property('slot').equal('header')
-    expect(b).to.have.property('variant').equal('danger')
+    expect(buttons).to.have.lengthOf(1)
+    const button = buttons[0]
+    expect(button).to.have.property('label').equal('btnLabel')
+    expect(button).to.have.property('script').equal('scriptName')
+    expect(button).to.have.property('resourceType').equal('system')
+    expect(button).to.have.property('slot').equal('header')
+    expect(button).to.have.property('variant').equal('danger')
   })
 
   it('should remove existing scripts', () => {
     const hooks = new UIHooks('test')
-    const s = {
+    const script = {
       name: 'scriptName',
       label: 'btnLabel',
       triggers: [{
@@ -52,19 +52,19 @@ describe(__filename, () => {
       }],
     }
 
-    let bb
+    let buttons
 
-    hooks.Register(s)
-    bb = hooks.Find('system', 'index', 'header')
-    expect(bb).to.have.lengthOf(1)
-    hooks.Register(s)
-    bb = hooks.Find('system', 'index', 'header')
-    expect(bb).to.have.lengthOf(1)
-    hooks.Register(s, { ...s, name: 'anotherScript' })
-    bb = hooks.Find('system', 'index', 'header')
-    expect(bb).to.have.lengthOf(2)
-    hooks.Register(s)
-    bb = hooks.Find('system', 'index', 'header')
-    expect(bb).to.have.lengthOf(2)
+    hooks.Register(script)
+    buttons = hooks.Find('system', 'index', 'header')
+    expect(buttons).to.have.lengthOf(1)
+    hooks.Register(script)
+    buttons = hooks.Find('system', 'index', 'header')
+    expect(buttons).to.have.lengthOf(1)
+    hooks.Register(script, { ...script, name: 'anotherScript' })
+    buttons = hooks.Find('system', 'index', 'header')
+    expect(buttons).to.have.lengthOf(2)
+    hooks.Register(script)
+    buttons = hooks.Find('system', 'index', 'header')
+    expect(buttons).to.have.lengthOf(2)
   })
 })

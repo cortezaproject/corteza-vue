@@ -1,5 +1,5 @@
 <script lang="js">
-import { getComponent } from './index.js'
+import { getComponent } from './index.ts'
 
 export default {
   inheritAttrs: false,

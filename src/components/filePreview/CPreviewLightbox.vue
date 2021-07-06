@@ -22,7 +22,7 @@
 </template>
 
 <script lang="js">
-import { LightboxIMG as IMG, PDF } from './common/types'
+import { LightboxIMG as IMG, PDF } from './common/types/index.ts'
 import { CLightbox } from '../lightbox/index.ts'
 import base from './common/base.vue'
 

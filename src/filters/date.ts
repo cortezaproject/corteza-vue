@@ -1,37 +1,37 @@
 import moment, { Moment } from 'moment'
 
-export function isoDate (d: Moment | Date | string | number): string {
-  return moment(d).format()
+export function isoDate (date: Moment | Date | string | number): string {
+  return moment(date).format()
 }
 
-export function isoDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format()
+export function isoDateOnly (date: Moment | Date | string | number): string {
+  return moment(date).format()
 }
 
-export function locDate (d: Moment | Date | string | number): string {
-  return moment(d).format('lll')
+export function locDate (date: Moment | Date | string | number): string {
+  return moment(date).format('lll')
 }
 
-export function locLongDate (d: Moment | Date | string | number): string {
-  return moment(d).format('LLLL')
+export function locLongDate (date: Moment | Date | string | number): string {
+  return moment(date).format('LLLL')
 }
 
-export function locDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('L')
+export function locDateOnly (date: Moment | Date | string | number): string {
+  return moment(date).format('L')
 }
 
-export function locLongDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LL')
+export function locLongDateOnly (date: Moment | Date | string | number): string {
+  return moment(date).format('LL')
 }
 
-export function locTimeOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LT')
+export function locTimeOnly (date: Moment | Date | string | number): string {
+  return moment(date).format('LT')
 }
 
-export function locLongTimeOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LTS')
+export function locLongTimeOnly (date: Moment | Date | string | number): string {
+  return moment(date).format('LTS')
 }
 
-export function relTime (d: Moment | Date | string | number, s?: boolean): string {
-  return moment(d).fromNow(s)
+export function relTime (date: Moment | Date | string | number, suffix?: boolean): string {
+  return moment(date).fromNow(suffix)
 }

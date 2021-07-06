@@ -13,7 +13,7 @@ const types = [
  * @param {String|undefined} name object's name
  * @returns {String|undefined} preview component or undefined
  */
-export const getComponent = ({ type, src, name }) => {
+export const getComponent = ({ type, src, name }: { type: string; src: string; name: string }) => {
   const srcType = type || mime.lookup(src) || mime.lookup(name)
   if (!srcType) {
     return
@@ -33,6 +33,6 @@ export const getComponent = ({ type, src, name }) => {
  * @param {String|undefined} name object's name
  * @returns {Boolean} if file can be previewed
  */
-export const canPreview = ({ type, src, name }) => {
+export const canPreview = ({ type, src, name }: { type: string; src: string; name: string }) => {
   return !!getComponent({ type, src, name })
 }
