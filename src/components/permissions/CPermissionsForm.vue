@@ -37,6 +37,7 @@
         <rules :rules.sync="rules" />
       </b-col>
     </b-row>
+
     <b-row class="footer mt-3"
     >
       <b-col
@@ -78,12 +79,17 @@ export default {
       default: undefined,
     },
 
-    backendServiceName: {
+    backendComponentName: {
       type: String,
       default () {
         // Assuming backend service will
         // be equal to (first part of) resource
-        return this.resource.split(':')[0]
+        if (!this.resource.startsWith('corteza::')) {
+          throw Error('unrecognized resource type schema')
+        }
+
+        // <schema>::<backend-component-name>:...
+        return this.resource.split(':')[2]
       },
     },
   },
@@ -116,7 +122,7 @@ export default {
     },
 
     api () {
-      const s = this.backendServiceName
+      const s = this.backendComponentName
       return this['$' + s.charAt(0).toUpperCase() + s.slice(1) + 'API']
     },
   },
@@ -137,7 +143,7 @@ export default {
       const rules = this.collectChangedRules()
       const { roleID } = this.currentRole
 
-      this.api.permissionsUpdate({ roleID, rules }).then((rules) => {
+      this.api.permissionsUpdate({ roleID, rules }).then(() => {
         this.fetchRules(roleID)
         this.processing = false
       })
@@ -167,7 +173,9 @@ export default {
       this.processing = true
       // Roles are always fetched from $SystemAPI.
       return this.$SystemAPI.roleList().then(({ set }) => {
-        this.roles = set.sort((a, b) => a.roleID.localeCompare(b.roleID))
+        this.roles = set
+          .filter(({ isBypass  }) => !isBypass )
+          .sort((a, b) => a.roleID.localeCompare(b.roleID))
 
         if (this.roles.length > 0) {
           this.onRoleChange(this.roles[0])
@@ -177,9 +185,15 @@ export default {
     },
 
     normalizeRules (rr) {
+      const inherit = 'inherit'
+
       // merges roleRules (subset) with list of all permissions
       const findCurrent = ({ resource, operation }) => {
-        return (rr.find(r => r.resource === resource && r.operation === operation) || {}).access || 'inherit'
+        if (!rr) {
+          return inherit
+        }
+
+        return (rr.find(r => r.resource === resource && r.operation === operation) || {}).access || inherit
       }
 
       return this.permissions.map((p) => {
@@ -191,32 +205,17 @@ export default {
     // Removes unneeded permissions (ones that do not match resource prop)
     // and translates the rest
     filterPermissions (pp) {
-      let out = []
-      const resourceType = this.resource.replace(/:(\d+|\*)$/, ':')
-      const isService = !!resourceType.match(/[^:]$/)
-
-      pp.forEach(({ resource, operation }) => {
-        if (isService && resource !== resourceType) {
-          // Test if service
-          return
-        }
-
-        if (!isService && resource.indexOf(resourceType) !== 0) {
-          // test if resource type
-          return
-        }
-
-        // Describe, translate
-        let p = this.describePermission({ resource, operation })
-
-        // Now, override resource-type with the actual resource-ID
-        p.operation = operation
-        p.resource = this.resource
-
-        out.push(p)
-      })
-
-      return out
+      const [ resourceType ] = this.resource.split('/', 2)
+      return pp
+        .filter(({ type }) => resourceType === type)
+        .map(({ type, op: operation }) => {
+          return {
+            ...this.describePermission({ resource: type, operation }),
+            operation,
+            // override resource-type with the actual resource-ID
+            resource: this.resource
+          }
+        })
     },
 
     collectChangedRules () {
@@ -226,28 +225,24 @@ export default {
     },
 
     describePermission ({ resource, operation }) {
-      resource = resource.replace(/:/g, '-')
-      operation = operation.replace(/\./g, '-')
+      resource = _.camelCase(resource.split(':')[2] + ' ' + (resource.split(':')[3] || 'component'))
+      operation = _.camelCase(operation)
 
-      if (resource.slice(-1) === '-') {
-        resource = resource.slice(0, -1)
-      }
-
-      const tString = `permission.${resource}.${operation}`
       let title = ''
       if (this.target) {
-        title = this.$t(`${tString}.specific`, { target: this.target })
+        title = this.$t(`permission.${resource}.operations.${operation}.specific`, { target: this.target })
       } else {
-        title = this.$t(`${tString}.title`)
+        title = this.$t(`permission.${resource}.operations.${operation}.title`)
       }
 
       return {
         title,
-        description: this.$t(`${tString}.description`),
+        description: this.$t(`permission.${resource}.operations.${operation}.description`),
       }
     },
   },
 }
+
 </script>
 <style scoped lang="scss">
 .pointer {

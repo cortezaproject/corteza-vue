@@ -20,6 +20,7 @@
 <script lang="js">
 import { modalOpenEventName } from './def.ts'
 import CPermissionsForm from './CPermissionsForm.vue'
+import _ from 'lodash'
 
 export default {
   components: {
@@ -50,12 +51,18 @@ export default {
     getTitle () {
       if (this.resource) {
         if (this.resource.indexOf(':') > -1) {
-          let [, targetName, target] = this.resource.split(':')
-          if (target === '*') {
-            target = this.$t(`permission.${targetName}.all`)
+          let [ resourceType, ...resourceRefs ] = this.resource.split('/')
+          let [ ,, component, service = 'component' ] = resourceType.split(':', 4)
+
+          resourceType = _.camelCase(`${component} ${service}`)
+
+          let target
+          if (resourceRefs.length > 0 && resourceRefs[resourceRefs.length - 1] === '*') {
+            target = this.$t(`permission.${resourceType}.all`)
           } else {
-            target = this.$t(`permission.${targetName}.specific`, { target: this.title })
+            target = this.$t(`permission.${resourceType}.specific`, { target: this.title })
           }
+
           return this.$t('permission.setFor', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
         } else {
           return this.$t('permission.setFor', { target: this.$t(`permission.base.${this.resource}`) })
