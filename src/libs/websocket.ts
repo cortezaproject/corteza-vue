@@ -28,8 +28,6 @@ export function endpoint (): string {
   // @ts-ignore
   let { CortezaAPI, CortezaWebsocket, location } = window
 
-  CortezaAPI = '/api'
-
   if (!CortezaWebsocket) {
     // Corteza websocket entrypoint not set, use API and append /websocket
     CortezaWebsocket = Make({ url: `${CortezaAPI}/websocket` })
