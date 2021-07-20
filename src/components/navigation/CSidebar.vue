@@ -228,6 +228,12 @@ export default {
     },
   },
 
+created(){
+  this.$root.$on('close-sidebar', () => {
+    this.isExpanded = false
+  });
+},
+
   methods: {
     onHover (expand) {
       if (!this.pinned && this.expandOnHover) {
