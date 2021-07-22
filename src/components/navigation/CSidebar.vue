@@ -185,11 +185,16 @@ export default {
     },
   },
 
-created(){
-  this.$root.$on('close-sidebar', () => {
-    this.isExpanded = false
-  });
-},
+  created () {
+    this.$root.$on('close-sidebar', () => {
+      this.isExpanded = false
+      this.isPinned = false
+    })
+  },
+
+  beforeDestroy () {
+    this.$root.$off('close-sidebar')
+  },
 
   methods: {
     onHover (expand) {
