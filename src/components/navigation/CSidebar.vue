@@ -6,8 +6,8 @@
       <b-sidebar
         v-model="isExpanded"
         :sidebar-class="`sidebar ${isExpanded ? 'expanded' : ''}`"
-        :header-class="`d-block sidebar-header ${isExpanded ? 'expanded border-bottom' : ''}`"
-        :body-class="`bg-white ${isExpanded ? 'p-2' : ''}`"
+        :header-class="`d-block sidebar-header ${isExpanded ? 'expanded border-bottom p-2' : ''}`"
+        :body-class="`bg-white ${isExpanded ? 'py-2 px-3' : ''}`"
         :footer-class="`bg-white rounded-right ${isExpanded ? 'p-2' : ''}`"
         :no-header="!isExpanded"
         :backdrop="isMobile"
@@ -17,77 +17,78 @@
       >
         <template #header>
           <div
-            :class="`padding ${isExpanded ? '' : 'px-2 pt-2'}`"
+            class="d-flex align-items-center justify-content-center"
           >
-            <div
-              class="d-flex align-items-center justify-content-center"
-            >
-              <b-button
-                variant="outline-light"
-                size="lg"
-                :block="!isExpanded"
-                class="flex-shrink-1 icon-logo border-0 p-2"
-                :to="{ name: 'root' }"
-              />
-
-              <h2
-                class="flex-grow-1 mb-0"
-              >
-                Corteza
-              </h2>
-
-              <b-button
-                v-if="isMobile"
-                variant="outline-light border-0"
-                class="d-flex align-items-center justify-content-center p-2"
-                style="margin-right: 7px; margin-top: 4px;"
-                @click="closeSidebar()"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'times']"
-                  class="h6 mb-0 text-dark"
-                />
-              </b-button>
-
-              <b-button
-                v-else
-                variant="outline-light border-0"
-                class="d-flex align-items-center justify-content-center p-2"
-                style="margin-right: 7px; margin-top: 4px;"
-                @click="pin()"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'thumbtack']"
-                  :class="`h6 mb-0 ${isPinned ? 'text-primary' : 'text-secondary'}`"
-                />
-              </b-button>
-            </div>
+            <!-- <b-button
+              variant="outline-light"
+              size="lg"
+              :block="!isExpanded"
+              class="flex-shrink-1 icon-logo border-0"
+              :to="{ name: 'root' }"
+            /> -->
 
             <div
-              v-if="!isExpanded"
-              class="d-flex align-items-center justify-content-center my-3"
-            >
-              <b-button
-                variant="link"
-                @click="pin()"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'chevron-right']"
-                  class="h6 mb-0"
-                />
-              </b-button>
-            </div>
-
-            <slot
-              v-if="isExpanded"
-              name="header-expanded"
+              class="flex-shrink-1 icon-logo border-0"
             />
 
-            <hr
-              v-if="!isExpanded"
-              class="my-2"
+            <h2
+              class="flex-grow-1 mb-0"
             >
+              Corteza
+            </h2>
+
+            <b-button
+              v-if="isMobile"
+              variant="outline-light border-0"
+              class="d-flex align-items-center justify-content-center p-2"
+              style="margin-right: 7px; margin-top: 4px;"
+              @click="closeSidebar()"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'times']"
+                class="h6 mb-0 text-dark"
+              />
+            </b-button>
+
+            <b-button
+              v-else
+              variant="outline-light border-0"
+              class="d-flex align-items-center justify-content-center p-2"
+              style="margin-right: 7px; margin-top: 4px;"
+              @click="pin()"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'thumbtack']"
+                :class="`h6 mb-0 ${isPinned ? 'text-primary' : 'text-secondary'}`"
+              />
+            </b-button>
           </div>
+
+          <div
+            v-if="!isExpanded"
+            class="d-flex align-items-center justify-content-center my-3"
+          >
+            <b-button
+              variant="link"
+              @click="pin()"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'chevron-right']"
+                class="h6 mb-0"
+              />
+            </b-button>
+          </div>
+
+          <slot
+            v-if="isExpanded"
+            name="header-expanded"
+            class="px-1"
+          />
+
+          <hr
+            v-if="!isExpanded"
+            class="my-2"
+          >
         </template>
 
         <slot
@@ -116,7 +117,7 @@
       >
         <font-awesome-icon
           :icon="['fas', 'bars']"
-          class="h4 mb-0 text-dark"
+          class="h4 mb-0 text-primary"
         />
       </b-button>
 
@@ -245,10 +246,6 @@ $header-height: 64px;
 
 .sidebar-header {
   height: $header-height;
-
-  .padding {
-    padding: calc(0.5rem - 1px) calc(0.5rem - 1px) 0.5rem 0.5rem;
-  }
 }
 </style>
 
