@@ -10,6 +10,7 @@
         :body-class="`bg-white ${isExpanded ? 'p-2' : ''}`"
         :footer-class="`bg-white rounded-right ${isExpanded ? 'p-2' : ''}`"
         :no-header="!isExpanded"
+        :backdrop="isMobile"
         shadow
         no-slide
         no-close-on-route-change
@@ -36,6 +37,20 @@
               </h2>
 
               <b-button
+                v-if="isMobile"
+                variant="outline-light border-0"
+                class="d-flex align-items-center justify-content-center p-2"
+                style="margin-right: 7px; margin-top: 4px;"
+                @click="closeSidebar()"
+              >
+                <font-awesome-icon
+                  :icon="['fas', 'times']"
+                  class="h6 mb-0 text-dark"
+                />
+              </b-button>
+
+              <b-button
+                v-else
                 variant="outline-light border-0"
                 class="d-flex align-items-center justify-content-center p-2"
                 style="margin-right: 7px; margin-top: 4px;"
@@ -170,6 +185,10 @@ export default {
         this.$emit('update:pinned', pinned)
       },
     },
+
+    isMobile () {
+      return window.innerWidth < 576
+    },
   },
 
   watch: {
@@ -197,6 +216,11 @@ export default {
     pin () {
       this.isPinned = !this.isPinned
       // this.isExpanded = !this.isExpanded
+    },
+
+    closeSidebar () {
+      this.isPinned = false
+      this.isExpanded = false
     },
   },
 }
