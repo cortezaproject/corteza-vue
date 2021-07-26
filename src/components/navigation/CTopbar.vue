@@ -12,11 +12,16 @@
         />
       </template>
 
-      <h2
-        class="d-flex align-items-center mb-0 ml-2 mr-auto h-100"
+      <div
+        class="d-flex align-items-center ml-2 mr-auto h-100"
       >
-        <slot name="title" />
-      </h2>
+        <h2
+          class="d-none d-sm-block mb-0"
+        >
+          <slot name="title" />
+        </h2>
+
+      </div>
 
       <div>
         <slot name="tools" />
