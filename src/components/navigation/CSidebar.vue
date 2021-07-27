@@ -79,11 +79,15 @@
             </b-button>
           </div>
 
-          <slot
+          <div
             v-if="isExpanded"
-            name="header-expanded"
-            class="px-1"
-          />
+            class="px-2"
+          >
+            <slot
+              name="header-expanded"
+            />
+          </div>
+
 
           <hr
             v-if="!isExpanded"
