@@ -192,6 +192,17 @@ export default {
     },
   },
 
+  created () {
+    this.$root.$on('close-sidebar', () => {
+      this.isExpanded = false
+      this.isPinned = false
+    })
+  },
+
+  beforeDestroy () {
+    this.$root.$off('close-sidebar')
+  },
+
   watch: {
     '$route.name': {
       immediate: true,
