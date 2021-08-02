@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 import babel from 'rollup-plugin-babel'
 import json from 'rollup-plugin-json'
+import css from "rollup-plugin-import-css";
 
 import pkg from './package.json'
 
@@ -50,6 +51,7 @@ export default {
       exclude: 'node_modules/**',
     }),
     json(),
+    css(),
   ],
 
   watch: {

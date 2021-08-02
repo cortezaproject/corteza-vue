@@ -12,6 +12,7 @@ export {
   CInputConfirm,
   CInputDateTime,
   CInputInterval,
+  CRichTextInput,
 } from './input'
 
 export {
