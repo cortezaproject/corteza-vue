@@ -55,7 +55,7 @@
               variant="outline-light border-0"
               class="d-flex align-items-center justify-content-center p-2"
               style="margin-right: 7px; margin-top: 4px;"
-              @click="pin()"
+              @click="togglePin()"
             >
               <font-awesome-icon
                 :icon="['fas', 'thumbtack']"
@@ -70,7 +70,7 @@
           >
             <b-button
               variant="link"
-              @click="pin()"
+              @click="togglePin()"
             >
               <font-awesome-icon
                 :icon="['fas', 'chevron-right']"
@@ -170,6 +170,12 @@ export default {
     }
   },
 
+  data () {
+    return {   
+      sidebar_settings : {}
+    }
+  },
+
   computed: {
     isExpanded: {
       get () {
@@ -215,6 +221,8 @@ export default {
         if (this.disabledRoutes.includes(name)) {
           this.isPinned = false
           this.isExpanded = false
+        } else if(this.expandOnHover){
+          this.defaultSidebarAppearance()
         }
       },
     },
@@ -229,9 +237,41 @@ export default {
       }
     },
 
-    pin () {
+    togglePin () {
+      this.saveSettings(!this.isPinned)
       this.isPinned = !this.isPinned
-      // this.isExpanded = !this.isExpanded
+    },
+
+    defaultSidebarAppearance () {
+      const localstorage_settings = JSON.parse(window.localStorage.getItem('sidebar_settings'))
+      if (localstorage_settings) {
+        this.sidebar_settings = localstorage_settings
+      }
+      const app_sidebar = (localstorage_settings || {})[this.$root.$options.name]
+      if (!this.isMobile) {
+        if (app_sidebar) {
+          this.isExpanded = app_sidebar.pinned
+          this.isPinned = app_sidebar.pinned
+        } else {
+          this.openSidebar()
+        }
+      } else {
+        this.closeSidebar()
+      }
+    },
+
+    saveSettings (pinned) {
+      if (this.sidebar_settings[this.$root.$options.name]) {
+        this.sidebar_settings[this.$root.$options.name].pinned = pinned
+      } else {
+        this.sidebar_settings[this.$root.$options.name] = { pinned: pinned }
+      }
+      window.localStorage.setItem('sidebar_settings', JSON.stringify(this.sidebar_settings))
+    },
+
+    openSidebar () {
+      this.isPinned = true
+      this.isExpanded = true
     },
 
     closeSidebar () {
