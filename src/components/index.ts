@@ -1,3 +1,4 @@
+
 export {
   CCorredorManualButtons,
 } from './corredor'
@@ -42,3 +43,5 @@ export {
   CHamburgerMenu,
   CReminderSidebar,
 } from './sidebar'
+
+export { default as C3 } from './c3'
