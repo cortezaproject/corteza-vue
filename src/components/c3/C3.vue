@@ -1,90 +1,75 @@
 <template>
-  <div class="w-100 mt-3">
-    <b-container class="mw-100">
-      <b-row class="mb-5">
-        <b-col cols="3">
-          <aside class="h-100">
-            <h4
-              class="font-weight-bold"
-            >
-              Component Catalogue
-            </h4>
-            <component-list
-              :catalogue="catalogue"
-              @select="setCurrent($event)"
-            />
-          </aside>
-        </b-col>
-        <b-col
-          v-if="current"
-          cols="8"
-        >
-          <component
-            :is="current.component"
-            v-if="current"
-            v-bind="current.props"
-          />
-        </b-col>
-        <b-col
-          v-else
-          class="d-flex align-items-center justify-content-center"
-          cols="7"
-        >
-          <h3>
-            Select a component from the Component Catalogue and start hacking :)
-          </h3>
-        </b-col>
-      </b-row>
-      <b-row
+  <div class="layout">
+    <aside class="sidebar p-2">
+      <h4
+        class="border-bottom">
+        C3: Corteza Component Catalogue
+      </h4>
+      <component-list
+        :catalogue="catalogue"
+        @select="setCurrent($event)"
+      />
+    </aside>
+
+    <main
+      class="p-5"
+    >
+      <component
+        :is="current.component"
         v-if="current"
-        class="w-50 my-0 mx-auto"
+        v-bind="current.props"
+      />
+      <p
+        v-else
+        class="text-center"
       >
-        <b-col>
-          <h3>
-            Pre-set Controls
-          </h3>
-          <ul
-            class="pl-0"
-          >
-            <li
-              v-for="(s, i) in current.scenarios"
-              :key="i"
-              class="mb-1 h5 list-unstyled"
-              @click="setScenario(s)"
-            >
-              <span
-                v-if="s.label === 'Full form'"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'file-alt']"
-                />
-              </span>
-              <span
-                v-else
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'file']"
-                />
-              </span>
-              {{ s.label }}
-            </li>
-          </ul>
-        </b-col>
-        <b-col>
-          <h3>
-            Controls
-          </h3>
-          <component
-            :is="c.component"
-            v-for="(c, i) in current.controls"
+        Select a component from the C3 Catalogue and start hacking :)
+      </p>
+    </main>
+
+    <div
+      class="controls px-5 py-2 mt-2"
+      v-if="current"
+    >
+      <div
+        class="control-group mr-2"
+        v-for="(cg, g) in controlGroups"
+        :key="`control-group-${g}`"
+      >
+        <h3>
+          Controls
+        </h3>
+        <component
+          :is="c.component"
+          v-for="(c, i) in cg"
+          :key="i"
+          :value="c.value(current.props)"
+          v-bind="c.props"
+          @update="c.update(current.props, $event)"
+        />
+      </div>
+
+      <div
+        v-if="current.scenarios"
+        class="control-group float-right"
+      >
+        <h3>
+          Pre-set controls
+        </h3>
+        <ul
+          class="pl-0"
+        >
+          <li
+            v-for="(s, i) in current.scenarios"
             :key="i"
-            :value="c.value(current.props)"
-            v-bind="c.props"
-            @update="c.update(current.props, $event)"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
+            class="list-unstyled scenario"
+            @click="setScenario(s)"
+          >
+            {{ s.label }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -104,9 +89,25 @@ export default {
     },
   },
 
+  computed: {
+    controlGroups () {
+      if (this.current.controls.length === 0) {
+        return []
+      }
+
+      if (Array.isArray(this.current.controls[0])) {
+        // already grouped
+        return this.current.controls
+      }
+
+      // make one virtual group holding all controls
+      return [this.current.controls]
+    },
+  },
+
   data () {
     return {
-      current: {},
+      current: undefined,
     }
   },
 
@@ -121,10 +122,66 @@ export default {
       props = JSON.parse(JSON.stringify(props))
 
       // create missing props from controls
-      controls.forEach(c => c.update(props, c.value(props) || null))
+      const apply = (c, props) => c.update(props, c.value(props) || null)
+      controls.forEach(c => {
+        if (Array.isArray(c)) {
+          c.forEach(c => apply(c, props))
+        } else {
+          apply(c, props)
+        }
+
+      })
 
       this.current.props = props
     },
   },
 }
 </script>
+<style lang="scss">
+.layout {
+  height: 100vh;
+  width: 100vw;
+
+  display: grid;
+  grid-template-rows: auto 400px;
+  grid-template-columns: 300px auto;
+  align-content: stretch;
+  grid-template-areas:
+    "side main"
+    "side controls"
+  ;
+
+  aside {
+    grid-area: side;
+  }
+
+  main {
+    grid-area: main;
+    background-image: linear-gradient(
+      135deg,
+      #f3f3f5 21.43%,
+      #ffffff 21.43%,
+      #ffffff 50%,
+      #f3f3f5 50%,
+      #f3f3f5 71.43%,
+      #ffffff 71.43%,
+      #ffffff 100%
+    );
+    background-size: 35.00px 35.00px;
+    overflow: auto;
+  }
+
+  .controls {
+    grid-area: controls;
+    overflow: auto;
+
+    .control-group {
+      float: left;
+    }
+  }
+
+  .scenario {
+    cursor: pointer;
+  }
+}
+</style>

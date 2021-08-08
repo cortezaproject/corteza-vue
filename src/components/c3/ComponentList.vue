@@ -2,6 +2,7 @@
   <div>
     <h5
       v-if="!root"
+      class="mb-0"
     >
       {{  group  }}
     </h5>
@@ -26,7 +27,7 @@
         :catalogue="catalogue"
         :path="[...path, group]"
         @select="$emit('select', $event)"
-        class="m-2"
+        class="my-2"
       />
     </div>
   </div>
