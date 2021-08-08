@@ -116,9 +116,14 @@ export default {
       this.setScenario(this.current)
     },
 
-    setScenario ({ props = {} }) {
+    setScenario ({ props = {}, controls = [] }) {
       // do a deep copy and loose all references
-      this.current.props = JSON.parse(JSON.stringify(props))
+      props = JSON.parse(JSON.stringify(props))
+
+      // create missing props from controls
+      controls.forEach(c => c.update(props, c.value(props) || null))
+
+      this.current.props = props
     },
   },
 }
