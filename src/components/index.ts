@@ -30,6 +30,7 @@ export * from './prompts'
 export {
   CTopbar,
   CSidebar,
+  CSidebarNavItems,
 } from './navigation'
 
 export {
