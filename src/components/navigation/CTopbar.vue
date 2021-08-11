@@ -66,26 +66,26 @@
           href="https://forum.cortezaproject.org/"
           target="_blank"
         >
-          {{ $t('navigation.help.forum') }}
+          {{ labels.helpForum }}
         </b-dropdown-item>
         <b-dropdown-item
           :href="documentationURL"
           target="_blank"
         >
-          {{ $t('navigation.help.documentation') }}
+          {{ labels.helpDocumentation }}
         </b-dropdown-item>
         <b-dropdown-item
           href="mailto:info@crust.tech"
           target="_blank"
         >
-          {{ $t('navigation.help.feedback') }}
+          {{ labels.helpFeedback }}
         </b-dropdown-item>
         <b-dropdown-divider />
         <b-dropdown-item
           disabled
           class="small"
         >
-          {{ $t('navigation.help.version') }}
+          {{ labels.helpVersion }}
           <br>
           {{ frontendVersion }}
         </b-dropdown-item>
@@ -109,24 +109,24 @@
               :icon="['far', 'user']"
             />
             <span class="sr-only">
-              {{ $t('navigation.help.forum') }}
+              {{ labels.helpForum }}
             </span>
           </div>
         </template>
         <b-dropdown-text class="text-muted mb-2">
-          {{ $t('navigation.userSettings.loggedInAs', { user: userLabel }) }}
+          {{ labels.userSettingsLoggedInAs  }}
         </b-dropdown-text>
         <b-dropdown-item
           :href="userProfileURL"
           target="_blank"
         >
-          {{ $t('navigation.userSettings.profile') }}
+          {{ labels.userSettingsProfile }}
         </b-dropdown-item>
         <b-dropdown-item
           :href="changePasswordURL"
           target="_blank"
         >
-          {{ $t('navigation.userSettings.changePassword') }}
+          {{ labels.userSettingsChangePassword }}
         </b-dropdown-item>
         <b-dropdown-divider />
         <b-dropdown-item
@@ -134,7 +134,7 @@
           @click="$auth.logout()"
           class="mt-2"
         >
-          {{ $t('navigation.userSettings.logout') }}
+          {{ labels.userSettingsLogout }}
         </b-dropdown-item>
       </b-dropdown>
     </div>
@@ -159,18 +159,15 @@ export default {
     appSelectorURL: {
       type: String,
       default: '/..'
-    }
+    },
+
+    labels: {
+      type: Object,
+      default: () => ({})
+    },
   },
 
   computed: {
-    user () {
-      return this.$auth.user || {}
-    },
-
-    userLabel () {
-      return this.user.name || this.user.handle || this.user.email || ''
-    },
-
     userProfileURL () {
       return this.$auth.cortezaAuthURL
     },
