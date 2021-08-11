@@ -6,6 +6,7 @@ import * as filters from './filters'
 import * as store from './store'
 import * as url from './libs/url'
 import * as websocket from './libs/websocket'
+import i18n from './i18n'
 
 export {
   plugins,
@@ -16,4 +17,5 @@ export {
   store,
   url,
   websocket,
+  i18n,
 }
