@@ -28,8 +28,13 @@
             /> -->
 
             <div
-              class="flex-shrink-1 icon-logo border-0"
-            />
+              class="flex-shrink-1 d-flex align-items-center justify-content-center icon-logo border-0"
+            >
+              <img
+                class="border-0"
+                :src="logo"
+              >
+            </div>
 
             <h2
               class="flex-grow-1 mb-0"
@@ -167,11 +172,16 @@ export default {
     disabledRoutes: {
       type: Array,
       default: () => [],
-    }
+    },
+
+    logo: {
+      type: String,
+      default: () => ''
+    },
   },
 
   data () {
-    return {   
+    return {
       sidebar_settings : {}
     }
   },
@@ -295,8 +305,6 @@ $header-height: 64px;
 .icon-logo {
   width: 50px;
   height: 50px;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .sidebar-header {
