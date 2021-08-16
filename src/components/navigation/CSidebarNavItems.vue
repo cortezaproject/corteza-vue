@@ -1,8 +1,8 @@
 <template>
   <div class="nav-sidebar">
     <b-button
-      v-for="{page = {}, params = {}, children = []} of items"
-      :key="page.name"
+      v-for="({page = {}, params = {}, children = []}, index) of items"
+      :key="index"
       variant="link"
       class="w-100 text-left text-dark text-decoration-none p-0 pt-2 nav-item"
       active-class="nav-active"
