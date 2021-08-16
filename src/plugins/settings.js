@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+/**
+ * Is the file attached in Corteza
+ * @type {RegExp}
+ */
+const localAttachment = /^attachment:(\d+)/
+
 export class Settings {
   constructor () {
     this.current = {}
@@ -37,6 +43,23 @@ export class Settings {
 
     const v = s[k[k.length - 1]]
     return v !== undefined ? v : d
+  }
+
+  attachment (k, d) {
+    const src = this.get(k, d)
+
+    if (localAttachment.test(src)) {
+      const [, attachmentID] = localAttachment.exec(src)
+
+      return this.api.baseURL +
+        this.api.attachmentOriginalEndpoint({
+          attachmentID,
+          kind: 'settings',
+          name: k,
+        })
+    }
+
+    return d
   }
 }
 
