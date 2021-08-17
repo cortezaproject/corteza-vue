@@ -29,6 +29,10 @@ export {
 export * from './prompts'
 
 export {
+  CLoaderLogo,
+} from './loader'
+
+export {
   CTopbar,
   CSidebar,
   CSidebarNavItems,
