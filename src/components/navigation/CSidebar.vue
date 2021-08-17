@@ -17,22 +17,14 @@
       >
         <template #header>
           <div
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center"
           >
-            <!-- <b-button
-              variant="outline-light"
-              size="lg"
-              :block="!isExpanded"
-              class="flex-shrink-1 icon-logo border-0"
-              :to="{ name: 'root' }"
-            /> -->
-
             <div
-              class="flex-shrink-1 d-flex align-items-center justify-content-center icon-logo border-0"
+              class="d-flex align-items-center icon border-0 p-2"
             >
               <img
-                class="border-0"
-                :src="logo"
+                class="h-100 w-auto border-0"
+                :src="icon"
               >
             </div>
 
@@ -145,8 +137,13 @@
 
       <div
         v-else
-        class="icon-logo border-0"
-      />
+        class="d-flex align-items-center icon border-0 p-2"
+      >
+        <img
+          class="h-100 w-auto border-0"
+          :src="icon"
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -174,7 +171,7 @@ export default {
       default: () => [],
     },
 
-    logo: {
+    icon: {
       type: String,
       default: () => ''
     },
@@ -302,7 +299,7 @@ $header-height: 64px;
   width: 66px;
 }
 
-.icon-logo {
+.icon {
   width: 50px;
   height: 50px;
 }
