@@ -14,12 +14,16 @@
         v-for="(cmp, i) in components"
         :key="i"
         @click="$emit('select', cmp)"
-        class="component"
+        class="component ml-2"
       >
-        <font-awesome-icon
-          :icon="['fas', 'puzzle-piece']"
-        />
         {{ cmp.name || cmp.component.name || 'Untitled' }}
+        <b-badge
+          v-if="cmp.wip"
+          variant="warning"
+          class="float-right"
+        >
+          wip
+        </b-badge>
       </div>
       <component-list
         v-for="(group) in subgroups"
@@ -27,7 +31,7 @@
         :catalogue="catalogue"
         :path="[...path, group]"
         @select="$emit('select', $event)"
-        class="my-2"
+        class="my-3"
       />
     </div>
   </div>

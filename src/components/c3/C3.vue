@@ -1,10 +1,10 @@
 <template>
   <div class="layout">
     <aside class="sidebar p-2">
-      <h4
+      <h5
         class="border-bottom">
-        C3: Corteza Component Catalogue
-      </h4>
+        C3: Component Catalogue
+      </h5>
       <component-list
         :catalogue="catalogue"
         @select="setCurrent($event)"
@@ -153,6 +153,7 @@ export default {
 
   aside {
     grid-area: side;
+    overflow: auto;
   }
 
   main {
