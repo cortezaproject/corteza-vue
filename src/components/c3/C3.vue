@@ -118,9 +118,6 @@ export default {
     },
 
     setScenario ({ props = {}, controls = [] }) {
-      // do a deep copy and loose all references
-      props = JSON.parse(JSON.stringify(props))
-
       // create missing props from controls
       const apply = (c, props) => c.update(props, c.value(props) || null)
       controls.forEach(c => {
@@ -129,7 +126,6 @@ export default {
         } else {
           apply(c, props)
         }
-
       })
 
       this.current.props = props
