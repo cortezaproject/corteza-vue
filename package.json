@@ -1,7 +1,7 @@
 {
   "name": "@cortezaproject/corteza-vue",
   "description": "Corteza Vue.js JavaScript/TypeScript libs",
-  "version": "2021.9.0-dev.3",
+  "version": "2021.9.0-dev.4",
   "license": "Apache-2.0",
   "author": "Denis Arh <denis.arh@crust.tech>",
   "main": "dist/index.js",
@@ -42,7 +42,7 @@
     "tiptap": "^1.26.0",
     "tiptap-extensions": "^1.28.4",
     "v-photoswipe": "^1.0.3-1",
-    "vue": "^2.6.11",
+    "vue": "^2.6.14",
     "vue-swatches": "^1.0.4",
     "vuex": "^3.6.2",
     "websocket-extensions": "^0.1.4"
@@ -97,7 +97,7 @@
     "typescript": "^3.7.4",
     "vue-property-decorator": "^8.3.0",
     "vue-select": "^3.4.0",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.14"
   },
   "resolutions": {
     "**/**/yargs-parser": "^13.1.2",
