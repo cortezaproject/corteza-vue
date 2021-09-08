@@ -1,37 +1,12 @@
-import moment, { Moment } from 'moment'
+import { fmt } from '@cortezaproject/corteza-js'
 
-export function isoDate (d: Moment | Date | string | number): string {
-  return moment(d).format()
+export function locFullDateTime (d: unknown): string {
+  // Thursday, September 4, 1986 8:30 PM
+  // return moment(d).format('LLLL')
+  return fmt.fullDateTime(d)
 }
 
-export function isoDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format()
-}
-
-export function locDate (d: Moment | Date | string | number): string {
-  return moment(d).format('lll')
-}
-
-export function locLongDate (d: Moment | Date | string | number): string {
-  return moment(d).format('LLLL')
-}
-
-export function locDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('L')
-}
-
-export function locLongDateOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LL')
-}
-
-export function locTimeOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LT')
-}
-
-export function locLongTimeOnly (d: Moment | Date | string | number): string {
-  return moment(d).format('LTS')
-}
-
-export function relTime (d: Moment | Date | string | number, s?: boolean): string {
-  return moment(d).fromNow(s)
+export function locDate (d: unknown): string {
+  // 09/04/1986
+  return fmt.date(d)
 }
