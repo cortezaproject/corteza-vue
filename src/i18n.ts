@@ -69,7 +69,7 @@ export default (Vue: VueConstructor, app: string | Partial<Options>, ...namespac
     // keeping lng without a value
     // lang-auto-detect plugin
     lng,
-    fallbackLng = false,
+    fallbackLng = 'en',
     fallbackNS = false,
   } = opt
 
