@@ -27,7 +27,7 @@ interface Options {
   fallbackNS: string | false;
 
   /**
-   * What namespace to use when not explcitly defined
+   * What namespace to use when not explicitly defined
    * When empty, default is set to the value of (the first item in) ns
    */
   defaultNS: string;
