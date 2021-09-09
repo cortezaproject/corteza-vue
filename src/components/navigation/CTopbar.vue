@@ -166,7 +166,7 @@ export default {
 
     labels: {
       type: Object,
-      default: () => ({})
+      required: true,
     },
   },
 
