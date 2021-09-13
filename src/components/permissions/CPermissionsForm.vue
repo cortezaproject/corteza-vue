@@ -16,7 +16,7 @@
             class="text-break pointer"
             @click="onRoleChange(r)"
           >
-            {{ r.name || r.handle || r.roleID || $t('role.unnamed') }}
+            {{ r.name || r.handle || r.roleID }}
           </b-list-group-item>
         </b-list-group>
         <vue-select
@@ -50,7 +50,7 @@
           variant="primary"
           :disabled="disabled"
         >
-          {{ $t('permission.saveChanges') }}
+          {{ $t('saveChanges') }}
         </b-button>
       </b-col>
     </b-row>
@@ -62,6 +62,10 @@ import { VueSelect } from 'vue-select'
 
 // Data, Methods, Computed, Props
 export default {
+  i18nOptions: {
+    namespaces: 'permission',
+  },
+
   components: {
     Rules,
     VueSelect,
@@ -230,14 +234,14 @@ export default {
 
       let title = ''
       if (this.target) {
-        title = this.$t(`permission.${resource}.operations.${operation}.specific`, { target: this.target })
+        title = this.$t(`${resource}.operations.${operation}.specific`, { target: this.target })
       } else {
-        title = this.$t(`permission.${resource}.operations.${operation}.title`)
+        title = this.$t(`${resource}.operations.${operation}.title`)
       }
 
       return {
         title,
-        description: this.$t(`permission.${resource}.operations.${operation}.description`),
+        description: this.$t(`${resource}.operations.${operation}.description`),
       }
     },
   },

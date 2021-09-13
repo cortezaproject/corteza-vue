@@ -22,7 +22,7 @@
         class="pl-0"
         @click="onReset"
       >
-        {{ $t('permission.resetBack', {current}) }}
+        {{ $t('resetBack', {current}) }}
       </b-button>
     </b-col>
     <b-col
@@ -41,6 +41,10 @@
 import Access from './Access.vue'
 
 export default {
+  i18nOptions: {
+    namespaces: 'permission',
+  },
+
   components: {
     Access,
   },

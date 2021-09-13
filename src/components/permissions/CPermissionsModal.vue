@@ -23,6 +23,10 @@ import CPermissionsForm from './CPermissionsForm.vue'
 import _ from 'lodash'
 
 export default {
+  i18nOptions: {
+    namespaces: 'permission',
+  },
+
   components: {
     CPermissionsForm,
   },
@@ -58,14 +62,14 @@ export default {
 
           let target
           if (resourceRefs.length > 0 && resourceRefs[resourceRefs.length - 1] === '*') {
-            target = this.$t(`permission.${resourceType}.all`)
+            target = this.$t(`${resourceType}.all`)
           } else {
-            target = this.$t(`permission.${resourceType}.specific`, { target: this.title })
+            target = this.$t(`${resourceType}.specific`, { target: this.title })
           }
 
-          return this.$t('permission.setFor', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
+          return this.$t('setFor', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
         } else {
-          return this.$t('permission.setFor', { target: this.$t(`permission.base.${this.resource}`) })
+          return this.$t('setFor', { target: this.$t(`base.${this.resource}`) })
         }
       }
 
