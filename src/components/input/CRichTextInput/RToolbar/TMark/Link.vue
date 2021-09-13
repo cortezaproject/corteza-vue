@@ -25,7 +25,7 @@
           v-model="attrs.href"
           autofocus
           :state="urlValid ? null : false"
-          :placeholder="$t('general.label.urlPlaceholder')"
+          :placeholder="labels.urlPlaceholder"
           @keydown.enter.prevent.stop="link"
           @keydown.esc.prevent.stop="close" />
         <b-input-group-append>
@@ -33,7 +33,7 @@
             @click="link"
             :disabled="!urlValid"
             variant="outline-success">
-            {{ $t('general.label.ok') }}
+            {{ labels.ok }}
           </b-button>
         </b-input-group-append>
       </b-input-group>
@@ -51,6 +51,13 @@ import base from './base.vue'
 export default {
   name: 't-mark-link',
   extends: base,
+
+  props: {
+    labels: {
+      type: Object,
+      default: () => ({})
+    }
+  },
 
   data () {
     return {

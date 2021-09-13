@@ -6,6 +6,7 @@
       :is="getItem(f)"
       :format="f"
       v-bind="$props"
+      :labels="labels"
       @click="(commands[$event.type])($event.attrs)" />
 
     <!-- Extra button to remove formatting -->
@@ -48,6 +49,10 @@ export default {
       required: true,
       default: () => [],
     },
+    labels: {
+      type: Object,
+      default: () => ({})
+    }
   },
 
   methods: {

@@ -12,8 +12,9 @@
           :commands="commands"
           :is-active="isActive"
           :get-mark-attrs="getMarkAttrs"
-          :get-node-attrs="getNodeAttrs" />
-
+          :get-node-attrs="getNodeAttrs" 
+          :labels="labels"
+        />
         </editor-menu-bar>
       </b-card-header>
 
@@ -47,6 +48,10 @@ export default {
       required: false,
       default: null,
     },
+    labels: {
+      type: Object,
+      default: () => ({})
+    }
   },
 
   data () {
