@@ -14,6 +14,7 @@
         shadow
         no-slide
         no-close-on-route-change
+        no-close-on-esc
       >
         <template #header>
           <div
