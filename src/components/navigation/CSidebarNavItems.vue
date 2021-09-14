@@ -149,14 +149,19 @@ export default {
   width: 30px;
 }
 
+.nav-item > span > {
+  .title {
+    font-family: 'Poppins-Regular'
+  }
+}
+
 .nav-active > span > {
   .icon {
     color: #4D7281;
   }
 
   .title {
-    font-size: 1.05rem;
-    font-family: 'nunito_sansbold';
+    font-family: 'Poppins-SemiBold'
   }
 }
 </style>
