@@ -63,7 +63,7 @@ import { VueSelect } from 'vue-select'
 // Data, Methods, Computed, Props
 export default {
   i18nOptions: {
-    namespaces: 'permission',
+    namespaces: 'permissions',
   },
 
   components: {

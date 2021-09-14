@@ -24,7 +24,7 @@ import _ from 'lodash'
 
 export default {
   i18nOptions: {
-    namespaces: 'permission',
+    namespaces: 'permissions',
   },
 
   components: {

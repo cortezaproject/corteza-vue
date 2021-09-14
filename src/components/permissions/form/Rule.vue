@@ -42,7 +42,7 @@ import Access from './Access.vue'
 
 export default {
   i18nOptions: {
-    namespaces: 'permission',
+    namespaces: 'permissions',
   },
 
   components: {
