@@ -18,28 +18,18 @@
       >
         <template #header>
           <div
-            class="d-flex align-items-center"
+            class="d-flex align-items-center justify-content-between px-2"
+            style="height: 50px;"
           >
-            <div
-              class="d-flex align-items-center icon border-0 p-2"
+            <img
+              class="logo border-0"
+              :src="logo"
             >
-              <img
-                class="h-100 w-auto border-0"
-                :src="icon"
-              >
-            </div>
-
-            <h2
-              class="flex-grow-1 mb-0"
-            >
-              Corteza
-            </h2>
 
             <b-button
               v-if="isMobile"
               variant="outline-light border-0"
               class="d-flex align-items-center justify-content-center p-2"
-              style="margin-right: 7px; margin-top: 4px;"
               @click="closeSidebar()"
             >
               <font-awesome-icon
@@ -52,7 +42,6 @@
               v-else
               variant="outline-light border-0"
               class="d-flex align-items-center justify-content-center p-2"
-              style="margin-right: 7px; margin-top: 4px;"
               @click="togglePin()"
             >
               <font-awesome-icon
@@ -173,6 +162,11 @@ export default {
     },
 
     icon: {
+      type: String,
+      default: () => ''
+    },
+
+    logo: {
       type: String,
       default: () => ''
     },
@@ -303,6 +297,11 @@ $header-height: 64px;
 .icon {
   width: 50px;
   height: 50px;
+}
+
+.logo {
+  max-height: 40px;
+  width: auto;
 }
 
 .sidebar-header {
