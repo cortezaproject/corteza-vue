@@ -22,7 +22,7 @@
             style="height: 50px;"
           >
             <img
-              class="logo border-0"
+              class="logo w-auto border-0"
               :src="logo"
             >
 
@@ -127,10 +127,10 @@
 
       <div
         v-else
-        class="d-flex align-items-center icon border-0 p-2"
+        class="d-flex align-items-center border-0 p-2"
       >
         <img
-          class="h-100 w-auto border-0"
+          class="icon w-auto border-0"
           :src="icon"
         >
       </div>
@@ -295,13 +295,12 @@ $header-height: 64px;
 }
 
 .icon {
-  width: 50px;
-  height: 50px;
+  max-height: 40px;
+  max-width: 40px;
 }
 
 .logo {
   max-height: 40px;
-  width: auto;
 }
 
 .sidebar-header {
