@@ -44,8 +44,7 @@ export {
 } from './toaster'
 
 export {
-  CHamburgerMenu,
   CReminderSidebar,
-} from './sidebar'
+} from './reminders'
 
 export { default as C3 } from './c3'

@@ -116,6 +116,9 @@
         <b-dropdown-text class="text-muted mb-2">
           {{ labels.userSettingsLoggedInAs  }}
         </b-dropdown-text>
+        <div>
+          <slot name="avatar-dropdown" />
+        </div>
         <b-dropdown-item
           :href="userProfileURL"
           target="_blank"
