@@ -4,7 +4,7 @@
       v-model="showModal"
       hide-footer
       size="lg"
-      :title="getTitle"
+      :title="translatedTitle"
       lazy
       scrollable
       @hide="onHide"
@@ -18,9 +18,8 @@
   </div>
 </template>
 <script lang="js">
-import { modalOpenEventName } from './def.ts'
+import {modalOpenEventName, split} from './def.ts'
 import CPermissionsForm from './CPermissionsForm.vue'
-import _ from 'lodash'
 
 export default {
   i18nOptions: {
@@ -52,25 +51,18 @@ export default {
       },
     },
 
-    getTitle () {
+    translatedTitle () {
       if (this.resource) {
-        if (this.resource.indexOf(':') > -1) {
-          let [ resourceType, ...resourceRefs ] = this.resource.split('/')
-          let [ ,, component, service = 'component' ] = resourceType.split(':', 4)
+        const { i18nPrefix } = split(this.resource)
 
-          resourceType = _.camelCase(`${component} ${service}`)
-
-          let target
-          if (resourceRefs.length > 0 && resourceRefs[resourceRefs.length - 1] === '*') {
-            target = this.$t(`${resourceType}.all`)
-          } else {
-            target = this.$t(`${resourceType}.specific`, { target: this.title })
-          }
-
-          return this.$t('setFor', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
+        let target
+        if (this.title) {
+          target = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.title })
         } else {
-          return this.$t('setFor', { target: this.$t(`base.${this.resource}`) })
+          target = this.$t(`permissions:${i18nPrefix}.all`)
         }
+
+        return this.$t('permissions:ui.set-for', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
       }
 
       return undefined

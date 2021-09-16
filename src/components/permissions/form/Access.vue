@@ -4,7 +4,7 @@
     buttons
     :disabled="!enabled"
     :button-variant="variant"
-    :options="permissionOptions"
+    :options="options"
   />
 </template>
 <script lang="js">
@@ -28,17 +28,14 @@ export default {
     },
   },
 
-  data () {
-    return {
-      permissionOptions: [
-        { text: 'Allow', value: 'allow' },
-        { text: 'Inherit', value: 'inherit' },
-        { text: 'Deny', value: 'deny' },
-      ],
-    }
-  },
-
   computed: {
+    options () {
+      return ['allow', 'inherit', 'deny'].map(value => ({
+        value,
+        text: this.$t('permissions:ui.access.' + value)
+      }))
+    },
+
     isChanged () {
       return this.selected !== this.current
     },

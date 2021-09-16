@@ -22,7 +22,7 @@
         class="pl-0"
         @click="onReset"
       >
-        {{ $t('resetBack', {current}) }}
+        {{ $t('ui.reset-back', {current}) }}
       </b-button>
     </b-col>
     <b-col

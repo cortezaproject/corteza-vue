@@ -50,7 +50,7 @@
           variant="primary"
           :disabled="disabled"
         >
-          {{ $t('saveChanges') }}
+          {{ $t('permissions:ui.save-changes') }}
         </b-button>
       </b-col>
     </b-row>
@@ -59,10 +59,15 @@
 <script lang="js">
 import Rules from './form/Rules.vue'
 import { VueSelect } from 'vue-select'
+import { split } from './def.ts'
 
 // Data, Methods, Computed, Props
 export default {
   i18nOptions: {
+    /**
+     * Using both, implicit (here) and explicit (at $t()) namespace setting.
+     * If we only use implicit the behaviour is flaky.
+     */
     namespaces: 'permissions',
   },
 
@@ -229,19 +234,18 @@ export default {
     },
 
     describePermission ({ resource, operation }) {
-      resource = _.camelCase(resource.split(':')[2] + ' ' + (resource.split(':')[3] || 'component'))
-      operation = _.camelCase(operation)
+      const i18nPrefix = split(resource).i18nPrefix + `.operations.${operation}`
 
       let title = ''
       if (this.target) {
-        title = this.$t(`${resource}.operations.${operation}.specific`, { target: this.target })
+        title = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.target })
       } else {
-        title = this.$t(`${resource}.operations.${operation}.title`)
+        title = this.$t(`permissions:${i18nPrefix}.title`)
       }
 
       return {
         title,
-        description: this.$t(`${resource}.operations.${operation}.description`),
+        description: this.$t(`permissions:${i18nPrefix}.description`),
       }
     },
   },
