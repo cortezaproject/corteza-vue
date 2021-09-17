@@ -34,6 +34,7 @@ interface OAuth2TokenResponse {
   name?: string;
   handle?: string;
   email?: string;
+  preferred_language?: string;
 }
 
 interface PluginOpts {
@@ -277,12 +278,19 @@ export class Auth {
 
       return this.axios.get(oauth2InfoURL, { headers }).then(({ data }) => {
         this.log.info('data fetch form info endpoint', { oauth2InfoURL, headers, data })
-        this[user] = new system.User({
+
+        const authUser = new system.User({
           userID: data.sub,
           name: data.name,
           email: data.email,
           handle: data.username,
         })
+
+        if (data.preferred_language) {
+          authUser.meta.preferredLanguage = data.preferred_language || 'en'
+        }
+
+        this[user] = authUser
 
         return data
       }).catch((error) => {
@@ -417,6 +425,10 @@ export class Auth {
       handle: oa2tkn.handle,
       email: oa2tkn.email,
     })
+
+    if (oa2tkn.preferred_language) {
+      u.meta.preferredLanguage = oa2tkn.preferred_language
+    }
 
     this[accessToken] = oa2tkn.access_token
     this[user] = u
