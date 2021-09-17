@@ -12,7 +12,7 @@ interface ResourceParts {
  *  - corteza::compose:moduleField/42/21/12
  *  - corteza::compose/42/21/12
  */
-export function split(input: string): ResourceParts {
+export function split (input: string): ResourceParts {
   const [tmp = '', references = ''] = input.split('/', 2)
   const [,, component, resourceType = undefined] = tmp.split(':')
   return {

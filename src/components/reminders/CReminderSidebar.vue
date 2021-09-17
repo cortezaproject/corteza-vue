@@ -1,7 +1,7 @@
 <template>
   <b-sidebar
     v-model="isVisible"
-    header-class="reminder-sidebar-header px-2 py-3 border-bottom"
+    header-class="d-flex align-items-center justify-content-between reminder-sidebar-header px-2 py-3 border-bottom"
     body-class="bg-white px-2"
     :title="title"
     :backdrop="isMobile"
@@ -11,6 +11,25 @@
     no-close-on-route-change
     no-close-on-esc
   >
+    <template #header>
+      <h4
+        class="text-primary mb-0"
+      >
+        <b>{{ title }}</b>
+      </h4>
+
+      <b-button
+        variant="outline-light border-0"
+        class="d-flex align-items-center justify-content-center p-2"
+        @click="isVisible = false"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'times']"
+          class="h6 mb-0 text-dark"
+        />
+      </b-button>
+    </template>
+
     <slot />
   </b-sidebar>
 </template>
