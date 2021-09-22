@@ -90,8 +90,8 @@
           {{ frontendVersion }}
         </b-dropdown-item>
       </b-dropdown>
-
       <b-dropdown
+        data-v-onboarding="profile"
         size="lg"
         variant="outline-light"
         class="nav-user-icon"

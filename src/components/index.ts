@@ -39,6 +39,11 @@ export {
 } from './navigation'
 
 export {
+  Tour,
+  TourStart,
+} from './Tour'
+
+export {
   CToaster,
   CToasterLink,
 } from './toaster'
