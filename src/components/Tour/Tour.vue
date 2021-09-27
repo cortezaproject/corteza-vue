@@ -98,19 +98,16 @@ export default {
     callbacks: {
       type: Object,
     },
+    steps: {
+      default: () => [],
+      type: Array,
+    },
   },
-    data () {
+  data () {
     return {
       tour: {
         name:'app-list',
-        steps: [   
-          'app-list',
-          'low-code',
-          'crm',
-          'reporter',
-          'workflow',
-          'profile',
-          ].map(step=>{
+        steps: this.steps.map(step=>{
             return {
                     name: step,
                     target: `[data-v-onboarding="${step}"]`,
@@ -130,7 +127,7 @@ export default {
     },
   methods: {
     start () {
-      if (JSON.parse(localStorage.getItem('corteza.tour'))) {
+      if (JSON.parse(localStorage.getItem('corteza.tour')) && this.$tours[this.tour.name].steps.length) {
         this.$tours[this.tour.name].start()
       }
     },
