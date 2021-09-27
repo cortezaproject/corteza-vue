@@ -1,94 +1,93 @@
-  <template>
-    <v-tour
-      v-if="tour !== null"
-      :name="tour.name"
-      :steps="tour.steps"
-      :options="tour"
-      :callbacks="this.callbacks"
-      @onStop="onStop"
-    >
-      <template slot-scope="tour">
-        <transition name="fade">
-          <template v-for="(step, index) of tour.steps">
-            <v-step
-              v-if="tour.currentStep === index"
-              :key="index"
-              :step="step"
-              :previous-step="tour.previousStep"
-              :next-step="tour.nextStep"
-              :stop="tour.stop"
-              :is-first="tour.isFirst"
-              :is-last="tour.isLast"
-              :labels="tour.labels"
-              @onStop="onStop"
-            >
-              <div slot="header">
+<template>
+  <v-tour
+    v-if="tour !== null"
+    :name="tour.name"
+    :steps="tour.steps"
+    :options="tour"
+    :callbacks="this.callbacks"
+    @onStop="onStop"
+  >
+    <template slot-scope="tour">
+      <transition name="fade">
+        <template v-for="(step, index) of tour.steps">
+          <v-step
+            v-if="tour.currentStep === index"
+            :key="index"
+            :step="step"
+            :previous-step="tour.previousStep"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+            @onStop="onStop"
+          >
+            <div slot="header">
+              <div
+                v-if="step.header"
+                class="v-step__header"
+              >
                 <div
-                  v-if="step.header"
-                  class="v-step__header"
-                >
-                  <div
-                    v-if="step.header.title"
-                    v-html="$t(step.header.title)"
-                  />
-                </div>
+                  v-if="step.header.title"
+                  v-html="$t(step.header.title)"
+                />
               </div>
+            </div>
 
-              <div slot="content">
-                <div class="v-step__content">
-                  <div v-html="$t(step.content)" />
-                </div>
+            <div slot="content">
+              <div class="v-step__content">
+                <div v-html="$t(step.content)" />
               </div>
+            </div>
 
-              <div slot="actions">
-                <b-button
-                  class="v-step__button"
-                  @click="onStop"
-                >
-                  <template v-if="tour.isLast && !(callbacks || {}).onNextRedirect">
-                    {{ $t('buttons.end') }}
-                  </template>
-                  <template v-else>
-                    {{ $t('buttons.skip') }}
-                  </template>
-                </b-button>
-                <b-button
-                  v-if="tour.isFirst && (callbacks || {}).onPrevRedirect"
-                  class="v-step__button"
-                  :href="callbacks.onPrevRedirect"
-                >
-                  {{ $t('buttons.previous') }}
-                </b-button>
-                <b-button
-                  v-else-if="!tour.isFirst"
-                  class="v-step__button"
-                  @click="tour.previousStep"
-                >
-                  {{ $t('buttons.previous') }}
-                </b-button>
-                <b-button
-                  v-if="tour.isLast && (callbacks || {}).onNextRedirect"
-                  class="v-step__button"
-                  :href="callbacks.onNextRedirect"
-                >
-                  {{ $t('buttons.next') }}
-                </b-button>
-                <b-button
-                  v-else-if="!tour.isLast"
-                  class="v-step__button"
-                  @click="tour.nextStep"
-                >
-                  {{ $t('buttons.next') }}
-                </b-button>
-              </div>
-            </v-step>
-          </template>
-        </transition>
-      </template>
-    </v-tour>
-  </template>
+            <div slot="actions">
+              <b-button
+                class="v-step__button"
+                @click="onStop"
+              >
+                <template v-if="tour.isLast && !(callbacks || {}).onNextRedirect">
+                  {{ $t('buttons.end') }}
+                </template>
+                <template v-else>
+                  {{ $t('buttons.skip') }}
+                </template>
+              </b-button>
+              <b-button
+                v-if="tour.isFirst && (callbacks || {}).onPrevRedirect"
+                class="v-step__button"
+                :href="callbacks.onPrevRedirect"
+              >
+                {{ $t('buttons.previous') }}
+              </b-button>
+              <b-button
+                v-else-if="!tour.isFirst"
+                class="v-step__button"
+                @click="tour.previousStep"
+              >
+                {{ $t('buttons.previous') }}
+              </b-button>
+              <b-button
+                v-if="tour.isLast && (callbacks || {}).onNextRedirect"
+                class="v-step__button"
+                :href="callbacks.onNextRedirect"
+              >
+                {{ $t('buttons.next') }}
+              </b-button>
+              <b-button
+                v-else-if="!tour.isLast"
+                class="v-step__button"
+                @click="tour.nextStep"
+              >
+                {{ $t('buttons.next') }}
+              </b-button>
+            </div>
+          </v-step>
+        </template>
+      </transition>
+    </template>
+  </v-tour>
+</template>
 <script>
-
 export default {
   name: 'TourComponent',
   i18nOptions: {
