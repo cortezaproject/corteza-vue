@@ -30,7 +30,14 @@ export function endpoint (): string {
 
   if (!CortezaWebsocket) {
     // Corteza websocket entrypoint not set, use API and append /websocket
-    CortezaWebsocket = Make({ url: `${CortezaAPI}/websocket` })
+    //
+    // When CortezaAPI is provided as a path (/api for example); make sure that
+    // no fragments/query parameters are provided
+    const aux = new URL(Make({ url: `${CortezaAPI}/websocket` }))
+    aux.hash = ''
+    aux.search = ''
+
+    CortezaWebsocket = aux.toString()
   }
 
   let proto: string
