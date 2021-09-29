@@ -12,7 +12,7 @@
     @click="onClick"
   >
     <slot>
-      <font-awesome-icon :icon="['fas', 'lock']" />
+      <font-awesome-icon v-if="showButtonIcon" :icon="['fas', 'lock']" />
       <span v-if="buttonLabel">
         {{ buttonLabel }}
       </span>
@@ -62,6 +62,11 @@ export default {
       required: false,
       default: undefined,
     },
+
+    showButtonIcon: {
+      type: Boolean,
+      default: true,
+    }
   },
 
   methods: {
