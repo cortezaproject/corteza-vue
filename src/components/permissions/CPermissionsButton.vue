@@ -66,7 +66,13 @@ export default {
     showButtonIcon: {
       type: Boolean,
       default: true,
-    }
+    },
+
+    // Use this prop if you want the translations to look for all-specific key instead of all/specific
+    allSpecific: {
+      type: Boolean,
+      default: false
+    },
   },
 
   methods: {
@@ -75,6 +81,7 @@ export default {
         target: this.target,
         resource: this.resource,
         title: this.title,
+        allSpecific: this.allSpecific
       })
     },
   },

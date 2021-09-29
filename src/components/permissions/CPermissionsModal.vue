@@ -3,16 +3,19 @@
     <b-modal
       v-model="showModal"
       hide-footer
-      size="lg"
+      size="xl"
       :title="translatedTitle"
       lazy
       scrollable
+      class="overflow-hidden"
       @hide="onHide"
     >
       <c-permissions-form
         v-if="resource"
         :resource="resource"
         :target="target"
+        :all-specific="allSpecific"
+        class="h-100"
       />
     </b-modal>
   </div>
@@ -35,6 +38,7 @@ export default {
       resource: undefined,
       title: undefined,
       target: undefined,
+      allSpecific: false,
     }
   },
 
@@ -56,7 +60,9 @@ export default {
         const { i18nPrefix } = split(this.resource)
 
         let target
-        if (this.title) {
+        if (this.allSpecific) {
+          target = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.title })
+        } else if (this.title) {
           target = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.title })
         } else {
           target = this.$t(`permissions:${i18nPrefix}.all`)
@@ -70,10 +76,11 @@ export default {
   },
 
   mounted () {
-    this.$root.$on(modalOpenEventName, ({ resource, title, target }) => {
+    this.$root.$on(modalOpenEventName, ({ resource, title, target, allSpecific }) => {
       this.resource = resource
       this.title = title
       this.target = target
+      this.allSpecific = allSpecific
     })
   },
 

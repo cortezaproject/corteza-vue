@@ -88,6 +88,11 @@ export default {
       default: undefined,
     },
 
+    allSpecific: {
+      type: Boolean,
+      default: false
+    },
+
     backendComponentName: {
       type: String,
       default () {
@@ -237,7 +242,9 @@ export default {
       const i18nPrefix = split(resource).i18nPrefix + `.operations.${operation}`
 
       let title = ''
-      if (this.target) {
+      if (this.allSpecific) {
+        title = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.target })
+      } else if (this.target) {
         title = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.target })
       } else {
         title = this.$t(`permissions:${i18nPrefix}.title`)
