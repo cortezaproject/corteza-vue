@@ -28,7 +28,7 @@
     <b-col
       cols="12"
       lg="6"
-      class="mb-lg-4 text-nowrap text-truncate"
+      class="mb-lg-4 text-wrap"
       order="1"
       order-lg="2"
     >
