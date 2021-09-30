@@ -23,6 +23,7 @@
         :disabled="okDisabled"
         class="mr-1"
         :class="[ borderless && 'border-0' ]"
+        @blur.prevent="onCancel()"
         @click.prevent="onConfirmation()"
       >
         <slot name="yes">
