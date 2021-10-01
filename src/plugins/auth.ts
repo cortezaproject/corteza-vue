@@ -3,7 +3,6 @@ import { Make } from '../libs/url'
 import { system } from '@cortezaproject/corteza-js'
 import { PluginFunction } from 'vue'
 
-const lsAuthRefreshTokenKey = 'auth.refreshToken'
 const accessToken = Symbol('accessToken')
 const user = Symbol('user')
 
@@ -68,7 +67,7 @@ interface AuthCtor {
   /**
    * used for storing
    */
-  localStorage: Storage;
+  sessionStorage: Storage;
 
   /**
    * Static string with entry-point URL stored at app init
@@ -114,7 +113,7 @@ export class Auth {
   readonly cortezaAuthURL: string
   readonly callbackURL: string
   readonly location: Location
-  readonly localStorage: Storage
+  readonly sessionStorage: Storage
 
   /**
    * Application entrypoint URL
@@ -129,7 +128,7 @@ export class Auth {
 
   private $emit?: (event: string, ...args: unknown[]) => unknown
 
-  constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, localStorage, refreshFactor }: AuthCtor) {
+  constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, sessionStorage, refreshFactor }: AuthCtor) {
     if (refreshFactor >= 1 || refreshFactor <= 0) {
       throw new Error('refreshFactor should be between 0 and 1')
     }
@@ -139,7 +138,7 @@ export class Auth {
     this.cortezaAuthURL = cortezaAuthURL
     this.callbackURL = callbackURL
     this.location = location
-    this.localStorage = localStorage
+    this.sessionStorage = sessionStorage
     this.refreshFactor = refreshFactor
     this.entrypointURL = entrypointURL
 
@@ -182,8 +181,8 @@ export class Auth {
    * Returns prefixed key
    * @param key
    */
-  localStoreageKey (key: string): string {
-    return `${this.app}.${key}`
+  get refreshTokenKey (): string {
+    return 'auth.refresh-token'
   }
 
   /**
@@ -222,10 +221,10 @@ export class Auth {
 
         if (params.has('state')) {
           const state = params.get('state') || ''
-          const lsKey = this.localStoreageKey(`state.${state}.location`)
+          const key = `auth.state.${state}.location`
           this.log.info('state received', state)
 
-          finalLocation = this.localStorage.getItem(lsKey)
+          finalLocation = this.sessionStorage.getItem(key)
           if (!finalLocation) {
             throw Error('state does not match')
           }
@@ -238,7 +237,7 @@ export class Auth {
             this.log.info('location before auth flow start', finalLocation)
           }
 
-          this.localStorage.removeItem(lsKey)
+          this.sessionStorage.removeItem(key)
         }
 
         const code = params.get('code') || ''
@@ -301,7 +300,7 @@ export class Auth {
       })
     }
 
-    const refreshToken = this.localStorage.getItem(this.localStoreageKey(lsAuthRefreshTokenKey))
+    const refreshToken = this.sessionStorage.getItem(this.refreshTokenKey)
     if (refreshToken) {
       this.log.info('refresh token found, exchanging it for new access token')
 
@@ -335,7 +334,7 @@ export class Auth {
   startAuthenticationFlow (): void {
     this.log.debug('starting new authentication flow')
     const state = Math.random().toString(36).substring(2)
-    this.localStorage.setItem(this.localStoreageKey(`state.${state}.location`), this.location.toString())
+    this.sessionStorage.setItem(`auth.state.${state}.location`, this.location.toString())
 
     this.location.assign(Make({
       url: `${this.cortezaAuthURL}` + oauth2FlowURL,
@@ -417,7 +416,7 @@ export class Auth {
         })
     }, 1000 * timeout)
 
-    this.localStorage.setItem(this.localStoreageKey(lsAuthRefreshTokenKey), oa2tkn.refresh_token)
+    this.sessionStorage.setItem(this.refreshTokenKey, oa2tkn.refresh_token)
 
     const u = new system.User({
       userID: oa2tkn.sub,
@@ -471,7 +470,7 @@ export class Auth {
   private pruneStore (): void {
     this[accessToken] = undefined
     this[user] = undefined
-    this.localStorage.clear()
+    this.sessionStorage.clear()
   }
 
   get accessToken (): string | undefined {
@@ -494,7 +493,7 @@ export default function (): PluginFunction<PluginOpts> {
       refreshFactor = 0.75,
       entrypointURL = window.location.toString(),
       location = window.location,
-      localStorage = window.localStorage,
+      sessionStorage = window.sessionStorage,
     } = (opts || {}) as Partial<AuthCtor & { rootApp: boolean }>
 
     if (!cortezaAuthURL) {
@@ -574,7 +573,8 @@ export default function (): PluginFunction<PluginOpts> {
       // enable debug (when not expl. disabled on localhost)
       verbose = location.hostname === 'localhost' ||
         window.location.search.includes('verboseAuth') ||
-        !!window.localStorage.getItem('auth.verbose')
+        !!window.localStorage.getItem('auth.verbose') ||
+        !!window.sessionStorage.getItem('auth.verbose')
     }
 
     if (verbose) {
@@ -584,7 +584,7 @@ export default function (): PluginFunction<PluginOpts> {
         cortezaAuthURL,
         callbackURL,
         location,
-        localStorage,
+        sessionStorage,
         entrypointURL,
         refreshFactor,
       })
@@ -596,7 +596,7 @@ export default function (): PluginFunction<PluginOpts> {
       cortezaAuthURL,
       callbackURL,
       location,
-      localStorage,
+      sessionStorage,
       entrypointURL,
       refreshFactor,
     })
