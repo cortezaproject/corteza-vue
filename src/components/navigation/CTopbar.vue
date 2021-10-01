@@ -62,6 +62,9 @@
             </span>
           </div>
         </template>
+        <div>
+          <slot name="help-dropdown" />
+        </div>
         <b-dropdown-item
           href="https://forum.cortezaproject.org/"
           target="_blank"

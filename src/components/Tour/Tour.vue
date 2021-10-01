@@ -122,7 +122,7 @@ export default {
     },
   },
   methods: {
-    start () {
+    onStart () {
       if (JSON.parse(localStorage.getItem('corteza.tour')) && this.tour.steps.length) {
         this.$tours[this.tour.name].start()
       }
@@ -130,6 +130,10 @@ export default {
     onStop () {
       localStorage.setItem('corteza.tour', JSON.stringify(false))
       this.$tours[this.tour.name].stop()
+    },
+    onStartClick () {
+      localStorage.setItem('corteza.tour', JSON.stringify(true))
+      this.onStart()
     },
   },
 }
