@@ -47,12 +47,10 @@ export default function (...apis: Array<Fetcher>): StoreOptions<State> {
     },
 
     actions: {
-      load ({ commit }: ActionContext<State, State>): void {
+      // The apis must be valid and enabled, this is the responsibility of the callee
+      load ({ commit }: ActionContext<State, State>, enabledAPIs: Array<Fetcher> = apis || []): void {
         commit(types.UNLOAD)
-        Promise.all(apis.map(api => {
-          // suppress 404s (when federation is disabled) and return empty array
-          // @todo we need a better way to detect if Federation is disabled and not add it to the
-          //      list at all
+        Promise.all(enabledAPIs.map(api => {
           return api.permissionsEffective().catch(() => [])
         })).then((rr: Array<Array<Rule>>) => {
           commit(types.UPDATE, ([] as Array<Rule>)
