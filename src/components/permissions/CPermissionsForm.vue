@@ -243,9 +243,9 @@ export default {
 
       let title = ''
       if (this.allSpecific) {
-        title = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.target })
+        title = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.target, interpolation: { escapeValue: false } })
       } else if (this.target) {
-        title = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.target })
+        title = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.target, interpolation: { escapeValue: false } })
       } else {
         title = this.$t(`permissions:${i18nPrefix}.title`)
       }

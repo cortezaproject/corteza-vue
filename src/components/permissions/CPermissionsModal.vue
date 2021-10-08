@@ -61,14 +61,14 @@ export default {
 
         let target
         if (this.allSpecific) {
-          target = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.title })
+          target = this.$t(`permissions:${i18nPrefix}.all-specific`, { target: this.title, interpolation: { escapeValue: false } })
         } else if (this.title) {
-          target = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.title })
+          target = this.$t(`permissions:${i18nPrefix}.specific`, { target: this.title, interpolation: { escapeValue: false } })
         } else {
-          target = this.$t(`permissions:${i18nPrefix}.all`)
+          target = this.$t(`permissions:${i18nPrefix}.all`,)
         }
 
-        return this.$t('permissions:ui.set-for', { target: target }).replace(/&amp;quot;|&quot;/g, '"')
+        return this.$t('permissions:ui.set-for', { target: target, interpolation: { escapeValue: false } })
       }
 
       return undefined
