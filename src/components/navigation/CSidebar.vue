@@ -11,7 +11,7 @@
         :footer-class="`bg-white rounded-right ${isExpanded ? 'p-2' : ''}`"
         :no-header="!isExpanded"
         :backdrop="isMobile"
-        shadow
+        :class="{ 'shadow-none' : !isExpanded }"
         no-slide
         no-close-on-route-change
         no-close-on-esc
