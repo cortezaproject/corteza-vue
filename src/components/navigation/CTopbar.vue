@@ -1,7 +1,7 @@
 <template>
   <div class="header-navigation d-flex align-items-center justify-content-between sticky-top pr-3 pl-5 ">
     <div
-      class="d-flex text-nowrap flex-grow-1 align-items-center header h-100"
+      class="d-flex text-nowrap flex-grow-1 align-items-center header h-100 w-100"
     >
       <template>
         <div
@@ -13,7 +13,7 @@
       </template>
 
       <div
-        class="d-flex align-items-center ml-2 mr-auto h-100"
+        class="d-flex align-items-center ml-2 text-truncate mr-auto h-100"
       >
         <h2
           class="d-none d-sm-block mb-0"
@@ -23,7 +23,7 @@
 
       </div>
 
-      <div>
+      <div class="ml-3">
         <slot name="tools" />
       </div>
 
@@ -32,7 +32,7 @@
         variant="outline-light"
         :href="appSelectorURL"
         size="lg"
-        class="d-flex align-items-center justify-content-center text-dark border-0 nav-icon rounded-circle p-2 ml-2"
+        class="d-flex align-items-center justify-content-center text-dark border-0 nav-icon rounded-circle ml-2"
       >
         <font-awesome-icon
           class="m-0 h5"
@@ -44,7 +44,7 @@
         size="lg"
         variant="outline-light"
         class="nav-icon mx-1"
-        toggle-class="text-decoration-none text-dark rounded-circle border-0 p-2"
+        toggle-class="text-decoration-none text-dark rounded-circle border-0 w-100"
         menu-class="border-0 shadow-sm text-dark font-weight-bold mt-2"
         right
         no-caret
@@ -98,7 +98,7 @@
         size="lg"
         variant="outline-light"
         class="nav-user-icon"
-        toggle-class="nav-icon p-0 text-decoration-none text-dark rounded-circle border"
+        toggle-class="nav-icon text-decoration-none text-dark rounded-circle border"
         menu-class="border-0 shadow-sm text-dark font-weight-bold mt-2"
         right
         no-caret
