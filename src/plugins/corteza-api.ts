@@ -8,6 +8,7 @@ interface JWTFetcher {
 
 interface Options {
   baseURL?: string;
+  searcherURL?: string;
   accessTokenFn?: () => string | undefined;
 }
 
@@ -25,9 +26,15 @@ export default function (service: string, opt: Options = {}): PluginFunction<Opt
     if (!window.CortezaAPI) {
       throw new Error('config.js missing or window.CortezaAPI not set')
     }
+    // @ts-ignore
+    if (!window.SearcherAPI) {
+      throw new Error('config.js missing or window.SearcherAPI not set')
+    }
 
     // @ts-ignore
     opt.baseURL = `${window.CortezaAPI}/${service}`
+    // @ts-ignore
+    opt.searcherURL = window.SearcherAPI
   }
 
   return function (Vue): void {
