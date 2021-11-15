@@ -102,10 +102,11 @@ export const prompts = Object.freeze([{
         },
       },
     },
-    { name: 'value', types: ['String'] },
+    { name: 'value', types: ['String', 'Array'] },
     { name: 'options', types: ['KV'] },
+    { name: 'multiselect', types: ['Boolean'] },
   ],
   results: [
-    { name: 'value', types: ['String'] },
+    { name: 'value', types: ['Any'] },
   ],
 }].map(f => new automation.Function({ ...f, kind: 'prompt' })))

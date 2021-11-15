@@ -8,20 +8,28 @@
         v-if="type === 'select'"
         :options="options"
         :disabled="loading"
+        :multiple="multiple"
         v-model="value"
       >
+        <template v-if="!multiple" #first>
+          <b-form-select-option
+            :value="undefined"
+            disabled
+          >
+            -- Please select an option --
+          </b-form-select-option>
+        </template>
       </b-form-select>
-      <b-form-select
+      <b-form-radio-group
         v-if="type === 'radio'"
         v-model="value"
         :disabled="loading"
         :options="options"
-      >
-      </b-form-select>
+      />
     </b-form-group>
     <b-button
       :disabled="loading"
-      @click="$emit('submit', { value: { '@value': value, '@type': 'String' }})"
+      @click="$emit('submit', { value: encodeValue() })"
     >
       {{ pVal('buttonLabel', 'Submit') }}
     </b-button>
@@ -45,8 +53,31 @@ export default {
     }
   },
 
+  methods: {
+    encodeValue () {
+      if (Array.isArray(this.value)) {
+        return {
+          '@type': 'Array',
+          '@value': this.value || []
+        }
+      } else {
+        return { '@type': 'String', '@value': this.value }
+      }
+    },
+  },
+
   beforeMount() {
-    this.value = this.pVal('value')
+    let value = this.pVal('value')
+
+    if (this.pVal('multiselect', false)) {
+      if (Array.isArray(value)) {
+        value = value.map(v => v['@value'])
+      } else {
+        value = value ? [value] : []
+      }
+    }
+
+    this.value = value
   },
 
   computed: {
@@ -68,6 +99,10 @@ export default {
 
       return t
     },
+
+    multiple () {
+      return this.pVal('multiselect', false)
+    }
   },
 }
 </script>
