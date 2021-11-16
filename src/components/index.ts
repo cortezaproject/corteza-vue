@@ -11,6 +11,7 @@ export {
 
 export {
   CInputConfirm,
+  CInputProcessing,
   CInputDateTime,
   CInputInterval,
   CRichTextInput,
