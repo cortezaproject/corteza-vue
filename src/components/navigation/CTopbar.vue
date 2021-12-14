@@ -164,7 +164,7 @@ export default {
 
     appSelectorURL: {
       type: String,
-      default: '/..'
+      default: '../'
     },
 
     labels: {
