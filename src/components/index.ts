@@ -53,4 +53,9 @@ export {
   CReminderSidebar,
 } from './reminders'
 
+export {
+  FieldItem,
+  FieldPicker,
+} from './field'
+
 export { default as C3 } from './c3'
