@@ -12,6 +12,7 @@
     </b-button>
 
     <b-popover
+      v-if="currentValue"
       triggers="focus"
       target="link-popover"
       placement="auto"
@@ -85,8 +86,10 @@ export default {
      * Helper to show the popup & determine if a link already exists
      */
     showPopover () {
-      this.visible = true
-      this.attrs = { ...this.getMarkAttrs(this.format.type) }
+      if (this.currentValue) {
+        this.visible = true
+        this.attrs = { ...this.getMarkAttrs(this.format.type) }
+      }
     },
 
     /**

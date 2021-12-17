@@ -19,6 +19,10 @@ export default {
       required: false,
       default: () => {},
     },
+    currentValue: {
+      type: String,
+      required: false,
+    },
   },
   methods: {
     /**

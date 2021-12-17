@@ -7,6 +7,7 @@
       :format="f"
       v-bind="$props"
       :labels="labels"
+      :current-value="currentValue"
       @click="(commands[$event.type])($event.attrs)" />
 
     <!-- Extra button to remove formatting -->
@@ -52,6 +53,10 @@ export default {
     labels: {
       type: Object,
       default: () => ({})
+    },
+    currentValue: {
+      type: String,
+      required: false,
     }
   },
 

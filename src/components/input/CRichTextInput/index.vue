@@ -14,6 +14,7 @@
           :get-mark-attrs="getMarkAttrs"
           :get-node-attrs="getNodeAttrs" 
           :labels="labels"
+          :current-value="currentValue"
         />
         </editor-menu-bar>
       </b-card-header>
@@ -62,6 +63,7 @@ export default {
       // Helper to determine if current content differes from prop's content
       emittedContent: false,
       editor: undefined,
+      currentValue: '',
     }
   },
 
@@ -113,13 +115,13 @@ export default {
      * Because of this, we are using `view.dom.innerHTML`. This should be improved at a later point
      */
     onUpdate () {
-      let content = this.editor.view.dom.innerHTML
+      this.currentValue = this.editor.view.dom.innerHTML
 
       // Makes sure to default to '' as the value if no text is present, for validation purposes
-      content = content !== '<p><br></p>' ? content : ''
+      this.currentValue = this.currentValue !== '<p><br></p>' ? this.currentValue : ''
 
       this.emittedContent = true
-      this.$emit('input', content)
+      this.$emit('input', this.currentValue)
     },
   },
 }
