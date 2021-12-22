@@ -13,6 +13,7 @@
         :backdrop="isMobile"
         :shadow="isExpanded"
         no-slide
+        :right="right"
         no-close-on-route-change
         no-close-on-esc
       >
@@ -169,6 +170,11 @@ export default {
     logo: {
       type: String,
       default: () => ''
+    },
+
+    right: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -334,6 +340,32 @@ $sidebar-bg: #F4F7FA;
     -moz-transition: left 0.2s ease-in-out;
     -o-transition: left 0.2s ease-in-out;
     transition: left 0.2s ease-in-out;
+  }
+}
+
+[dir="rtl"] {
+  .sidebar {
+    right: calc(-#{$nav-width}) !important;
+    -webkit-transition: right 0.15s ease-in-out;
+    -moz-transition: right 0.15s ease-in-out;
+    -o-transition: right 0.15s ease-in-out;
+    transition: right 0.15s ease-in-out;
+
+    header {
+      background-color: white;
+
+      &.expanded {
+        background-color: $sidebar-bg !important;
+      }
+    }
+
+    &.expanded {
+      right: 0 !important;
+      -webkit-transition: right 0.2s ease-in-out;
+      -moz-transition: right 0.2s ease-in-out;
+      -o-transition: right 0.2s ease-in-out;
+      transition: right 0.2s ease-in-out;
+    }
   }
 }
 </style>
