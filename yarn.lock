@@ -775,10 +775,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@^2021.9.5":
-  version "2021.9.5"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2021.9.5.tgz#7e3e0f90a6215affe06afe6df71d57d437502322"
-  integrity sha512-ZIfxuEpoMPWoemY3QMgbtozDxRuzyOA4UjzZqaXaGqaq/gbOQFmjeT81udXrSA1S1rlydolGAmiDm9rd0HQIwQ==
+"@cortezaproject/corteza-js@^2021.9.6-dev.1":
+  version "2021.9.6-dev.1"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2021.9.6-dev.1.tgz#8f346288c5522c9b60de19b247619656ae19441c"
+  integrity sha512-LTYi08PawPOVWiYL808sF2Lpkgyv1IB2jmG0tHaJIocVoVNQcJOdUwSsKI4eKmY2dAjPIPvhTVSyQMo70Lo3pw==
   dependencies:
     axios "^0.21.1"
     chart.js "2.9.3"
@@ -9879,6 +9879,11 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
+  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
+
 source-list-map@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -11250,6 +11255,13 @@ vue@^2.6.12, vue@^2.6.14:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
+
+vuedraggable@^2.23.0:
+  version "2.24.3"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
+  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
+  dependencies:
+    sortablejs "1.10.2"
 
 vuex@^3.6.2:
   version "3.6.2"
