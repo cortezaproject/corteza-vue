@@ -132,9 +132,6 @@ export default {
       // Only reset input if prompt is kept open
       if (values.input && values.input.keep) {
         values.input = {}
-      } else {
-        // Otherwise remove prompt from toasts
-        this.toasts = this.toasts.filter(({ prompt }) => prompt.stateID !== values.prompt.stateID)
       }
 
       this.resume(values)
