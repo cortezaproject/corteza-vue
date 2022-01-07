@@ -87,7 +87,7 @@
     "node-watch": "^0.6.3",
     "nodemon": "2.0.2",
     "nyc": "15.0.0",
-    "postcss": "^7.0.26",
+    "postcss": "^8.2.13",
     "rollup": "^1.29.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-import-css": "^3.0.0",
