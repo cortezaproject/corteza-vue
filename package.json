@@ -29,6 +29,7 @@
     "@panter/vue-i18next": "^0.15.0",
     "acorn": "^7.3.1",
     "bootstrap-vue": "^2.21.2",
+    "highlight.js": "^10.4.1",
     "html-parse-stringify": "^3.0.1",
     "i18next": "^20.0.0",
     "i18next-browser-languagedetector": "^3.0.2",
@@ -47,7 +48,8 @@
     "vue-swatches": "^1.0.4",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.6.2",
-    "websocket-extensions": "^0.1.4"
+    "websocket-extensions": "^0.1.4",
+    "y18n": "^4.0.1"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.1",
@@ -94,8 +96,8 @@
     "rollup-plugin-vue": "^5.1.5",
     "sinon": "8.1.0",
     "source-map-support": "^0.5.16",
-    "ts-node": "^8.6.2",
-    "ts-node-dev": "^1.0.0",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.1.0",
     "typescript": "^3.7.4",
     "vue-property-decorator": "^8.3.0",
     "vue-select": "^3.4.0",
