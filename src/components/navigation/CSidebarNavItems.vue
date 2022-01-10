@@ -4,7 +4,7 @@
       v-for="({page = {}, params = {}, children = []}, index) of items"
       :key="index"
       variant="link"
-      class="w-100 text-left text-dark text-decoration-none p-0 pt-2 nav-item"
+      class="w-100 text-dark text-decoration-none p-0 pt-2 nav-item"
       active-class="nav-active"
       exact-active-class="nav-active"
       :to="{ name: page.name || defaultRouteName, params }"
@@ -162,6 +162,16 @@ export default {
 
   .title {
     font-family: 'Poppins-SemiBold'
+  }
+}
+
+.nav-item {
+  text-align: left;
+}
+
+[dir="rtl"] {
+  .nav-item {
+    text-align: right;
   }
 }
 </style>
