@@ -29,7 +29,7 @@
           <label
             class="text-primary mb-0"
           >
-            {{ labels.availableFieldsLabel }}
+            {{ labels.availableFields }}
           </label>
           <b-button
             variant="link"
@@ -37,7 +37,7 @@
             class="ml-auto px-0 text-muted"
             @click.prevent="selectedFields = [...allFields]"
           >
-            {{ labels.selectAllFieldsLabel }}
+            {{ labels.selectAllFields }}
           </b-button>
         </div>
         <b-list-group
@@ -62,7 +62,7 @@
                 :field="field"
                 :selected-fields="selectedFields"
                 :is-selected="false"
-                :system-field-label="labels.systemFieldLabel"
+                :system-field-label="labels.systemField"
                 @select-field="selectField"
               />
             </b-list-group-item>
@@ -78,7 +78,7 @@
           <label
             class="mb-0 text-primary"
           >
-            {{ labels.selectedFieldsLabel }}
+            {{ labels.selectedFields }}
           </label>
           <b-button
             variant="link"
@@ -86,7 +86,7 @@
             class="ml-auto px-0 text-muted"
             @click.prevent="selectedFields = []"
           >
-            {{ labels.unselectAllFieldsLabel }}
+            {{ labels.unselectAllFields }}
           </b-button>
         </div>
         <b-list-group
@@ -110,7 +110,7 @@
                 :field="field"
                 :selected-fields="selectedFields"
                 :is-selected="true"
-                :system-field-label="labels.systemFieldLabel"
+                :system-field-label="labels.systemField"
                 @unselect-field="unselectField"
               />
             </b-list-group-item>
