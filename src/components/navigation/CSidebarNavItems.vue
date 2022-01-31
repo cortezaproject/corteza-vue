@@ -31,7 +31,7 @@
         <b-button
           variant="link"
           class="p-0 float-right"
-          :disabled="showChildren(page, children)"
+          :disabled="showChildren({ params, children })"
           @click.self.stop.prevent="toggle(page)"
         >
           <font-awesome-icon
@@ -47,7 +47,7 @@
         </b-button>
 
         <b-collapse
-          :visible="collapses[pageIndex(page)] || showChildren(page, children)"
+          :visible="collapses[pageIndex(page)] || showChildren({ params, children })"
           @click.stop.prevent
         >
           <c-sidebar-nav-items
@@ -128,12 +128,16 @@ export default {
     },
 
     // Recursively check for child pages that are open, so that parents can open aswell
-    showChildren (page = {}, children = []) {
-      if (page.pageID === this.$route.params.pageID) {
-        return page.pageID === this.$route.params.pageID
+    showChildren ({ params = {}, children = [] }) {
+      const partialParamsMatch = Object.entries(params).some(([key, value]) => {
+        return this.$route.params[key] === value
+      })
+
+      if (partialParamsMatch) {
+        return partialParamsMatch
       }
 
-      return children.map(({ page, children }) => this.showChildren(page, children)).some(isOpen => isOpen)
+      return children.map(c => this.showChildren(c)).some(isOpen => isOpen)
     },
   },
 }
