@@ -55,8 +55,8 @@ export {
 } from './reminders'
 
 export {
-  FieldItem,
-  FieldPicker,
-} from './field'
+  CItemPicker,
+  CItemPickerItem,
+} from './itemPicker'
 
 export { default as C3 } from './c3'
