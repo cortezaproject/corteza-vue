@@ -123,6 +123,7 @@
 <script>
 import draggable from 'vuedraggable'
 import FieldItem from './FieldItem.vue'
+import { filter } from '@cortezaproject/corteza-vue'
 
 export default {
   components: {
@@ -267,8 +268,7 @@ export default {
 
   methods: {
     filterFields (fields) {
-      return fields
-        .filter(f => f.name.toLowerCase().indexOf(this.query.toLowerCase()) > -1 || f.label.toLowerCase().indexOf(this.query.toLowerCase()) > -1)
+      return fields.filter(f => filter.Assert(f, this.query, 'name', 'label'))
     },
     selectField (field) {
       if (this.selectedFields.some(selectedField => selectedField.label === field.label)) return
