@@ -158,9 +158,9 @@ const definitions: Record<string, PromptDefinition> = {
 
       // @ts-ignore
       if (this.$root.$options.name === 'compose') {
-        let name = 'page.record.edit'
-        if (!edit) {
-          name = 'page.record'
+        let name = 'page.record'
+        if (edit) {
+          name += recordID ? '.edit' : '.create'
         }
 
         // If name and params match, make sure to refresh page instead of push
