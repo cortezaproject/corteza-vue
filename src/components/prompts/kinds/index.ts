@@ -105,7 +105,7 @@ const definitions: Record<string, PromptDefinition> = {
         recordID = (record as KV).recordID
       } else {
         // Resolve recordID
-        if (pType(v, 'record') === 'String') {
+        if (pType(v, 'record') === 'ID') {
           recordID = record as string
         }
 
@@ -158,6 +158,10 @@ const definitions: Record<string, PromptDefinition> = {
 
       // @ts-ignore
       if (this.$root.$options.name === 'compose') {
+        if (!edit && !recordID) {
+          throw new Error('invalid record page prompt configuration')
+        }
+
         let name = 'page.record'
         if (edit) {
           name += recordID ? '.edit' : '.create'
