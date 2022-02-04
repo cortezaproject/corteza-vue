@@ -1,5 +1,5 @@
 <template>
-  <b-form-group :label="label">
+  <b-input-group>
     <b-form-input
       v-if="!noDate"
       v-model="date"
@@ -13,17 +13,19 @@
       type="time"
       class="d-inline w-50"
     />
-  </b-form-group>
+  </b-input-group>
 </template>
 <script lang="js">
-import base from '../base.vue'
 import moment from 'moment'
 import { getDate, setDate, getTime, setTime } from './lib/index.ts'
 
 export default {
-  extends: base,
-
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
+
     noTime: {
       type: Boolean,
       default: false,

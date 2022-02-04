@@ -13,7 +13,7 @@ export {
   CInputConfirm,
   CInputProcessing,
   CInputDateTime,
-  CInputInterval,
+  CInputCron,
   CRichTextInput,
 } from './input'
 
