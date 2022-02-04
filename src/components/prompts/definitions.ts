@@ -76,7 +76,15 @@ export const prompts = Object.freeze([{
       types: ['String'],
       meta: {
         visual: {
-          options: ['text', 'number', 'email', 'password', 'search', 'date', 'time'],
+          options: [
+            { value: 'text', text: 'Text' },
+            { value: 'number', text: 'Number' },
+            { value: 'email', text: 'Email' },
+            { value: 'password', text: 'Password' },
+            { value: 'search', text: 'Search' },
+            { value: 'date', text: 'Date' },
+            { value: 'time', text: 'Time' },
+          ],
         },
       },
     },
@@ -98,7 +106,10 @@ export const prompts = Object.freeze([{
       types: ['String'],
       meta: {
         visual: {
-          options: ['select', 'radio'],
+          options: [
+            { value: 'select', text: 'Select' },
+            { value: 'radio', text: 'Radio' },
+          ],
         },
       },
     },
