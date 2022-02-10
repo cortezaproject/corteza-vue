@@ -7,15 +7,18 @@ const accessToken = Symbol('accessToken')
 const user = Symbol('user')
 
 /**
- * This is an endpoint of a oauth2 authorization-code flow + refresh token exchange
+ * This is an endpoint of an oauth2 authorization-code flow + refresh token exchange
  * for default client.
  *
- * If you are concerned about security, this is not much different than using a dedicated backend
+ * If you are concerned about security, this is not much different to using a dedicated backend
  * for this SPA that only redirects to a set of allowed URIs.
  */
 const oauth2FlowURL = '/oauth2/default-client'
 const oauth2InfoURL = '/oauth2/info'
 const oauth2Scope = 'profile api'
+
+const storeKeyFinalState = 'auth.state.final'
+const storeKeyRefreshToken = 'auth.refresh-token'
 
 interface AuthInfo {
   accessTokenFn: () => string | undefined;
@@ -97,6 +100,7 @@ export class Auth {
    * we do not want to keep it in the local store
    */
   private [accessToken]?: string
+
   /**
    * Access token is only stored here (in-memory)!
    * we do not want to keep it in the local store
@@ -178,14 +182,6 @@ export class Auth {
   }
 
   /**
-   * Returns prefixed key
-   * @param key
-   */
-  get refreshTokenKey (): string {
-    return 'auth.refresh-token'
-  }
-
-  /**
    * Returns function that returns current access token
    */
   get accessTokenFn (): () => string | undefined {
@@ -221,36 +217,69 @@ export class Auth {
 
         if (params.has('state')) {
           const state = params.get('state') || ''
-          const key = `auth.state.${state}.location`
+          const redirKey = `auth.state.${state}.location`
           this.log.info('state received', state)
 
-          finalLocation = this.sessionStorage.getItem(key)
+          finalLocation = this.sessionStorage.getItem(redirKey)
           if (!finalLocation) {
             throw Error('state does not match')
           }
 
           if (/auth\/callback/.test(finalLocation)) {
             // if by some coincidence we got callback URL to finalLocation
-            // we'll silently ignore it
-            finalLocation = null
-          } else {
-            this.log.info('location before auth flow start', finalLocation)
+            // we'll silently ignore it and redirect user back to entrypoint
+            finalLocation = this.entrypointURL
           }
 
-          this.sessionStorage.removeItem(key)
+          this.sessionStorage.removeItem(redirKey)
         }
 
         const code = params.get('code') || ''
         this.log.info('authorization code received', code)
         await this.exchangeCode(code)
 
-        if (finalLocation) {
-          this.location.assign(finalLocation)
-        }
+        this.startFinalState(finalLocation as string)
+        return null
       }
     }
 
     return this.check()
+  }
+
+  /**
+   * Flagging session storage
+   *
+   * Challenge with sessions and browser tabs:
+   * Each browser tab & window interacts with an isolated session. When user clicks on a link to and wants to open
+   * it in a new window or a tab, or when tab is duplicated, session contents are copied!
+   *
+   * Consequences of that are that two (or more) tabs end up with the same session
+   * and the same refresh token, and we need to detect if we're dealing with refresh token in an old or new  session.
+   *
+   * With this function we start the final state and flag the session. This way we'll
+   * know, after the redirection to the final location, if this is a final stage or not and if the refresh token
+   * belongs to this session or not.
+   */
+  startFinalState (dst: string): void {
+    this.log.info('redirecting back to final destination', dst)
+    this.sessionStorage.setItem(storeKeyFinalState, Date.now().toString())
+    this.location.assign(dst)
+  }
+
+  /**
+   * Called when refresh token is re-fetched.
+   */
+  completeFinalState (): void {
+    this.sessionStorage.removeItem(storeKeyFinalState)
+  }
+
+  /**
+   * Are we in a final state or not?
+   *
+   * See startFinalState function for more details
+   */
+  inFinalState (): boolean {
+    return this.sessionStorage.getItem(storeKeyFinalState) !== null
   }
 
   /**
@@ -300,23 +329,31 @@ export class Auth {
       })
     }
 
-    const refreshToken = this.sessionStorage.getItem(this.refreshTokenKey)
+    const refreshToken = this.sessionStorage.getItem(storeKeyRefreshToken)
     if (refreshToken) {
-      this.log.info('refresh token found, exchanging it for new access token')
+      this.log.debug('refresh token found', { refreshToken })
 
       /**
-       * Refresh token found in the storage,
-       * let's use it to get new access token
+       * Only exchange refresh token if this is the final state (see startFinalState function for more details)
+       *
+       * If this is a duplicated-session, an error will be thrown and authentication will be (probably)
+       * restarted by the caller.
        */
-      return this.exchangeRefresh(refreshToken)
+      if (this.inFinalState()) {
+        this.log.info('refreshing token', refreshToken)
+
+        /**
+         * Refresh token found in the storage,
+         * let's use it to get new access token
+         */
+        return this.exchangeRefresh(refreshToken)
+      }
     }
 
     throw new Error('Unauthenticated')
   }
 
   logout (): void {
-    this[accessToken] = undefined
-    this[user] = undefined
     this.pruneStore()
 
     this.location.assign(Make({
@@ -368,6 +405,11 @@ export class Auth {
    * @param refreshToken
    */
   private async exchangeRefresh (refreshToken: string): Promise<AuthInfo | null> {
+    /**
+     * Finalize
+     */
+    this.completeFinalState()
+
     return this.oauth2token({
       // eslint-disable-next-line @typescript-eslint/camelcase
       refresh_token: refreshToken || '',
@@ -416,7 +458,7 @@ export class Auth {
         })
     }, 1000 * timeout)
 
-    this.sessionStorage.setItem(this.refreshTokenKey, oa2tkn.refresh_token)
+    this.sessionStorage.setItem(storeKeyRefreshToken, oa2tkn.refresh_token)
 
     const u = new system.User({
       userID: oa2tkn.sub,
