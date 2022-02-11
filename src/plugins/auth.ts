@@ -17,8 +17,11 @@ const oauth2FlowURL = '/oauth2/default-client'
 const oauth2InfoURL = '/oauth2/info'
 const oauth2Scope = 'profile api'
 
+const storeKeyFlowStarted = 'auth.flow-started'
 const storeKeyFinalState = 'auth.state.final'
 const storeKeyRefreshToken = 'auth.refresh-token'
+
+const maxStartAttempts = 5
 
 interface AuthInfo {
   accessTokenFn: () => string | undefined;
@@ -213,32 +216,34 @@ export class Auth {
       }
 
       if (params.has('code')) {
-        let finalLocation: string | null = null
+        let finalLocation = this.entrypointURL
 
         if (params.has('state')) {
           const state = params.get('state') || ''
-          const redirKey = `auth.state.${state}.location`
+          const storeKeyStateLocation = `auth.state.${state}.location`
           this.log.info('state received', state)
 
-          finalLocation = this.sessionStorage.getItem(redirKey)
-          if (!finalLocation) {
-            throw Error('state does not match')
+          const tmp = this.sessionStorage.getItem(storeKeyStateLocation)
+          if (tmp === null) {
+            console.warn('state does not match, restarting authentication flow')
+            this.startAuthenticationFlow()
+            return null
           }
 
-          if (/auth\/callback/.test(finalLocation)) {
+          if (!/auth\/callback/.test(tmp)) {
             // if by some coincidence we got callback URL to finalLocation
             // we'll silently ignore it and redirect user back to entrypoint
-            finalLocation = this.entrypointURL
+            finalLocation = tmp
           }
 
-          this.sessionStorage.removeItem(redirKey)
+          this.sessionStorage.removeItem(storeKeyStateLocation)
         }
 
         const code = params.get('code') || ''
         this.log.info('authorization code received', code)
         await this.exchangeCode(code)
 
-        this.startFinalState(finalLocation as string)
+        this.startFinalState(finalLocation)
         return null
       }
     }
@@ -268,9 +273,20 @@ export class Auth {
 
   /**
    * Called when refresh token is re-fetched.
+   *
+   * Cleanup aux items in the session store
    */
   completeFinalState (): void {
     this.sessionStorage.removeItem(storeKeyFinalState)
+    this.sessionStorage.removeItem(storeKeyFlowStarted)
+
+    const stateKey = /^auth\.state\.\w+\.location$/
+    for (let i = 0; i < this.sessionStorage.length; i++) {
+      const key = this.sessionStorage.key(i)
+      if (key !== null && stateKey.test(key)) {
+        this.sessionStorage.removeItem(key)
+      }
+    }
   }
 
   /**
@@ -322,7 +338,7 @@ export class Auth {
 
         return data
       }).catch((error) => {
-        this.log.info('data fetch form info endpoint failed', { oauth2InfoURL, headers, error })
+        this.log.error('data fetch form info endpoint failed', { oauth2InfoURL, headers, error })
         // assume invalid JWT and remove it
         this[accessToken] = undefined
         throw new Error('Unauthenticated')
@@ -370,6 +386,9 @@ export class Auth {
    */
   startAuthenticationFlow (): void {
     this.log.debug('starting new authentication flow')
+
+    this.incFlowCounter()
+
     const state = Math.random().toString(36).substring(2)
     this.sessionStorage.setItem(`auth.state.${state}.location`, this.location.toString())
 
@@ -382,6 +401,26 @@ export class Auth {
         state,
       },
     }))
+  }
+
+  private incFlowCounter (): void {
+    const aux = this.sessionStorage.getItem(storeKeyFlowStarted)
+    if (aux === null) {
+      this.sessionStorage.setItem(storeKeyFlowStarted, '1')
+      return
+    }
+
+    const count = parseInt(this.sessionStorage.getItem(storeKeyFlowStarted) as string)
+    if (count >= maxStartAttempts) {
+      // Too many start attempts
+      this.sessionStorage.removeItem(storeKeyFlowStarted)
+      throw new Error('could not start authentication flow, too many attempts')
+    }
+
+    this.sessionStorage.setItem(
+      storeKeyFlowStarted,
+      (count + 1).toString(),
+    )
   }
 
   /**
