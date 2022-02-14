@@ -59,4 +59,11 @@ export {
   FieldPicker,
 } from './field'
 
+export {
+  CReportChart,
+  CReportMetric,
+  CReportTable,
+  CReportText,
+} from './reporter'
+
 export { default as C3 } from './c3'
