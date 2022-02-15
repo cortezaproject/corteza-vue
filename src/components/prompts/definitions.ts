@@ -1,6 +1,15 @@
 import { automation } from '@cortezaproject/corteza-js'
 
-const variants = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'light', 'dark']
+const variants = [
+  { value: 'primary', text: 'Primary' },
+  { value: 'secondary', text: 'Secondary' },
+  { value: 'success', text: 'Success' },
+  { value: 'warning', text: 'Warning' },
+  { value: 'danger', text: 'Danger' },
+  { value: 'info', text: 'Info' },
+  { value: 'light', text: 'Light' },
+  { value: 'dark', text: 'Dark' },
+]
 
 export const prompts = Object.freeze([{
   ref: 'redirect',
@@ -34,7 +43,7 @@ export const prompts = Object.freeze([{
   parameters: [
     { name: 'title', types: ['String'] },
     { name: 'message', types: ['String'], required: true },
-    { name: 'variant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'timeout', types: ['Integer'], meta: { description: 'How long do we show the notification in seconds' } },
   ],
 }, {
@@ -44,7 +53,7 @@ export const prompts = Object.freeze([{
     { name: 'title', types: ['String'] },
     { name: 'message', types: ['String'], required: true },
     { name: 'buttonLabel', types: ['String'] },
-    { name: 'buttonVariant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'buttonVariant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'buttonValue', types: ['Any'] },
   ],
 }, {
@@ -54,10 +63,10 @@ export const prompts = Object.freeze([{
     { name: 'title', types: ['String'] },
     { name: 'message', types: ['String'], required: true },
     { name: 'confirmButtonLabel', types: ['String'] },
-    { name: 'confirmButtonVariant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'confirmButtonVariant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'confirmButtonValue', types: ['Any'] },
     { name: 'rejectButtonLabel', types: ['String'] },
-    { name: 'rejectButtonVariant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'rejectButtonVariant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'rejectButtonValue', types: ['Any'] },
   ],
   results: [
@@ -68,7 +77,7 @@ export const prompts = Object.freeze([{
   meta: { short: 'Prompt user with a single input' },
   parameters: [
     { name: 'title', types: ['String'] },
-    { name: 'variant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'message', types: ['String'], required: true },
     { name: 'label', types: ['String'] },
     {
@@ -98,7 +107,7 @@ export const prompts = Object.freeze([{
   meta: { short: 'Prompt user with options' },
   parameters: [
     { name: 'title', types: ['String'] },
-    { name: 'variant', types: ['String'], meta: { visual: { options: variants } } },
+    { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
     { name: 'message', types: ['String'], required: true },
     { name: 'label', types: ['String'] },
     {
