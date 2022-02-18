@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { getDate, setDate, getTime, setTime } from './index'
 
-describe.only(__filename, () => {
+describe(__filename, () => {
   describe('Can get and set time', () => {
     it('getDate', () => {
       expect(getDate('2021-06-29 13:57')).to.equal('2021-06-29')
