@@ -28,7 +28,7 @@
       </div>
 
       <b-button
-        v-if="!hideAppSelector"
+        v-if="!hideAppSelector && !settings.hideAppSelector"
         variant="outline-light"
         :href="appSelectorURL"
         size="lg"
@@ -41,6 +41,7 @@
       </b-button>
 
       <b-dropdown
+        v-if="!settings.hideHelp"
         size="lg"
         variant="outline-light"
         class="nav-icon mx-1"
@@ -66,24 +67,37 @@
           <slot name="help-dropdown" />
         </div>
         <b-dropdown-item
+          v-for="(helpLink, index) in helpLinks"
+          :key="index"
+          :href="helpLink.url"
+          :target="helpLink.newTab ? '_blank' : ''"
+        >
+          {{ helpLink.handle }}
+        </b-dropdown-item>
+        <b-dropdown-item
+          v-if="!settings.hideForumLink"
           href="https://forum.cortezaproject.org/"
           target="_blank"
         >
           {{ labels.helpForum }}
         </b-dropdown-item>
         <b-dropdown-item
+          v-if="!settings.hideDocumentationLink"
           :href="documentationURL"
           target="_blank"
         >
           {{ labels.helpDocumentation }}
         </b-dropdown-item>
         <b-dropdown-item
+          v-if="!settings.hideFeedbackLink"
           href="mailto:info@crust.tech"
           target="_blank"
         >
           {{ labels.helpFeedback }}
         </b-dropdown-item>
-        <b-dropdown-divider />
+        <b-dropdown-divider
+          v-if="!onlyVersion"
+        />
         <b-dropdown-item
           disabled
           class="small"
@@ -94,6 +108,7 @@
         </b-dropdown-item>
       </b-dropdown>
       <b-dropdown
+        v-if="!settings.hideProfile"
         data-v-onboarding="profile"
         size="lg"
         variant="outline-light"
@@ -117,18 +132,28 @@
           </div>
         </template>
         <b-dropdown-text class="text-muted mb-2">
-          {{ labels.userSettingsLoggedInAs  }}
+          {{ labels.userSettingsLoggedInAs }}
         </b-dropdown-text>
         <div>
           <slot name="avatar-dropdown" />
         </div>
         <b-dropdown-item
+          v-for="(profileLink, index) in profileLinks"
+          :key="index"
+          :href="profileLink.url"
+          :target="profileLink.newTab ? '_blank' : ''"
+        >
+          {{ profileLink.handle }}
+        </b-dropdown-item>
+        <b-dropdown-item
+          v-if="!settings.hideProfileLink"
           :href="userProfileURL"
           target="_blank"
         >
           {{ labels.userSettingsProfile }}
         </b-dropdown-item>
         <b-dropdown-item
+          v-if="!settings.hideChangePasswordLink"
           :href="changePasswordURL"
           target="_blank"
         >
@@ -167,6 +192,11 @@ export default {
       default: '../'
     },
 
+    settings: {
+      type: Object,
+      required: true,
+    },
+
     labels: {
       type: Object,
       required: true,
@@ -185,6 +215,26 @@ export default {
     documentationURL () {
       const [year, month] = VERSION.split('.')
       return `https://docs.cortezaproject.org/corteza-docs/${year}.${month}/index.html`
+    },
+
+    helpLinks () {
+      const { helpLinks = [] } = this.settings || {}
+      return helpLinks.filter(({ handle, url }) => handle && url)
+    },
+
+    profileLinks () {
+      const { profileLinks = [] } = this.settings || {}
+      return profileLinks.filter(({ handle, url }) => handle && url)
+    },
+
+    onlyVersion () {
+      const {
+        hideForumLink,
+        hideDocumentationLink,
+        hideFeedbackLink,
+      } = this.settings || {}
+
+      return !this.helpLinks.length && hideForumLink && hideDocumentationLink && hideFeedbackLink
     },
 
     frontendVersion () {
