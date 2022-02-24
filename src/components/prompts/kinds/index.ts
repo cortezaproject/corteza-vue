@@ -2,6 +2,7 @@
 
 import alert from './CPromptAlert.vue'
 import choice from './CPromptChoice.vue'
+import composeRecordPicker from './CPromptComposeRecordPicker.vue'
 import input from './CPromptInput.vue'
 import notification from './CPromptNotification.vue'
 import options from './CPromptOptions.vue'
@@ -39,6 +40,10 @@ const definitions: Record<string, PromptDefinition> = {
 
   choice: {
     component: choice,
+  },
+
+  composeRecordPicker: {
+    component: composeRecordPicker,
   },
 
   input: {

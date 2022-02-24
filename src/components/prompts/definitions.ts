@@ -58,7 +58,7 @@ export const prompts = Object.freeze([{
   ],
 }, {
   ref: 'choice',
-  meta: { short: 'Prompt user with  choice' },
+  meta: { short: 'Prompt user with choice' },
   parameters: [
     { name: 'title', types: ['String'] },
     { name: 'message', types: ['String'], required: true },
@@ -71,6 +71,21 @@ export const prompts = Object.freeze([{
   ],
   results: [
     { name: 'value', types: ['Any'] },
+  ],
+}, {
+  ref: 'composeRecordPicker',
+  meta: { short: 'Prompt user to select a Compose Record' },
+  parameters: [
+    { name: 'title', types: ['String'] },
+    { name: 'message', types: ['String'], required: true },
+    { name: 'namespace', types: ['ID', 'Handle', 'ComposeNamespace'], required: true },
+    { name: 'module', types: ['ID', 'Handle', 'ComposeModule'], required: true },
+    { name: 'labelField', types: ['Handle'], required: true },
+    { name: 'queryFields', types: ['Array'] },
+    { name: 'prefilter', types: ['String'] },
+  ],
+  results: [
+    { name: 'value', types: ['ComposeRecord'] },
   ],
 }, {
   ref: 'input',
