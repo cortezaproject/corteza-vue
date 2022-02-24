@@ -219,12 +219,12 @@ export default {
 
     helpLinks () {
       const { helpLinks = [] } = this.settings || {}
-      return helpLinks.filter(({ handle, url }) => handle && url)
+      return (helpLinks || []).filter(({ handle, url }) => handle && url)
     },
 
     profileLinks () {
       const { profileLinks = [] } = this.settings || {}
-      return profileLinks.filter(({ handle, url }) => handle && url)
+      return (profileLinks || []).filter(({ handle, url }) => handle && url)
     },
 
     onlyVersion () {
