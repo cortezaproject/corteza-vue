@@ -1,5 +1,5 @@
 <script lang="js">
-import { pVal } from '../utils.ts'
+import { pVal, pType } from '../utils.ts'
 
 export default {
   props: {
@@ -22,6 +22,10 @@ export default {
   methods: {
      pVal (k, def = undefined) {
       return pVal(this.payload, k, def)
+    },
+
+    pType (k, def = undefined) {
+      return pType(this.payload, k, def)
     },
 
     pRaw (k, defValue = undefined, defType = undefined) {
