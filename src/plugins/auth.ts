@@ -207,7 +207,7 @@ export class Auth {
    */
   async handle (req: URL = new URL(this.entrypointURL)): Promise<AuthInfo | null> {
     this.log.info('handling authentication')
-    if (/\/auth\/callback$/.test(req.pathname)) {
+    if (this.isCallback(req.pathname)) {
       this.log.info('handling authentication callback')
 
       const params = new URLSearchParams(req.search)
@@ -221,8 +221,6 @@ export class Auth {
         if (params.has('state')) {
           const state = params.get('state') || ''
           const storeKeyStateLocation = `auth.state.${state}.location`
-          this.log.info('state received', state)
-
           const tmp = this.sessionStorage.getItem(storeKeyStateLocation)
           if (tmp === null) {
             console.warn('state does not match, restarting authentication flow')
@@ -230,7 +228,7 @@ export class Auth {
             return null
           }
 
-          if (!/auth\/callback/.test(tmp)) {
+          if (!this.isCallback(tmp)) {
             // if by some coincidence we got callback URL to finalLocation
             // we'll silently ignore it and redirect user back to entrypoint
             finalLocation = tmp
@@ -241,10 +239,10 @@ export class Auth {
 
         const code = params.get('code') || ''
         this.log.info('authorization code received', code)
-        await this.exchangeCode(code)
+        const rsp = await this.exchangeCode(code)
 
         this.startFinalState(finalLocation)
-        return null
+        return rsp
       }
     }
 
@@ -390,7 +388,7 @@ export class Auth {
     this.incFlowCounter()
 
     const state = Math.random().toString(36).substring(2)
-    this.sessionStorage.setItem(`auth.state.${state}.location`, this.location.toString())
+    this.sessionStorage.setItem(`auth.state.${state}.location`, this.getRedirect(this.location.toString()))
 
     this.location.assign(Make({
       url: `${this.cortezaAuthURL}` + oauth2FlowURL,
@@ -401,6 +399,24 @@ export class Auth {
         state,
       },
     }))
+  }
+
+  getRedirect (url: string): string {
+    const u = new URL(url)
+
+    // In case someone started the flow on a callback route, default to the root
+    // of the webapp.
+    if (this.isCallback(u.pathname)) {
+      u.pathname = ''
+      u.search = ''
+      u.hash = ''
+    }
+
+    return u.toString()
+  }
+
+  isCallback (url: string): boolean {
+    return /\/auth\/callback$/.test(url)
   }
 
   /**
