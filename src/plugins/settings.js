@@ -19,6 +19,10 @@ export class Settings {
       throw new Error('api.notDefined')
     }
 
+    return this.fetch()
+  }
+
+  async fetch () {
     return this.api.settingsCurrent()
       .then(settings => {
         this.current = settings || {}
@@ -66,7 +70,7 @@ export class Settings {
 export default {
   install (Vue) {
     // Should be used to initialize settings
-    Vue.prototype.$Settings = new Settings()
+    Vue.prototype.$Settings = Vue.observable(new Settings())
 
     // Should be used to access settings
     Vue.prototype.$s = Vue.prototype.$Settings.get.bind(Vue.prototype.$Settings)

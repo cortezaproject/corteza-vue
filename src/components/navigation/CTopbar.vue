@@ -46,7 +46,7 @@
         variant="outline-light"
         class="nav-icon mx-1"
         toggle-class="text-decoration-none text-dark rounded-circle border-0 w-100"
-        menu-class="border-0 shadow-sm text-dark font-weight-bold mt-2"
+        menu-class="topbar-dropdown-menu border-0 shadow-sm text-dark font-weight-bold mt-2"
         right
         no-caret
       >
@@ -114,7 +114,7 @@
         variant="outline-light"
         class="nav-user-icon"
         toggle-class="nav-icon text-decoration-none text-dark rounded-circle border"
-        menu-class="border-0 shadow-sm text-dark font-weight-bold mt-2"
+        menu-class="topbar-dropdown-menu border-0 shadow-sm text-dark font-weight-bold mt-2"
         right
         no-caret
       >
@@ -275,6 +275,11 @@ $nav-user-icon-size: 50px;
   h2 {
     padding-left: calc(0.5rem + 2px);
   }
+}
+
+.topbar-dropdown-menu {
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .spacer {
