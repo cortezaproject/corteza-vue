@@ -11,8 +11,8 @@ export default class Link extends BaseLink {
     return {
       ...base,
       toDOM: node => ['a', {
-        ...node.attrs,
         target: '_blank',
+        ...node.attrs,
         rel: 'noopener noreferrer nofollow',
       }, 0],
     }

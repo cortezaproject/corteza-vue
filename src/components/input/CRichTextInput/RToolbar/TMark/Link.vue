@@ -37,6 +37,13 @@
             {{ labels.ok }}
           </b-button>
         </b-input-group-append>
+        <b-checkbox
+          v-model="attrs.target"
+          value="_blank"
+          unchecked-value="_self"
+          class="py-1">
+            {{ labels.openLinkInNewTab }}
+        </b-checkbox>
       </b-input-group>
     </b-popover>
   </div>
@@ -63,7 +70,7 @@ export default {
   data () {
     return {
       visible: false,
-      attrs: { href: null },
+      attrs: { href: null, target: '_self' },
     }
   },
 
