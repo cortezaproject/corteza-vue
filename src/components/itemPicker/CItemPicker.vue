@@ -344,19 +344,6 @@ export default {
     selected (items) {
       const value = items.map(i => i[this.valueField])
 
-      /**
-       * Make sure we do not fall into an infinite loop
-       *
-       * If we emit update/input event, parent will update value/v-modal
-       * and watcher function for value will trigger the sync and recreate
-       * the selected array and trigger this watcher!
-       */
-      if (value.length === this.value.length) {
-        if (value.filter(v => !this.value.includes(v)).length === 0) {
-          return
-        }
-      }
-
       // satisfy value.sync
       this.$emit('update:value', value)
 
@@ -372,7 +359,19 @@ export default {
       },
     },
 
-    value (vv) {
+    value (value) {
+      /**
+       * Make sure we do not fall into an infinite loop
+       * 
+       * If we update the value thenn sync will trigger recomputation of selected
+       * Which then emits the update event and the loop will begin
+       */
+      if (value.length === this.value.length) {
+        if (value.filter(v => !this.value.includes(v)).length === 0) {
+          return
+        }
+      }
+
       this.sync()
     },
   },
@@ -452,9 +451,11 @@ export default {
 
       /**
        * filter all unpicked options, freeze each item in the array and
-       * build list of selected items
+       * build list of selected items, traverse value to keep order
        */
-      this.selected = this.frozen().filter(opt => this.isPicked(opt))
+      this.selected = this.value.map(v => {
+        return this.frozen().find(item => item[this.valueField] === v)
+      }).filter(f => f)
     },
 
     frozen () {
