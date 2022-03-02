@@ -94,7 +94,7 @@
           :key="i"
 
           :class="{
-            separator: !!r[0].separator,
+            separator: !!(r[0] || {}).separator,
           }"
         >
           <b-td
