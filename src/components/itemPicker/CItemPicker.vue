@@ -341,14 +341,17 @@ export default {
      * Update parent component (if needed)
      * @param v
      */
-    selected (items) {
-      const value = items.map(i => i[this.valueField])
+    selected: {
+      immediate: false,
+      handler (items) {
+        const value = items.map(i => i[this.valueField])
 
-      // satisfy value.sync
-      this.$emit('update:value', value)
+        // satisfy value.sync
+        this.$emit('update:value', value)
 
-      // satisfy v-model
-      this.$emit('input', value)
+        // satisfy v-model
+        this.$emit('input', value)
+      }
     },
 
     options: {
@@ -359,20 +362,23 @@ export default {
       },
     },
 
-    value (value) {
-      /**
-       * Make sure we do not fall into an infinite loop
-       * 
-       * If we update the value thenn sync will trigger recomputation of selected
-       * Which then emits the update event and the loop will begin
-       */
-      if (value.length === this.value.length) {
-        if (value.filter(v => !this.value.includes(v)).length === 0) {
-          return
+    value: {
+      immediate: false,
+      handler (value = [], oldValue = []) {
+        /**
+        * Make sure we do not fall into an infinite loop
+        * 
+        * If we update the value thenn sync will trigger recomputation of selected
+        * Which then emits the update event and the loop will begin
+        */
+        if (value.length === oldValue.length) {
+          if (value.filter(v => !oldValue.includes(v)).length === 0) {
+            return
+          }
         }
-      }
 
-      this.sync()
+        this.sync()
+      },
     },
   },
 
