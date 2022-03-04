@@ -1,8 +1,9 @@
 <template>
-  <canvas
-    ref="chart"
-    class="h-100 w-100"
-  />
+  <div class="position-relative h-100 w-100 p-2">
+    <canvas
+      ref="chart"
+    />
+  </div>
 </template>
 <script>
 import base from './base.vue'
@@ -65,6 +66,8 @@ export default {
       const ctx = this.$refs.chart.getContext('2d')
 
       const chartConfig = this.options.getChartConfiguration(this.dataframes)
+
+      console.log(chartConfig)
 
       this.chart = new Chart(ctx, { ...chartConfig, plugins: this.plugins })
     },
