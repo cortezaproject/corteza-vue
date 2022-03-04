@@ -50,6 +50,7 @@
     "tiptap-extensions": "^1.28.4",
     "v-photoswipe": "^1.0.3-1",
     "vue": "^2.6.14",
+    "vue-select": "^3.4.0",
     "vue-swatches": "^1.0.4",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.6.2",
@@ -88,24 +89,23 @@
     "esm": "^3.2.25",
     "i18next-pseudo": "^2.2.1",
     "mocha": "7.0.0",
-    "node-sass": "4.14.1",
     "node-watch": "^0.6.3",
     "nodemon": "2.0.2",
     "nyc": "15.0.0",
-    "postcss": "^8.2.13",
     "rollup": "^1.29.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-import-css": "^3.0.0",
     "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-styles": "^4.0.0",
     "rollup-plugin-typescript2": "^0.25.3",
     "rollup-plugin-vue": "^5.1.5",
+    "sass": "^1.49.9",
     "sinon": "8.1.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.1.0",
     "typescript": "^3.7.4",
     "vue-property-decorator": "^8.3.0",
-    "vue-select": "^3.4.0",
     "vue-template-compiler": "^2.6.14",
     "vue-tour": "^2.0.0"
   },
@@ -151,11 +151,6 @@
   },
   "engines": {
     "node": ">=12.14.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
   },
   "browserslist": [
     "> 1%",
