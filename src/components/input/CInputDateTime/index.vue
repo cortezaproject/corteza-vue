@@ -1,31 +1,36 @@
 <template>
-  <b-input-group
-    :size="size"
+  <div
+    class="d-flex"
   >
     <b-form-datepicker
       v-if="!noDate"
       v-model="date"
       label-help=""
-      menu-class="bg-white"
+      :placeholder="labels.none"
       today-variant="info"
       selected-variant="secondary"
-      placeholder="dd/mm/yyy"
+      boundary="window"
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
       :min="minDate"
       :max="maxDate"
       hide-header
       reset-button
+      :class="{ 'd-inline-flex w-50': !noTime }"
+      class="word-break-keep-all"
     />
 
     <b-form-timepicker
       v-if="!noTime"
       v-model="time"
-      placeholder="--:--"
+      :placeholder="labels.none"
+      boundary="window"
       hide-header
       no-close-button
       reset-button
+      :class="{ 'd-inline-flex w-50': !noDate, 'ml-1': !noDate }"
+      class="word-break-keep-all"
     />
-  </b-input-group>
+  </div>
 </template>
 <script lang="js">
 import moment from 'moment'
@@ -61,7 +66,12 @@ export default {
     size: {
       type: String,
       default: 'md',
-    }
+    },
+
+    labels: {
+      type: Object,
+      required: true,
+    },
   },
 
   computed: {
@@ -97,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss">
-.b-calendar-inner {
-  background: white;
+.word-break-keep-all > .form-control {
+  word-break: keep-all !important;
 }
 </style>
