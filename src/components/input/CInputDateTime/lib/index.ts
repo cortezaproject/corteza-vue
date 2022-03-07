@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export function getDate (value: string): string | undefined {
+export function getDate (value: string|undefined): string | undefined {
   if (!value) {
     return undefined
   }
@@ -10,63 +10,46 @@ export function getDate (value: string): string | undefined {
     return undefined
   }
 
-  const dt = value.split(' ')
-  if (dt.length > 1) {
-    return dt[0] // we only want the date part
-  } else if (dt.length === 1) {
-    // If date is in the value
-    if (dt[0].indexOf('-') > -1) {
-      return dt[0]
-    }
-  }
+  return moment.utc(value).local().format('YYYY-MM-DD')
 }
 
-export function getTime (value: string): string | undefined {
+export function getTime (value: string|undefined): string | undefined {
   if (!value) {
     return undefined
   }
 
-  const dt = value.split(' ')
-
-  if (dt.length > 1) {
-    return dt[1] // we only want the time part
-  } else if (dt.length === 1) {
-    // If we time is in the value
-    if (dt[0].indexOf(':') > -1) {
-      return dt[0]
-    }
+  if (moment(value, 'YYYY-MM-DDTHH:mm:ssZ', true).isValid()) {
+    return moment.utc(value).local().format('HH:mm')
   }
+
+  return value
 }
 
-export function setDate (date: string, value: string, noDate = false, noTime = false): string | undefined {
+export function setDate (date: string|undefined, value: string|undefined, noDate = false, noTime = false): string | undefined {
   if (noDate || !date || !date.length) {
     return undefined
   }
-
-  const time = getTime(value)
 
   if (noTime) {
     return moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
   }
 
-  return moment(date + ' ' + time, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm')
+  const time = getTime(value) || '00:00'
+
+  return moment(date + ' ' + time, 'YYYY-MM-DD HH:mm').utc().format()
 }
 
-export function setTime (time: string, value: string, noDate = false, noTime = false): string | undefined {
+export function setTime (time: string|undefined, value: string|undefined, noDate = false, noTime = false): string | undefined {
   if (noTime || !time || !time.length) {
     return undefined
   }
-
-  let date = getDate(value)
 
   if (noDate) {
     return moment(time, 'HH:mm').format('HH:mm')
   }
 
-  if (!date) {
-    // If no date is yet set default to today
-    date = moment().format('YYYY-MM-DD')
-  }
+  // Default to today if date not provided
+  const date = getDate(value) || moment().local().format('YYYY-MM-DD')
 
-  return moment(date + ' ' + time, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm')
+  return moment(date + ' ' + time, 'YYYY-MM-DD HH:mm').utc().format()
 }

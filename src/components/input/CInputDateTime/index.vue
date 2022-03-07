@@ -1,17 +1,29 @@
 <template>
-  <b-input-group>
-    <b-form-input
+  <b-input-group
+    :size="size"
+  >
+    <b-form-datepicker
       v-if="!noDate"
       v-model="date"
-      type="date"
-      class="d-inline w-50"
+      label-help=""
+      menu-class="bg-white"
+      today-variant="info"
+      selected-variant="secondary"
+      placeholder="dd/mm/yyy"
+      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+      :min="minDate"
+      :max="maxDate"
+      hide-header
+      reset-button
     />
 
-    <b-form-input
+    <b-form-timepicker
       v-if="!noTime"
       v-model="time"
-      type="time"
-      class="d-inline w-50"
+      placeholder="--:--"
+      hide-header
+      no-close-button
+      reset-button
     />
   </b-input-group>
 </template>
@@ -23,7 +35,7 @@ export default {
   props: {
     value: {
       type: String,
-      required: true,
+      required: false,
     },
 
     noTime: {
@@ -35,6 +47,21 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    onlyFuture: {
+      type: Boolean,
+      default: false,
+    },
+
+    onlyPast: {
+      type: Boolean,
+      default: false,
+    },
+
+    size: {
+      type: String,
+      default: 'md',
+    }
   },
 
   computed: {
@@ -44,11 +71,7 @@ export default {
       },
 
       set (date) {
-        date = setDate(date, this.value, this.noDate, this.noTime)
-
-        if (date) {
-          this.$emit('input', date)
-        }
+        this.$emit('input', setDate(date, this.value, this.noDate, this.noTime))
       },
     },
 
@@ -58,13 +81,23 @@ export default {
       },
 
       set (time) {
-        time = setTime(time, this.value, this.noDate, this.noTime)
-
-        if (time) {
-          this.$emit('input', time)
-        }
+        this.$emit('input', setTime(time, this.value, this.noDate, this.noTime))
       },
+    },
+
+    minDate () {
+      return this.onlyFuture ? new Date() : undefined
+    },
+
+    maxDate () {
+      return this.onlyPast ? new Date() : undefined
     },
   },
 }
 </script>
+
+<style lang="scss">
+.b-calendar-inner {
+  background: white;
+}
+</style>
