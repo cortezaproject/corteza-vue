@@ -67,8 +67,6 @@ export default {
 
       const chartConfig = this.options.getChartConfiguration(this.dataframes)
 
-      console.log(chartConfig)
-
       this.chart = new Chart(ctx, { ...chartConfig, plugins: this.plugins })
     },
   },
