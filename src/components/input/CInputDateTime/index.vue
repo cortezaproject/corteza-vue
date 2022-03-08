@@ -107,6 +107,10 @@ export default {
 </script>
 
 <style lang="scss">
+.b-calendar-inner {
+  background-color: white;
+}
+
 .word-break-keep-all > .form-control {
   word-break: keep-all !important;
 }
