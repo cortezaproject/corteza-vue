@@ -207,6 +207,7 @@
 <script>
 import draggable from 'vuedraggable'
 import CItemPickerItem from './CItemPickerItem.vue'
+import { throttle } from 'lodash'
 
 export default {
   name: 'CItemPicker',
@@ -410,7 +411,7 @@ export default {
       this.available = []
     },
 
-    select (item) {
+    select: throttle(function (item) {
       // remove available
       this.available = this.available.filter(i => i !== item)
 
@@ -421,7 +422,7 @@ export default {
       } else {
         this.selected.push(item)
       }
-    },
+    }, 300),
 
     unselectAll () {
       this.available = [...this.frozen()]
