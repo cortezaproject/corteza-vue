@@ -9,12 +9,15 @@
       :placeholder="labels.none"
       today-variant="info"
       selected-variant="secondary"
-      boundary="window"
+      boundary="body"
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
       :min="minDate"
       :max="maxDate"
       hide-header
       reset-button
+      :label-reset-button="labels.clear"
+      today-button
+      :label-today-button="labels.today"
       :class="{ 'd-inline-flex w-50': !noTime }"
       class="word-break-keep-all"
     />
@@ -23,10 +26,13 @@
       v-if="!noTime"
       v-model="time"
       :placeholder="labels.none"
-      boundary="window"
+      boundary="body"
       hide-header
       no-close-button
       reset-button
+      :label-reset-button="labels.clear"
+      now-button
+      :label-now-button="labels.now"
       :class="{ 'd-inline-flex w-50': !noDate, 'ml-1': !noDate }"
       class="word-break-keep-all"
     />
