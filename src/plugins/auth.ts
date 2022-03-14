@@ -23,6 +23,10 @@ const storeKeyRefreshToken = 'auth.refresh-token'
 
 const maxStartAttempts = 5
 
+// signature copied from dom definition
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type eventListenerSignature = <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => void
+
 interface AuthInfo {
   accessTokenFn: () => string | undefined;
   user: system.User;
@@ -76,6 +80,11 @@ interface AuthCtor {
   sessionStorage: Storage;
 
   /**
+   * used for event listeners
+   */
+  registerEventListener: eventListenerSignature;
+
+  /**
    * Static string with entry-point URL stored at app init
    * so that there is no risk of changes when Vue router gets it's hands on it
    */
@@ -121,6 +130,7 @@ export class Auth {
   readonly callbackURL: string
   readonly location: Location
   readonly sessionStorage: Storage
+  readonly registerEventListener: eventListenerSignature
 
   /**
    * Application entrypoint URL
@@ -135,7 +145,7 @@ export class Auth {
 
   private $emit?: (event: string, ...args: unknown[]) => unknown
 
-  constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, sessionStorage, refreshFactor }: AuthCtor) {
+  constructor ({ app, verbose, cortezaAuthURL, callbackURL, entrypointURL, location, sessionStorage, refreshFactor, registerEventListener }: AuthCtor) {
     if (refreshFactor >= 1 || refreshFactor <= 0) {
       throw new Error('refreshFactor should be between 0 and 1')
     }
@@ -146,6 +156,7 @@ export class Auth {
     this.callbackURL = callbackURL
     this.location = location
     this.sessionStorage = sessionStorage
+    this.registerEventListener = registerEventListener
     this.refreshFactor = refreshFactor
     this.entrypointURL = entrypointURL
 
@@ -207,46 +218,30 @@ export class Auth {
    */
   async handle (req: URL = new URL(this.entrypointURL)): Promise<AuthInfo | null> {
     this.log.info('handling authentication')
-    if (this.isCallback(req.pathname)) {
-      this.log.info('handling authentication callback')
 
-      const params = new URLSearchParams(req.search)
+    // State management
+    // - duplication checking
+    // - management handlers
+    const dup = this.handleStateManagement()
+    if (dup) {
+      this.log.debug('duplicate tab: unauthorized')
+      throw new Error('Unauthenticated')
+    }
+
+    // Handle auth callback requests
+    const params = new URLSearchParams(req.search)
+    if (this.isCallback(req.pathname) && (params.has('error') || params.has('code'))) {
       if (params.has('error')) {
         throw new Error(params.get('error') || 'authentication flow failed with error')
       }
 
-      if (params.has('code')) {
-        let finalLocation = this.entrypointURL
-
-        if (params.has('state')) {
-          const state = params.get('state') || ''
-          const storeKeyStateLocation = `auth.state.${state}.location`
-          const tmp = this.sessionStorage.getItem(storeKeyStateLocation)
-          if (tmp === null) {
-            console.warn('state does not match, restarting authentication flow')
-            this.startAuthenticationFlow()
-            return null
-          }
-
-          if (!this.isCallback(tmp)) {
-            // if by some coincidence we got callback URL to finalLocation
-            // we'll silently ignore it and redirect user back to entrypoint
-            finalLocation = tmp
-          }
-
-          this.sessionStorage.removeItem(storeKeyStateLocation)
-        }
-
-        const code = params.get('code') || ''
-        this.log.info('authorization code received', code)
-        const rsp = await this.exchangeCode(code)
-
-        this.startFinalState(finalLocation)
-        return rsp
-      }
+      this.log.info('handling authentication callback')
+      return this.handleCallbackRoute(params.get('state'), (params.has('code') ? params.get('code') as string : ''))
     }
 
-    return this.check()
+    // Handle auth from the current system state
+    this.log.info('handling authentication from state')
+    return this.handleState()
   }
 
   /**
@@ -263,10 +258,19 @@ export class Auth {
    * know, after the redirection to the final location, if this is a final stage or not and if the refresh token
    * belongs to this session or not.
    */
-  startFinalState (dst: string): void {
-    this.log.info('redirecting back to final destination', dst)
+  handleStateManagement (): boolean {
+    // See if this is a duplicate
+    const dup = this.sessionStorage.getItem(storeKeyFinalState) !== null
+
+    // Bind listeners to cleanup
+    this.registerEventListener('beforeunload', function () {
+      this.sessionStorage.removeItem(storeKeyFinalState)
+    })
+
+    // Set state
     this.sessionStorage.setItem(storeKeyFinalState, Date.now().toString())
-    this.location.assign(dst)
+
+    return dup
   }
 
   /**
@@ -275,7 +279,6 @@ export class Auth {
    * Cleanup aux items in the session store
    */
   completeFinalState (): void {
-    this.sessionStorage.removeItem(storeKeyFinalState)
     this.sessionStorage.removeItem(storeKeyFlowStarted)
 
     const stateKey = /^auth\.state\.\w+\.location$/
@@ -288,12 +291,41 @@ export class Auth {
   }
 
   /**
-   * Are we in a final state or not?
+   * Exchanges the auth parameters for access & refresh token.
    *
-   * See startFinalState function for more details
+   * If the parameters are correct and exchange is successful, the refresh token
+   * gets stored in localStorage for further use, the access token and current user get stored
+   * in-memory.
+   *
+   * Function will throw null when user is unauthenticated
    */
-  inFinalState (): boolean {
-    return this.sessionStorage.getItem(storeKeyFinalState) !== null
+  async handleCallbackRoute (state: string|null, code: string): Promise<AuthInfo | null> {
+    let finalLocation = this.entrypointURL
+
+    if (state) {
+      const storeKeyStateLocation = `auth.state.${state}.location`
+      const tmp = this.sessionStorage.getItem(storeKeyStateLocation)
+      if (tmp === null) {
+        console.warn('state does not match, restarting authentication flow')
+        this.startAuthenticationFlow()
+        return null
+      }
+
+      if (!this.isCallback(tmp)) {
+        // if by some coincidence we got callback URL to finalLocation
+        // we'll silently ignore it and redirect user back to entrypoint
+        finalLocation = tmp
+      }
+
+      this.sessionStorage.removeItem(storeKeyStateLocation)
+    }
+
+    this.log.info('authorization code received', code)
+    const rsp = await this.exchangeCode(code)
+
+    this.log.info('redirecting back to final destination', finalLocation)
+    this.location.assign(finalLocation)
+    return rsp
   }
 
   /**
@@ -308,7 +340,7 @@ export class Auth {
    *
    * Function will throw null when user is unauthenticated
    */
-  async check (): Promise<AuthInfo | null> {
+  async handleState (): Promise<AuthInfo | null> {
     this.log.info('checking authentication')
 
     if (this[accessToken]) {
@@ -353,15 +385,13 @@ export class Auth {
        * If this is a duplicated-session, an error will be thrown and authentication will be (probably)
        * restarted by the caller.
        */
-      if (this.inFinalState()) {
-        this.log.info('refreshing token', refreshToken)
+      this.log.info('refreshing token', refreshToken)
 
-        /**
-         * Refresh token found in the storage,
-         * let's use it to get new access token
-         */
-        return this.exchangeRefresh(refreshToken)
-      }
+      /**
+       * Refresh token found in the storage,
+       * let's use it to get new access token
+       */
+      return this.exchangeRefresh(refreshToken)
     }
 
     throw new Error('Unauthenticated')
@@ -595,6 +625,7 @@ export default function (): PluginFunction<PluginOpts> {
       entrypointURL = window.location.toString(),
       location = window.location,
       sessionStorage = window.sessionStorage,
+      registerEventListener = window.addEventListener.bind(window),
     } = (opts || {}) as Partial<AuthCtor & { rootApp: boolean }>
 
     if (!cortezaAuthURL) {
@@ -700,6 +731,7 @@ export default function (): PluginFunction<PluginOpts> {
       sessionStorage,
       entrypointURL,
       refreshFactor,
+      registerEventListener,
     })
   }
 }
