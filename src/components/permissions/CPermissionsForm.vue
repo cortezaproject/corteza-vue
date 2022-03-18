@@ -41,7 +41,7 @@
     <b-row class="footer mt-3"
     >
       <b-col
-        class="rule-list text-right"
+        class="rule-list text-right mb-3"
         cols="9"
         offset="3"
       >
