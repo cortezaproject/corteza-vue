@@ -9,7 +9,7 @@
       :placeholder="labels.none"
       today-variant="info"
       selected-variant="secondary"
-      boundary="body"
+      boundary="window"
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
       :min="minDate"
       :max="maxDate"
@@ -19,14 +19,14 @@
       today-button
       :label-today-button="labels.today"
       :class="{ 'd-inline-flex w-50': !noTime }"
-      class="word-break-keep-all"
+      class="text-break"
     />
 
     <b-form-timepicker
       v-if="!noTime"
       v-model="time"
       :placeholder="labels.none"
-      boundary="body"
+      boundary="window"
       hide-header
       no-close-button
       reset-button
@@ -34,7 +34,7 @@
       now-button
       :label-now-button="labels.now"
       :class="{ 'd-inline-flex w-50': !noDate, 'ml-1': !noDate }"
-      class="word-break-keep-all"
+      class="text-break"
     />
   </div>
 </template>
