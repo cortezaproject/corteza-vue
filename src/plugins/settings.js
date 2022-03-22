@@ -63,6 +63,11 @@ export class Settings {
         })
     }
 
+    if (src) {
+      // this is a quick and dirty solution and should work in most cases
+      return this.api.baseURL.replace(/\/api\/system$/, '') + src
+    }
+
     return d
   }
 }
