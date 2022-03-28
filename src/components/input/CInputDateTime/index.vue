@@ -1,45 +1,42 @@
 <template>
-  <div
-    class="d-flex"
+  <b-input-group
+    class="position-static"
   >
     <b-form-datepicker
       v-if="!noDate"
       v-model="date"
-      label-help=""
       :placeholder="labels.none"
-      today-variant="info"
-      selected-variant="secondary"
-      boundary="window"
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
       :min="minDate"
       :max="maxDate"
+      :label-reset-button="labels.clear"
+      :label-today-button="labels.today"
+      label-help=""
+      today-variant="info"
+      selected-variant="secondary"
+      boundary="window"
       hide-header
       reset-button
-      :label-reset-button="labels.clear"
       today-button
-      :label-today-button="labels.today"
-      :class="{ 'd-inline-flex w-50': !noTime }"
-      class="text-break"
+      class="text-nowrap"
     />
 
     <b-form-timepicker
       v-if="!noTime"
       v-model="time"
       :placeholder="labels.none"
+      :label-reset-button="labels.clear"
+      :label-now-button="labels.now"
       boundary="window"
       hide-header
       no-close-button
       reset-button
-      :label-reset-button="labels.clear"
       now-button
-      :label-now-button="labels.now"
-      :class="{ 'd-inline-flex w-50': !noDate, 'ml-1': !noDate }"
-      class="text-break"
+      class="text-nowrap"
     />
-  </div>
+  </b-input-group>
 </template>
 <script lang="js">
-import moment from 'moment'
 import { getDate, setDate, getTime, setTime } from './lib/index.ts'
 
 export default {
@@ -115,9 +112,5 @@ export default {
 <style lang="scss">
 .b-calendar-inner {
   background-color: white;
-}
-
-.word-break-keep-all > .form-control {
-  word-break: keep-all !important;
 }
 </style>
