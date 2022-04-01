@@ -1,8 +1,8 @@
 <template>
   <div class="nav-sidebar">
     <b-button
-      v-for="({page = {}, params = {}, children = []}, index) of items"
-      :key="index"
+      v-for="({page = {}, params = {}, children = []}) of items"
+      :key="pageIndex(page)"
       variant="link"
       class="w-100 text-dark text-decoration-none p-0 pt-2 nav-item"
       active-class="nav-active"
@@ -97,12 +97,16 @@ export default {
 
   watch: {
     items: {
-      handler: function (items) {
-        for (const i of items) {
-          this.setState(i.page, this.startExpanded)
-        }
-      },
       immediate: true,
+      handler (items = []) {
+        items.forEach(({ page }) => {
+          const px = this.pageIndex(page)
+          // Apply startExpanded only if page isn't currently expanded
+          if (!this.collapses[px]) {
+            this.$set(this.collapses, px, this.startExpanded)
+          }
+        })
+      },
     },
   },
 
@@ -120,11 +124,6 @@ export default {
     toggle (p) {
       const px = this.pageIndex(p)
       this.$set(this.collapses, px, !this.collapses[px])
-    },
-
-    setState (p, state = false) {
-      const px = this.pageIndex(p)
-      this.$set(this.collapses, px, state)
     },
 
     // Recursively check for child pages that are open, so that parents can open aswell
