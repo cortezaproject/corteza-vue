@@ -19,6 +19,7 @@
           :icon="page.icon"
         />
         <span
+          :data-test-id="`sidebar-${page.title.toLowerCase()}`"
           class="title"
         >
           {{ page.title }}
