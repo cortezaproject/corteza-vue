@@ -220,8 +220,6 @@ export class Auth {
     this.log.info('handling authentication')
 
     // State management
-    // - duplication checking
-    // - management handlers
     const dup = this.handleStateManagement()
     if (dup) {
       this.log.debug('duplicate tab: unauthorized')
@@ -261,16 +259,28 @@ export class Auth {
   handleStateManagement (): boolean {
     // See if this is a duplicate
     const dup = this.sessionStorage.getItem(storeKeyFinalState) !== null
+    window.sessionStorage.setItem(storeKeyFinalState, Date.now().toString())
+    return dup
+  }
 
-    // Bind listeners to cleanup
-    this.registerEventListener('beforeunload', function () {
-      this.sessionStorage.removeItem(storeKeyFinalState)
+  bindListeners (): void {
+    // binding multiple listeners for cases where some browser refuser
+    // to emit one of them.
+    this.registerEventListener('pagehide', () => {
+      this.cleanFlags()
     })
 
-    // Set state
-    this.sessionStorage.setItem(storeKeyFinalState, Date.now().toString())
+    this.registerEventListener('unload', () => {
+      this.cleanFlags()
+    })
 
-    return dup
+    this.registerEventListener('beforeunload', () => {
+      this.cleanFlags()
+    })
+  }
+
+  cleanFlags (): void {
+    this.sessionStorage.removeItem(storeKeyFinalState)
   }
 
   /**
@@ -324,6 +334,7 @@ export class Auth {
     const rsp = await this.exchangeCode(code)
 
     this.log.info('redirecting back to final destination', finalLocation)
+    this.cleanFlags()
     this.location.assign(finalLocation)
     return rsp
   }
@@ -366,6 +377,7 @@ export class Auth {
 
         this[user] = authUser
 
+        this.bindListeners()
         return data
       }).catch((error) => {
         this.log.error('data fetch form info endpoint failed', { oauth2InfoURL, headers, error })
@@ -392,6 +404,10 @@ export class Auth {
        * let's use it to get new access token
        */
       return this.exchangeRefresh(refreshToken)
+        .then(r => {
+          this.bindListeners()
+          return r
+        })
     }
 
     throw new Error('Unauthenticated')
@@ -415,6 +431,7 @@ export class Auth {
   startAuthenticationFlow (): void {
     this.log.debug('starting new authentication flow')
 
+    this.cleanFlags()
     this.incFlowCounter()
 
     const state = Math.random().toString(36).substring(2)
