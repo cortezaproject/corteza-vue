@@ -420,7 +420,9 @@ export default {
       if (this.disabledSorting) {
         this.selected = this.frozen().filter(i => !this.available.includes(i))
       } else {
-        this.selected.push(item)
+        if (!this.selected.some(({ value = '' }) => value === item.value)) {
+          this.selected.push(item)
+        }
       }
     }, 300),
 
