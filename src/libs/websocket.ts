@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /**
- * Default websocket cofngiuration
+ * Default websocket configuration
  */
 import { Vue } from 'vue/types/vue'
 import { Make } from './url'

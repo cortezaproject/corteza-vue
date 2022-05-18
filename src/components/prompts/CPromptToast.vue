@@ -45,6 +45,15 @@ export default {
   data () {
     return {
       passive: new Set(),
+
+      /**
+       * Set initial value to NULL
+       *
+       * First interval will detect that null is not true|false
+       * and set it accordingly to the current state
+       */
+      hasFocus: null,
+      hasFocusObserver: 0,
     }
   },
 
@@ -55,14 +64,28 @@ export default {
       isLoading: 'wfPrompts/isLoading',
     }),
 
+    /**
+     * Prompts with handlers, observed with "watch"
+     *
+     * Prompts are only returned when document has focus!
+     *
+     * @returns {*}
+     */
     withHandlers () {
-      return this.prompts
+      return (this.hasFocus ? this.prompts : [])
         .filter(({ ref }) => !!definitions[ref] && !!definitions[ref].handler)
         .map(prompt => ({ ...definitions[prompt.ref], prompt }))
     },
 
+    /**
+     * Prompts with components
+     *
+     * Prompts are only returned when document has focus!
+     *
+     * @returns {*}
+     */
     withComponents () {
-      return this.prompts
+      return (this.hasFocus ? this.prompts : [])
         .filter(({ ref }) => !!definitions[ref] && !!definitions[ref].component)
         .map(prompt => ({ ...definitions[prompt.ref], prompt }))
     },
@@ -140,6 +163,34 @@ export default {
     pVal (prompt, k, def = undefined) {
       return pVal(prompt.payload, k, def)
     },
+
+    clearDocumentFocusObserver() {
+      if (this.hasFocusObserver) {
+        window.clearInterval(this.hasFocusObserver)
+      }
+    },
+
+    /**
+     * Interval check if window has focus
+     */
+    setDocumentFocusObserver() {
+      this.clearDocumentFocusObserver()
+
+      this.hasFocusObserver = window.setInterval(() => {
+        const f = document.hasFocus()
+        if (this.hasFocus !== f) {
+          this.hasFocus = f
+        }
+      }, 250)
+    }
+  },
+
+  mounted () {
+    this.setDocumentFocusObserver()
+  },
+
+  beforeDestroy () {
+    this.clearDocumentFocusObserver()
   },
 }
 </script>
