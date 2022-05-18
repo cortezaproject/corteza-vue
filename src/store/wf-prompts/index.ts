@@ -13,7 +13,7 @@ interface State {
 
   /**
    * Is prompt component active (modal open)?
-   *   prompt = modal is opwn, show this/current prompt
+   *   prompt = modal is open, show this/current prompt
    *   true   = modal is open, show list of pending prompts
    *   false  = modal is closed
    */
@@ -89,11 +89,6 @@ export default function ({ api }: Options): StoreOptions<State> {
         commit('active', false)
       },
 
-      // unwatch ({ state, commit }: ActionContext<State, State>): void {
-      //   commit('watching', undefined)
-      //   clearInterval(state.wiptr)
-      // },
-
       // fetch calls automation API endpoint and collects all states
       async update ({ commit, state }: ActionContext<State, State>): Promise<void> {
         return loadPrompts(api)
@@ -147,10 +142,6 @@ export default function ({ api }: Options): StoreOptions<State> {
       loading (state: State, flag = true): void {
         state.loading = flag
       },
-
-      // watching (state: State, ptr?: number): void {
-      //   state.wiptr = ptr
-      // },
 
       active (state: State, m: boolean | automation.Prompt): void {
         state.active = m
