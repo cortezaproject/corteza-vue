@@ -41,6 +41,7 @@
       </b-button>
 
       <b-dropdown
+        data-test-id="dropdown-helper"
         v-if="!settings.hideHelp"
         size="lg"
         variant="outline-light"
@@ -59,7 +60,7 @@
               :icon="['far', 'question-circle']"
             />
             <span class="sr-only">
-              Help
+              {{ labels.helpForum }}
             </span>
           </div>
         </template>
@@ -75,6 +76,7 @@
           {{ helpLink.handle }}
         </b-dropdown-item>
         <b-dropdown-item
+          data-test-id="dropdown-helper-forum"
           v-if="!settings.hideForumLink"
           href="https://forum.cortezaproject.org/"
           target="_blank"
@@ -82,6 +84,7 @@
           {{ labels.helpForum }}
         </b-dropdown-item>
         <b-dropdown-item
+          data-test-id="dropdown-helper-docs"
           v-if="!settings.hideDocumentationLink"
           :href="documentationURL"
           target="_blank"
@@ -89,6 +92,7 @@
           {{ labels.helpDocumentation }}
         </b-dropdown-item>
         <b-dropdown-item
+          data-test-id="dropdown-helper-feedback"
           v-if="!settings.hideFeedbackLink"
           href="mailto:info@crust.tech"
           target="_blank"
@@ -108,6 +112,7 @@
         </b-dropdown-item>
       </b-dropdown>
       <b-dropdown
+        data-test-id="dropdown-profile"
         v-if="!settings.hideProfile"
         data-v-onboarding="profile"
         size="lg"
@@ -146,6 +151,7 @@
           {{ profileLink.handle }}
         </b-dropdown-item>
         <b-dropdown-item
+          data-test-id="dropdown-profile-user"
           v-if="!settings.hideProfileLink"
           :href="userProfileURL"
           target="_blank"
@@ -153,6 +159,7 @@
           {{ labels.userSettingsProfile }}
         </b-dropdown-item>
         <b-dropdown-item
+          data-test-id="dropdown-profile-change-password"
           v-if="!settings.hideChangePasswordLink"
           :href="changePasswordURL"
           target="_blank"
@@ -161,6 +168,7 @@
         </b-dropdown-item>
         <b-dropdown-divider />
         <b-dropdown-item
+          data-test-id="dropdown-profile-logout"
           href=""
           @click="$auth.logout()"
           class="mt-2"

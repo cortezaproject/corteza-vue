@@ -40,6 +40,7 @@
               slot="actions"
             >
               <b-button
+                data-test-id="button-stop-tour"
                 variant="primary"
                 @click="onStop"
               >
@@ -51,6 +52,7 @@
                 </template>
               </b-button>
               <b-button
+                data-test-id="button-previous"
                 v-if="tour.isFirst && (callbacks || {}).onPrevRedirect"
                 variant="primary"
                 :href="callbacks.onPrevRedirect"
@@ -58,6 +60,7 @@
                 {{ $t('buttons.previous') }}
               </b-button>
               <b-button
+                data-test-id="button-previous"
                 v-else-if="!tour.isFirst"
                 variant="primary"
                 @click="tour.previousStep"
@@ -65,6 +68,7 @@
                 {{ $t('buttons.previous') }}
               </b-button>
               <b-button
+                data-test-id="button-next"
                 v-if="tour.isLast && (callbacks || {}).onNextRedirect"
                 variant="primary"
                 :href="callbacks.onNextRedirect"
@@ -72,6 +76,7 @@
                 {{ $t('buttons.next') }}
               </b-button>
               <b-button
+                data-test-id="button-next"
                 v-else-if="!tour.isLast"
                 variant="primary"
                 @click="tour.nextStep"
