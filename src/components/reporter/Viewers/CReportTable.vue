@@ -303,8 +303,6 @@ export default {
       const usedKeys = this.keyColumns(frame)
 
       for (const r of frame.rows || []) {
-        maxSize = 1
-
         const row = this.tabelifyRow(r, [...selectedCols])
 
         const auxRows = []
