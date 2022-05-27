@@ -2,6 +2,7 @@
   <span class="text-center">
     <span v-if="!inConfirmation">
       <b-button
+        data-test-id="button-delete"
         :variant="variant"
         :size="size"
         :disabled="disabled"
@@ -18,6 +19,7 @@
     </span>
     <span v-else>
       <b-button
+        data-test-id="button-delete-confirm"
         :variant="variantOk"
         :size="sizeConfirm"
         :disabled="okDisabled"
@@ -33,6 +35,7 @@
         </slot>
       </b-button>
       <b-button
+        data-test-id="button-delete-cancel"
         :variant="variantCancel"
         :size="sizeConfirm"
         :disabled="cancelDisabled"
