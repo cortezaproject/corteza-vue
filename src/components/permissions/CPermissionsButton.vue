@@ -1,6 +1,7 @@
 <template>
   <a
     v-if="link"
+    data-test-id="link-permissions"
     class="pointer"
     @click="onClick"
   >
@@ -8,6 +9,7 @@
   </a>
   <b-button
     v-else
+    data-test-id="button-permissions"
     :variant="buttonVariant"
     @click="onClick"
   >
