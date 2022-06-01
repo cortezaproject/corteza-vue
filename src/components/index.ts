@@ -15,6 +15,7 @@ export {
   CInputDateTime,
   CInputPresort,
   CInputCron,
+  CInputSearch,
   CRichTextInput,
 } from './input'
 
