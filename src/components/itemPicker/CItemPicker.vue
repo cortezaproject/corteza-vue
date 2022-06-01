@@ -9,26 +9,14 @@
       <b-card-header
         class="bg-white p-0"
       >
-        <b-input-group
-          v-if="!hideFilter"
-        >
-          <b-input
-            v-model.trim="query"
-            type="search"
-            :disabled="_disabledFilter"
-            :placeholder="labels.searchPlaceholder"
-            class="text-truncate"
-          />
-          <b-input-group-append>
-            <b-input-group-text
-              class="text-primary bg-white border-left-0"
-            >
-              <font-awesome-icon
-                :icon="['fas', 'search']"
-              />
-            </b-input-group-text>
-          </b-input-group-append>
-        </b-input-group>
+
+      <c-input-search
+        v-if="!hideFilter"
+        v-model.trim="query"
+        :disabled="_disabledFilter"
+        :placeholder="labels.searchPlaceholder"
+      />
+
       </b-card-header>
       <b-card-body
         class="d-flex p-0"
@@ -207,6 +195,7 @@
 <script>
 import draggable from 'vuedraggable'
 import CItemPickerItem from './CItemPickerItem.vue'
+import CInputSearch from '../input/CInputSearch.vue'
 import { throttle } from 'lodash'
 
 export default {
@@ -215,6 +204,7 @@ export default {
   components: {
     draggable,
     CItemPickerItem,
+    CInputSearch,
   },
 
   props: {
