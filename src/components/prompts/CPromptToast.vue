@@ -133,10 +133,10 @@ export default {
      * We do this because we do not want it to be removed right away
      * but through a toast component's timeout
      */
-    prompts: {
+    withComponents: {
       immediate: true,
-      handler () {
-        this.withComponents.forEach(p => {
+      handler (wc) {
+        wc.forEach(p => {
           if (p.passive) {
             this.passive.add(p)
           }
