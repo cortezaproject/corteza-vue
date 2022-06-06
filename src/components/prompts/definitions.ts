@@ -45,6 +45,10 @@ export const prompts = Object.freeze([
     ],
   },
   {
+    ref: 'refetchRecords',
+    meta: { short: 'Refreshes all record values on the page' },
+  },
+  {
     ref: 'notification',
     meta: { short: 'Show non-blocking message to user' },
     parameters: [

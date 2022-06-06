@@ -198,6 +198,13 @@ const definitions: Record<string, PromptDefinition> = {
       }
     },
   },
+
+  refetchRecords: {
+    handler: function (): void {
+      // @ts-ignore
+      this.$root.$emit('refetch-records')
+    },
+  },
 }
 
 export default definitions
