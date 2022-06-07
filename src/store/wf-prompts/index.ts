@@ -1,10 +1,12 @@
 import { apiClients, automation } from '@cortezaproject/corteza-js'
 import { ActionContext, StoreOptions } from 'vuex'
+import { promptDefinitions } from '../../components/prompts'
 
 interface Options {
   api: apiClients.Automation;
   ws: WebSocket;
   watchInterval: number;
+  webapp: string;
 }
 
 interface State {
@@ -48,7 +50,7 @@ function onlyFresh (existing: Array<automation.Prompt>, fresh: Array<automation.
   return fresh.filter(({ stateID = undefined }) => stateID && !index.includes(stateID))
 }
 
-export default function ({ api }: Options): StoreOptions<State> {
+export default function ({ api, webapp }: Options): StoreOptions<State> {
   return {
     strict: true,
 
@@ -152,7 +154,12 @@ export default function ({ api }: Options): StoreOptions<State> {
       },
 
       update (state: State, pp: Array<automation.Prompt>): void {
-        state.prompts.push(...pp)
+        // // Check if prompt should be run only in certain webapps
+        state.prompts.push(...pp.filter(({ ref }) => {
+          return promptDefinitions.some(p => {
+            return p.ref === ref && (!p.meta.webapps || p.meta.webapps.includes(webapp))
+          })
+        }))
       },
 
       remove (state: State, prompt: automation.Prompt): void {

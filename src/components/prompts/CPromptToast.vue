@@ -42,6 +42,12 @@ import { pVal } from './utils.ts'
 export default {
   name: 'c-prompt-toast',
 
+  props: {
+    hideToasts: {
+      type: Boolean,
+    },
+  },
+
   data () {
     return {
       passive: new Set(),
@@ -104,7 +110,7 @@ export default {
      * passive (no feedback or input from user required) first and the rest later
      */
     toasts () {
-      return [
+      return this.hideToasts ? [] : [
         ...this.passive.values(),
         ...this.active
       ]

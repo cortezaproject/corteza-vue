@@ -1,6 +1,8 @@
 <template>
   <div>
-    <c-prompt-toast />
+    <c-prompt-toast
+      :hide-toasts="hideToasts"
+    />
     <c-prompt-modal />
   </div>
 </template>
@@ -18,9 +20,16 @@ import CPromptModal from './CPromptModal.vue'
  */
 export default {
   name: 'c-prompts',
+
   components: {
     CPromptToast,
     CPromptModal
+  },
+
+  props: {
+    hideToasts: {
+      type: Boolean,
+    },
   },
 }
 </script>
