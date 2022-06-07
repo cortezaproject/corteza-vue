@@ -267,15 +267,12 @@ export default {
     // tabelifyFrame returns a set of rows and columns that should be shown
     // for this frame.
     //
-    // maxSize is used to calculate the rowSpan that should be applied to joined
-    // frames with fewer rows then the other.
-    //
     // Flow outline:
     //  * for each row of the frame:
     //  ** find all foreign frames
     //  ** tabelify foreign frames
     //  ** merge with the current tabelified result
-    tabelifyFrame (frame, maxSize = 1) {
+    tabelifyFrame (frame) {
       const outRows = []
       const isLocal = frame.ref === this.localDataframe.ref
 
@@ -303,7 +300,7 @@ export default {
       const usedKeys = this.keyColumns(frame)
 
       for (const r of frame.rows || []) {
-        maxSize = 1
+        let maxSize = 1
 
         const row = this.tabelifyRow(r, [...selectedCols])
 
@@ -322,7 +319,7 @@ export default {
             //   return frame.columns.findIndex(fc => fc.name === name)
             // })
 
-            const aux = this.tabelifyFrame(rf, Math.max(rf.rows.length, maxSize))
+            const aux = this.tabelifyFrame(rf, Math.max(rf.rows.length))
 
             // Optionally append header
             if (!hSeanFrames[rf.ref]) {
