@@ -118,6 +118,7 @@ export default function ({ api, webapp }: Options): StoreOptions<State> {
         commit('loading')
         return resumeState(api, prompt, input)
           .then(() => commit('remove', prompt))
+          .catch(() => commit('remove', prompt))
           .finally(() => commit('loading', false))
       },
 
