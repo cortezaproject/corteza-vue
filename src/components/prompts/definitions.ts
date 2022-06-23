@@ -16,6 +16,7 @@ export const prompts = Object.freeze([
     ref: 'redirect',
     meta: { short: 'Redirect user to an outside URL' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'url', types: ['String'], required: true },
       { name: 'delay', types: ['Integer'], meta: { description: 'Redirection delay in seconds' } },
     ],
@@ -24,6 +25,7 @@ export const prompts = Object.freeze([
     ref: 'reroute',
     meta: { short: 'Redirect user to an internal application route' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'name', types: ['String'], required: true },
       { name: 'params', types: ['KV'] },
       { name: 'query', types: ['KV'] },
@@ -37,6 +39,7 @@ export const prompts = Object.freeze([
       webapps: ['compose'],
     },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'module', types: ['ID', 'Handle', 'ComposeModule'] },
       { name: 'namespace', types: ['ID', 'Handle', 'ComposeNamespace'] },
       { name: 'record', types: ['ID', 'ComposeRecord'] },
@@ -52,6 +55,7 @@ export const prompts = Object.freeze([
     ref: 'notification',
     meta: { short: 'Show non-blocking message to user' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'message', types: ['String'], required: true },
       { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
@@ -62,6 +66,7 @@ export const prompts = Object.freeze([
     ref: 'alert',
     meta: { short: 'Prompt user with an alert' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'message', types: ['String'], required: true },
       { name: 'buttonLabel', types: ['String'] },
@@ -73,6 +78,7 @@ export const prompts = Object.freeze([
     ref: 'choice',
     meta: { short: 'Prompt user with choice' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'message', types: ['String'], required: true },
       { name: 'confirmButtonLabel', types: ['String'] },
@@ -90,6 +96,7 @@ export const prompts = Object.freeze([
     ref: 'composeRecordPicker',
     meta: { short: 'Prompt user to select a Compose Record' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'message', types: ['String'], required: true },
       { name: 'namespace', types: ['ID', 'Handle', 'ComposeNamespace'], required: true },
@@ -106,6 +113,7 @@ export const prompts = Object.freeze([
     ref: 'input',
     meta: { short: 'Prompt user with a single input' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
       { name: 'message', types: ['String'], required: true },
@@ -137,6 +145,7 @@ export const prompts = Object.freeze([
     ref: 'options',
     meta: { short: 'Prompt user with options' },
     parameters: [
+      { name: 'owner', types: ['User', 'ID'], required: false },
       { name: 'title', types: ['String'] },
       { name: 'variant', types: ['String'], meta: { visual: { input: { type: 'select', properties: { options: variants } } } } },
       { name: 'message', types: ['String'], required: true },
