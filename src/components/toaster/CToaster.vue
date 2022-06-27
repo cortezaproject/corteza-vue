@@ -21,7 +21,7 @@
         </b-card-text>
 
         <b-card-text v-if="t.payload.link">
-          <c-toaster-link :toast="t" />
+          <c-toaster-link :link="t.payload.link" />
         </b-card-text>
 
         <component
