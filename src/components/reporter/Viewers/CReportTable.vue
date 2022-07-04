@@ -34,7 +34,7 @@
           <b-th
             v-for="(c, i) in tabelify.header"
             :key="i"
-            v-bind="c.column.attrs || {}"
+            v-bind="c.column ? c.column.attrs : {}"
             class="border-0"
           >
             <p
@@ -57,6 +57,7 @@
               class="d-flex align-items-center"
             >
               <div
+                v-if="c.column ? c.column.label : ''"
                 class="d-flex text-nowrap"
               >
                 {{ c.column.label }}
@@ -285,11 +286,12 @@ export default {
       const hSeanFrames = {}
       const outHeader = [...selectedCols].map(index => {
         const column = frame.columns[index]
+        const columnName = column ? column.name : ''
         return {
           column,
           meta: {
             ref: frame.ref,
-            sortKey: isLocal ? column.name : `${frame.ref}.${column.name}`,
+            sortKey: isLocal ? columnName : `${frame.ref}.${columnName}`,
           },
         }
       })
@@ -348,7 +350,10 @@ export default {
           for (const c of row) {
             c.attrs = { rowspan: maxSize }
           }
-          row[0].separator = true
+
+          if (row.length) {
+            row[0].separator = true
+          }
 
           const merged = this.mergeRows(auxRows).pop()
           row.push(...merged[0])
