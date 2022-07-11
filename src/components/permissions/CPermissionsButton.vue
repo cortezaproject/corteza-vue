@@ -3,6 +3,7 @@
     v-if="link"
     data-test-id="link-permissions"
     class="pointer"
+    :title="tooltip"
     @click="onClick"
   >
     <font-awesome-icon :icon="['fas', 'lock']" />
@@ -10,6 +11,7 @@
   <b-button
     v-else
     data-test-id="button-permissions"
+    :title="tooltip"
     :variant="buttonVariant"
     @click="onClick"
   >
@@ -74,6 +76,11 @@ export default {
     allSpecific: {
       type: Boolean,
       default: false
+    },
+
+    tooltip: {
+      type: String,
+      default: '',
     },
   },
 
