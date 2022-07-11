@@ -25,7 +25,6 @@ export {
 
 export {
   CPermissionsButton,
-  CPermissionsForm,
   CPermissionsModal,
 } from './permissions'
 
