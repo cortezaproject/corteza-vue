@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <div>
     <rule
       v-for="(p, i) in rules"
       :key="p.resource + p.operation"
@@ -7,7 +7,7 @@
       :class="{ 'mt-4': i > 0 }"
       @update="onUpdate"
     />
-  </b-container>
+  </div>
 </template>
 <script lang="js">
 import Rule from './Rule.vue'

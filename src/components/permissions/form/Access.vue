@@ -5,6 +5,7 @@
     :disabled="!enabled"
     :button-variant="variant"
     :options="options"
+    class="access rounded"
   />
 </template>
 <script lang="js">
@@ -60,3 +61,16 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.access {
+  .btn {
+    background-color: #E4E9EF;
+    border: none;
+  }
+
+  .btn:nth-child(2), .btn:nth-child(3) {
+    margin-left: 0.2rem !important;
+  }
+}
+</style>
