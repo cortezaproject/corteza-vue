@@ -1,4 +1,3 @@
-
 export {
   CCorredorManualButtons,
 } from './corredor'
@@ -65,5 +64,9 @@ export {
   CReportTable,
   CReportText,
 } from './reporter'
+
+export {
+  CSensitivityLevelPicker,
+} from './privacy'
 
 export { default as C3 } from './c3'
