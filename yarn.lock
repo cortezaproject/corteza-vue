@@ -923,10 +923,10 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@^2022.3.4-rc.1":
-  version "2022.3.4-rc.1"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2022.3.4-rc.1.tgz#61870c553a75dc09f745188f0da03117d140a7e9"
-  integrity sha512-cTy5FEsnrRGc7mbgRsYSfqGQ36hBdpQAI1C8rbg6ZjfyHIcnv5LJvqgmbnPmM75/pTmJ8HrzEKKqvDk0KuIeTg==
+"@cortezaproject/corteza-js@^2022.3.4-rc.2":
+  version "2022.3.4-rc.2"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2022.3.4-rc.2.tgz#991cb8ed952a39b092403725c2034e2f80099791"
+  integrity sha512-HTjBtQ/w/SWE2Lif6wY/eHMbSox/rwE5QDivpEeni5ez+CNg7YBT36156O5+tWuCVnjEfqXOjp8EsaOj2tHlYw==
   dependencies:
     axios "^0.21.1"
     chart.js "2.9.3"
@@ -7140,12 +7140,7 @@ mocha@7.0.0:
     yargs-parser "13.1.1"
     yargs-unparser "1.6.0"
 
-moment@2.25.3, moment@^2.10.2:
-  version "2.25.3"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
-  integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
-
-moment@2.29.2:
+moment@2.29.2, moment@^2.10.2:
   version "2.29.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.2.tgz#00910c60b20843bcba52d37d58c628b47b1f20e4"
   integrity sha512-UgzG4rvxYpN15jgCmVJwac49h9ly9NurikMWGPdVxm8GZD6XjkKPxDTjQQ43gtGgnV3X0cAyWDdP2Wexoquifg==
