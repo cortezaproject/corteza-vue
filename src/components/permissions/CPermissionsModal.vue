@@ -391,7 +391,8 @@ export default {
 
     async fetchRules (roleID) {
       this.processing = true
-      return this.api.permissionsRead({ roleID }).then((rules) => {
+
+      return this.api.permissionsRead({ roleID, specific: 1 }).then((rules) => {
         this.rules = this.normalizeRules(rules)
       }).finally(() => {
         this.processing = false
