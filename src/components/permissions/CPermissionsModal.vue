@@ -17,16 +17,16 @@
     >
       <b-row
         no-gutters
-        class="bg-extra-light"
+        class="bg-extra-light border-bottom"
       >
         <b-col
           lg="4"
-          class="px-3 pt-3 pb-2"
+          class="p-3"
         >
           {{ labels.edit.description }}
         </b-col>
         <b-col
-          class="d-none d-lg-block border-left px-3 pt-3 pb-2"
+          class="d-none d-lg-block border-left p-3"
         >
           {{ labels.evaluate.description }}
         </b-col>
@@ -124,7 +124,7 @@
           v-for="(e, i) in evaluate"
           :key="i"
           lg="2"
-          class="d-none d-lg-flex border-left p-3"
+          class="d-none d-lg-flex border-left p-3 bg-extra-light not-allowed"
         >
           <div
             class="d-flex flex-column align-items-center justify-content-between mt-4 w-100"
@@ -132,10 +132,16 @@
             <h5
               v-for="r in e.rules"
               :key="r.operation"
-              class="mb-1 mt-2 text-danger"
+              :title="getRuleTooltip(r.access === 'unknown-context', !!e.userID)"
+              class="text-center mb-1 mt-2 w-100"
             >
               <font-awesome-icon
-                v-if="r.access === 'allow'"
+                v-if="r.access === 'unknown-context'"
+                :icon="['fas', 'question']"
+                class="text-secondary"
+              />
+              <font-awesome-icon
+                v-else-if="r.access === 'allow'"
                 :icon="['fas', 'check']"
                 class="text-success"
               />
@@ -392,7 +398,7 @@ export default {
     async fetchRules (roleID) {
       this.processing = true
 
-      return this.api.permissionsRead({ roleID, specific: 1 }).then((rules) => {
+      return this.api.permissionsRead({ roleID, resource: this.resource }).then((rules) => {
         this.rules = this.normalizeRules(rules)
       }).finally(() => {
         this.processing = false
@@ -404,7 +410,7 @@ export default {
       // Roles are always fetched from $SystemAPI.
       return this.$SystemAPI.roleList().then(({ set }) => {
         this.roles = set
-          .filter(({ isBypass  }) => !isBypass)
+          .filter(({ isBypass }) => !isBypass)
           .sort((a, b) => a.roleID.localeCompare(b.roleID))
 
         if (this.roles.length > 0) {
@@ -421,6 +427,7 @@ export default {
       this.processing = true
 
       return this.api.permissionsTrace({ resource, roleID, userID })
+        .then(this.normalizeRules)
         .finally(() => {
           this.processing = false
         })
@@ -482,7 +489,15 @@ export default {
           return inherit
         }
 
-        return (rr.find(r => r.resource === resource && r.operation === operation) || {}).access || inherit
+        let { resolution, access = 'inherit'} = (rr.find(r => r.resource === resource && r.operation === operation) || {})
+
+        if (resolution === 'unknown-context') {
+          access = 'unknown-context'
+        } else if (access === 'inherit') {
+          access = 'deny'
+        }
+
+        return access
       }
 
       return this.permissions.map((p) => {
@@ -530,11 +545,22 @@ export default {
         description: this.$t(`permissions:${i18nPrefix}.description`),
       }
     },
+
+    getRuleTooltip (isUnknown = false, isUser) {
+      if (!isUnknown) {
+        return ''
+      }
+
+      return this.$t(`permissions:ui.tooltip.unknown-context.${isUser ? 'user' : 'role'}`)
+    },
   },
 }
 </script>
 
 <style scoped lang="scss">
+.not-allowed {
+  cursor: not-allowed;
+}
 .bg-extra-light {
   background-color: #F3F5F7;
 }
