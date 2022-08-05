@@ -42,7 +42,7 @@ async function resumeState (api: apiClients.Automation, { sessionID, stateID }: 
 }
 
 async function cancelState (api: apiClients.Automation, { sessionID, stateID }: automation.Prompt): Promise<unknown> {
-  return api.sessionDeleteState({ sessionID, stateID })
+  return api.sessionCancel({ sessionID, stateID })
 }
 
 function onlyFresh (existing: Array<automation.Prompt>, fresh: Array<automation.Prompt>): Array<automation.Prompt> {
