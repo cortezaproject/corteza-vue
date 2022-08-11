@@ -22,7 +22,7 @@
         class="pl-0"
         @click="onReset"
       >
-        {{ $t('ui.reset-back', {current}) }}
+        {{ $t('ui.reset-back', {current: $t('ui.access.' + current)}) }}
       </b-button>
     </b-col>
     <b-col
