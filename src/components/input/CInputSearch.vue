@@ -16,6 +16,7 @@
       @input="search"
     />
     <b-input-group-append
+      :class="{ 'border-left': showSubmittable }"
       class="bg-white border-light rounded-right append-group-border"
     >
       <b-button
