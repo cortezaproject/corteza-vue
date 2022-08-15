@@ -2,6 +2,7 @@
   <vue-select
     key="type"
     :value="value"
+    :disabled="disabled"
     :options="sensitivityLevels"
     :get-option-label="getLabel"
     :placeholder="placeholder"
@@ -35,6 +36,11 @@ export default {
     maxLevel: {
       type: String,
       default: undefined
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false
     },
   },
 
