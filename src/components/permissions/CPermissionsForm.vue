@@ -46,6 +46,7 @@
         offset="3"
       >
         <b-button
+          data-test-id="button-save"
           type="submit"
           variant="primary"
           :disabled="disabled"

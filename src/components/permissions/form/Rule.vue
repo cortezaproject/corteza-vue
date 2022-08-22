@@ -18,6 +18,7 @@
 
       <b-button
         v-show="isChanged"
+        data-test-id="button-reset-back"
         variant="link"
         class="pl-0"
         @click="onReset"
