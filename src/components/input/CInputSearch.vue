@@ -12,6 +12,7 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      :size="size"
       class="h-100 pr-0 border-light border-right-0 text-truncate bg-white"
       @input="search"
     />
@@ -54,6 +55,10 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+
+    size: {
+      type: String,
     },
 
     disabled: {
