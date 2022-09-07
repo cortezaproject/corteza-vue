@@ -1,7 +1,5 @@
 <template>
-  <b-input-group
-    class="h-100 mw-100"
-  >
+  <b-input-group>
     <b-input
       ref="value"
       data-test-id="input-search"
