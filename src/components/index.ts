@@ -69,4 +69,8 @@ export {
   CSensitivityLevelPicker,
 } from './privacy'
 
+export {
+  CResourceList,
+} from './resourceList'
+
 export { default as C3 } from './c3'
