@@ -234,11 +234,6 @@ export default {
       default: () => true,
     },
 
-    editRoute: {
-      type: String,
-      default: '',
-    },
-
     rowClass: {
       type: Function,
       default: () => {},
