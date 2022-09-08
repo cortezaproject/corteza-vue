@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    :data-test-id="title || `${operation} on ${resource}`"
+  >
     <p
       :title="title || `${operation} on ${resource}`"
       class="mb-1"

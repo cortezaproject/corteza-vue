@@ -1,6 +1,7 @@
 <template>
   <b-form-radio-group
     v-model="selected"
+    data-test-id="toggle-role-permissions"
     buttons
     :disabled="!enabled"
     :button-variant="variant"
