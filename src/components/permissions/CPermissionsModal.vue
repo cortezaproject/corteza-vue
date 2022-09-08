@@ -48,6 +48,7 @@
           >
             <vue-select
               v-model="currentRole"
+              data-test-id="select-user-list-roles"
               key="roleID"
               label="name"
               :clearable="false"
@@ -61,6 +62,7 @@
 
         <b-col
           v-for="(e, i) in evaluate"
+          data-test-id="icon-remove"
           :key="i"
           lg="2"
           class="pointer hide-eval border-bottom d-none d-lg-flex flex-column align-items-center justify-content-center overflow-hidden border-left p-3"
@@ -83,6 +85,7 @@
         <b-col
           v-if="evaluate.length < 4"
           v-b-modal.permissions-modal-eval
+          data-test-id="icon-add"
           class="d-none d-lg-flex pointer border-bottom flex-column align-items-center justify-content-center overflow-hidden border-left p-3"
         >
           <label
@@ -175,6 +178,7 @@
         class="mb-0"
       >
         <vue-select
+          data-test-id="select-role"
           key="roleID"
           v-model="add.roleID"
           :options="roles"
@@ -193,6 +197,7 @@
         class="mt-3 mb-0"
       >
         <vue-select
+          data-test-id="select-user"
           key="userID"
           v-model="add.userID"
           :disabled="!!add.roleID.length"

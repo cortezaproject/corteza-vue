@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    data-test-id="role-permissions-list"
+  >
     <rule
       v-for="(p, i) in rules"
       :key="p.resource + p.operation"
