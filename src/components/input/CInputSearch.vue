@@ -1,7 +1,7 @@
 <template>
   <b-input-group>
     <b-input
-      ref="value"
+      ref="searchInput"
       data-test-id="input-search"
       :type="inputType"
       name="search"
@@ -13,6 +13,7 @@
       :size="size"
       class="h-100 pr-0 border-light border-right-0 text-truncate bg-white"
       @input="search"
+      @keyup.enter="submitQuery"
     />
     <b-input-group-append
       :class="{ 'border-left': showSubmittable }"
@@ -29,13 +30,9 @@
       >
         <font-awesome-icon
           :icon="['fas', 'search']"
-          :class="{'mt-1': showSubmittableAndClearable}"
+          class="align-middle"
         />
       </b-button>
-      <input
-        type="submit"
-        hidden
-      >
     </b-input-group-append>
   </b-input-group>
 </template>
@@ -109,11 +106,13 @@ export default {
     },
 
     submitQuery () {
-      this.$emit('search')
+      if (this.submittable) {
+        this.$emit('search', this.$refs.searchInput.localValue)
+      }
     },
 
     clearQuery () {
-      this.$refs.value.focus()
+      this.$refs.searchInput.focus()
       this.$emit('input', '')
     },
   },
@@ -127,7 +126,6 @@ input:focus::placeholder {
 }
 
 input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: none;
   height: 13px;
   width: 13px;
   padding-left: 12px;
