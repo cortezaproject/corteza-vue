@@ -369,7 +369,7 @@ export default {
       this.target = undefined
     },
 
-    onRoleChange (roleID) {
+    onRoleChange ({ roleID }) {
       this.fetchRules(roleID)
     },
 
@@ -420,8 +420,7 @@ export default {
 
         if (this.roles.length > 0) {
           this.currentRole = this.roles[0]
-          const { roleID } = this.currentRole
-          this.onRoleChange(roleID)
+          this.onRoleChange(this.currentRole)
         }
       }).finally(() => {
         this.processing = false
