@@ -1,19 +1,20 @@
 <template>
   <vue-select
     key="type"
-    :value="value"
-    :disabled="disabled"
+    :value="_value"
+    :disabled="_disabled"
     :options="sensitivityLevels"
     :get-option-label="getLabel"
     :placeholder="placeholder"
     :reduce="l => l.sensitivityLevelID"
     append-to-body
     class="bg-white"
-    @input="$emit('input', $event)"
+    @input="onInput"
   />
 </template>
 
 <script>
+import { NoID } from '@cortezaproject/corteza-js'
 import { VueSelect } from 'vue-select'
 
 export default {
@@ -25,6 +26,11 @@ export default {
     value: {
       type: String,
       default: '',
+    },
+
+    options: {
+      type: Array,
+      required: true
     },
 
     placeholder: {
@@ -44,36 +50,52 @@ export default {
     },
   },
 
-  data () {
-    return {
-      allSensitivityLevels: [],
-    }
-  },
-
   computed: {
+    _value () {
+      return this.value === NoID ? undefined : this.value
+    },
+
+    _disabled () {
+      return this.disabled || this.maxLevel === NoID
+    },
+
     sensitivityLevels () {
+      if (this.maxLevel === NoID) {
+        return []
+      }
+
       if (this.maxLevel) {
-        const maxLevelConnection = this.allSensitivityLevels.find(({ sensitivityLevelID }) => sensitivityLevelID === this.maxLevel)
+        const maxLevelConnection = this.options.find(({ sensitivityLevelID }) => sensitivityLevelID === this.maxLevel)
         if (maxLevelConnection) {
-          return this.allSensitivityLevels.filter(({ level }) => level <= maxLevelConnection.level)
+          return this.options.filter(({ level }) => level <= maxLevelConnection.level)
         }
       }
 
-      return this.allSensitivityLevels
+      return this.options
     },
   },
 
-  mounted () {
-    this.$SystemAPI.dalSensitivityLevelList()
-      .then(({ set }) => {
-        this.allSensitivityLevels = set
-      })
+  watch: {
+    // If sensitivityLevels change because of maxLevel change, then assert if value is still allowed, otherwise reset it
+    sensitivityLevels: {
+      immediate: true,
+      handler () {
+        const isValueCompatible = this.sensitivityLevels.some(({ sensitivityLevelID }) => sensitivityLevelID === this.value)
+        if (!isValueCompatible) {
+          this.$emit('input', NoID)
+        }
+      }
+    },
   },
 
   methods: {
     getLabel ({ handle, meta = {} }) {
       return meta.name || handle
     },
+
+    onInput (event) {
+      this.$emit('input', event ? event : NoID)
+    }
   }
 }
 </script>
