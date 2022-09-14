@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-modal
+      id="permissions-modal"
       :visible="showModal"
       size="xl"
       :title="translatedTitle"
@@ -579,5 +580,18 @@ export default {
   .rotate {
     color: #162425 !important;
   }
+}
+</style>
+
+<style lang="scss">
+#permissions-modal, #permissions-modal-eval {
+  .v-select {
+    min-width: 100%;
+
+    .vs__selected-options {
+      flex-wrap: wrap;
+    }
+  }
+
 }
 </style>
