@@ -23,7 +23,7 @@
 
       </div>
 
-      <div class="ml-3">
+      <div class="topbar-tools ml-3">
         <slot name="tools" />
       </div>
 
@@ -303,6 +303,15 @@ $nav-user-icon-size: 50px;
     -moz-transition: min-width 0.2s ease-in-out;
     -o-transition: min-width 0.2s ease-in-out;
     transition: min-width 0.2s ease-in-out;
+  }
+}
+</style>
+
+<style lang="scss">
+.topbar-tools {
+  .vue-portal-target {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
