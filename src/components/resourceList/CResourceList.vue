@@ -56,6 +56,7 @@
       >
         <template #empty>
           <p
+            data-test-id="no-matches"
             class="text-center text-dark"
             style="margin-top: 1vh;"
           >
