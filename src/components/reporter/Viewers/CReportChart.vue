@@ -1,54 +1,33 @@
 <template>
-  <div class="position-relative h-100 w-100 p-2">
-    <canvas
-      ref="chart"
-    />
-  </div>
+  <c-chart
+    v-if="chart"
+    :chart="chart"
+    class="p-1"
+  />
 </template>
 <script>
 import base from './base.vue'
-import colorschemes from 'chartjs-plugin-colorschemes'
-import Funnel from 'chartjs-plugin-funnel'
+import { CChart } from '../../chart/index.ts'
 
 export default {
   extends: base,
 
+  title: 'CReportChart',
+
+  components: {
+    CChart,
+  },
+
   data () {
     return {
       chart: undefined,
-
-      plugins: [
-        Funnel,
-        colorschemes,
-      ],
     }
-  },
-
-  computed: {
-    localDataframe () {
-      return this.dataframes[0]
-    },
-
-    size () {
-      return this.displayElement ? this.displayElement.meta.size || 100 : 100
-    },
   },
 
   watch: {
     dataframes: {
       deep: true,
-      handler (dataframes = []) {
-        if (dataframes.length) {
-          this.$nextTick(() => {
-            this.renderChart()
-          })
-        }
-      },
-    },
-
-    size: {
       immediate: true,
-      deep: true,
       handler () {
         this.$nextTick(() => {
           this.renderChart()
@@ -59,15 +38,7 @@ export default {
 
   methods: {
     renderChart () {
-      if (this.chart) {
-        this.chart.destroy()
-      }
-
-      const ctx = this.$refs.chart.getContext('2d')
-
-      const chartConfig = this.options.getChartConfiguration(this.dataframes)
-
-      this.chart = new Chart(ctx, { ...chartConfig, plugins: this.plugins })
+      this.chart = this.options.getChartConfiguration(this.dataframes)
     },
   },
 }

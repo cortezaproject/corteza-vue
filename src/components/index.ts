@@ -73,4 +73,8 @@ export {
   CResourceList,
 } from './resourceList'
 
+export {
+  CChart,
+} from './chart'
+
 export { default as C3 } from './c3'
