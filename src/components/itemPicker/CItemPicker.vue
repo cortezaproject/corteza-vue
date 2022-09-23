@@ -32,7 +32,7 @@
               class="d-flex align-items-center"
             >
               <label
-                class="text-primary mb-1 mt-2"
+                class="text-primary mb-0"
               >
                 {{ labels.availableItems }}
               </label>
@@ -115,7 +115,7 @@
               class="d-flex align-items-center"
             >
               <label
-                class="text-primary mb-2 mt-1"
+                class="text-primary mb-0"
               >
                 {{ labels.selectedItems }}
               </label>
