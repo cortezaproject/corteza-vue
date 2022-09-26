@@ -432,7 +432,7 @@ export default {
       this.processing = true
 
       return this.api.permissionsTrace({ resource, roleID, userID })
-        .then(this.normalizeRules)
+        .then(this.normalizeRules, true)
         .finally(() => {
           this.processing = false
         })
@@ -485,7 +485,7 @@ export default {
       }
     },
 
-    normalizeRules (rr) {
+    normalizeRules (rr, fallback = false) {
       const inherit = 'inherit'
 
       // merges roleRules (subset) with list of all permissions
@@ -494,11 +494,11 @@ export default {
           return inherit
         }
 
-        let { resolution, access = 'inherit'} = (rr.find(r => r.resource === resource && r.operation === operation) || {})
+        let { resolution, access = inherit } = (rr.find(r => r.resource === resource && r.operation === operation) || {})
 
         if (resolution === 'unknown-context') {
           access = 'unknown-context'
-        } else if (access === 'inherit') {
+        } else if (fallback && access === inherit) {
           access = 'deny'
         }
 
