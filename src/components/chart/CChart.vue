@@ -3,7 +3,7 @@
     :option="chart"
     :theme="theme"
     autoresize
-    class="w-100 h-100"
+    class="w-100 h-100 overflow-hidden"
   />
 </template>
 
