@@ -254,7 +254,7 @@ export default {
 
       for (const ff of Object.values(foreignFrames)) {
         for (const f of ff) {
-          keys[f.relColumn] = f.columns.findIndex(({ name }) => name === f.relColumn)
+          keys[f.relColumn] = frame.columns.findIndex(({ name }) => name === f.relColumn)
         }
       }
 
