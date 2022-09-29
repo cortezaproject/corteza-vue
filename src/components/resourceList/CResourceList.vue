@@ -39,19 +39,19 @@
       <b-table
         id="resource-list"
         ref="resourceList"
+        head-variant="light"
         hover
         responsive
-        head-variant="light"
-        class="mb-0"
+        show-empty
+        no-sort-reset
+        no-local-sorting
         :primary-key="primaryKey"
         :sort-by.sync="sorting.sortBy"
         :sort-desc.sync="sorting.sortDesc"
         :items="_items"
         :fields="_fields"
-        show-empty
-        no-sort-reset
         :tbody-tr-class="tableRowClasses"
-        no-local-sorting
+        class="mb-0"
         @row-clicked="$emit('row-clicked', $event)"
       >
         <template #empty>
@@ -65,13 +65,13 @@
         </template>
 
         <template #table-busy>
-          <div
-            class="text-center"
-          >
-            <b-spinner />
-            <h5 class="mt-2 text-dark">
-              {{ translations.loading }}
-            </h5>
+          <div class="text-center m-5">
+            <div>
+              <b-spinner
+                class="align-middle m-2"
+              />
+            </div>
+            {{ translations.loading }}
           </div>
         </template>
 
