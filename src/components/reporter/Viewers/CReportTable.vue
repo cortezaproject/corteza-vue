@@ -50,8 +50,8 @@
             v-for="(c, i) in tabelify.header"
             :key="i"
             class="border-0"
-            :class="{ 'pointer': !c.meta.sortKey.includes('.') }"
-            @click="handleSort(c.meta.sortKey)"
+            :class="{ 'pointer': c.meta.tmp_noSort }"
+            @click="c.meta.tmp_noSort ? undefined : handleSort(c.meta.sortKey)"
           >
             <div
               class="d-flex align-items-center"
@@ -64,7 +64,7 @@
               </div>
 
               <font-awesome-layers
-                v-if="!c.meta.sortKey.includes('.')"
+                v-if="!c.meta.tmp_noSort"
                 class="ml-2"
               >
                 <font-awesome-icon
@@ -292,6 +292,7 @@ export default {
           meta: {
             ref: frame.ref,
             sortKey: isLocal ? columnName : `${frame.ref}.${columnName}`,
+            tmp_noSort: !isLocal,
           },
         }
       })
@@ -407,10 +408,6 @@ export default {
     // Sorting
     handleSort (fieldName) {
       let relatedDatasource
-      if (fieldName.includes('.')) {
-        [relatedDatasource, fieldName] = fieldName.split('.')
-        return // Uncomment this when foreign frame sorting is implemented
-      }
 
       if (fieldName) {
         const { field, descending } = this.sort
