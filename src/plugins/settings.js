@@ -49,6 +49,12 @@ export class Settings {
     return v !== undefined ? v : d
   }
 
+  /**
+   * Provides the attachment for the given resource
+   * @param {String} k Setting key
+   * @param {*} d Default value
+   * @returns {*}
+   */
   attachment (k, d) {
     const src = this.get(k, d)
 
@@ -64,8 +70,9 @@ export class Settings {
     }
 
     if (src) {
-      // this is a quick and dirty solution and should work in most cases
-      return this.api.baseURL.replace(/\/api\/system$/, '') + src
+      return this.api.baseURL
+        .replace(/\/system$/, '')
+        .replace(/\/api$/, '') + src
     }
 
     return d
