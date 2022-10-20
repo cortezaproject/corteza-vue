@@ -30,6 +30,14 @@
             />
           </b-col>
         </b-row>
+
+        <b-row
+          :class="{ 'mt-3': !!$slots.toolbar }"
+        >
+          <slot
+            name="toolbar"
+          />
+        </b-row>
       </b-container>
     </template>
 
@@ -52,6 +60,7 @@
         :fields="_fields"
         :tbody-tr-class="tableRowClasses"
         class="mb-0"
+        @sort-changed="pagination.page = 1"
         @row-clicked="$emit('row-clicked', $event)"
       >
         <template #empty>
@@ -120,7 +129,7 @@
             v-if="!hideTotal"
             class="text-nowrap font-weight-bold"
           >
-            <span v-if="pagination.count > 1">
+            <span v-if="pagination.total > 1">
               {{ $t(`${translations.showingPagination}`, getPagination) }}
             </span>
             <span
@@ -135,7 +144,7 @@
           v-if="!hidePagination"
         >
           <b-button
-            :disabled="hasPrevPage"
+            :disabled="!hasPrevPage"
             variant="link"
             class="text-dark"
             @click="goToPage()"
@@ -143,7 +152,7 @@
             <font-awesome-icon :icon="['fas', 'angle-double-left']" />
           </b-button>
           <b-button
-            :disabled="hasPrevPage"
+            :disabled="!hasPrevPage"
             variant="link"
             class="text-dark"
             @click="goToPage('prevPage')"
@@ -152,7 +161,7 @@
             {{ translations.prevPagination }}
           </b-button>
           <b-button
-            :disabled="hasNextPage"
+            :disabled="!hasNextPage"
             variant="link"
             class="text-dark"
             @click="goToPage('nextPage')"
@@ -292,21 +301,21 @@ export default {
     },
 
     getPagination () {
-      const { page = 1, count = 0, limit = 10 } = this.pagination
+      const { total = 0, limit = 10, page = 1 } = this.pagination
 
       return {
         from: ((page - 1) * limit) + 1,
-        to: Math.min((page * limit), count),
-        count,
+        to: Math.min((page * limit), total),
+        total,
       }
     },
 
     hasPrevPage () {
-      return !this.pagination.prevPage
+      return !!this.pagination.prevPage
     },
 
     hasNextPage () {
-      return !this.pagination.nextPage
+      return !!this.pagination.nextPage
     },
   },
 
@@ -353,9 +362,20 @@ export default {
       }
     },
 
-    goToPage (page) {
-      const pageCursor = this.pagination[page] || ''
-      this.$router.push({ path: this.$route.path, query: { ...this.$route.query, pageCursor } })
+    goToPage (destination) {
+      const pageCursor = this.pagination[destination] || ''
+
+      let { page = 1 } = this.pagination
+
+      if (destination === 'nextPage') {
+        page++
+      } else if (destination === 'prevPage') {
+        page--
+      } else {
+        page = 1
+      }
+
+      this.$router.replace({ query: { ...this.$route.query, page, pageCursor } })
     },
   },
 }
