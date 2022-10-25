@@ -93,8 +93,8 @@ export default {
       return meta.name || handle
     },
 
-    onInput (event) {
-      this.$emit('input', event ? event : NoID)
+    onInput (sensitivityLevelID) {
+      this.$emit('input', sensitivityLevelID ? sensitivityLevelID : NoID)
     }
   }
 }
