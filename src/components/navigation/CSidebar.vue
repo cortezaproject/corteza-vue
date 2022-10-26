@@ -140,6 +140,8 @@
 </template>
 
 <script>
+import { throttle } from 'lodash'
+
 export default {
   props: {
     expanded: {
@@ -237,13 +239,13 @@ export default {
   },
 
   methods: {
-    onHover (expand) {
+    onHover: throttle(function (expand) {
       if (!this.pinned && this.expandOnHover) {
         setTimeout(() => {
           this.isExpanded = expand
         }, expand ? 0 : 100)
       }
-    },
+    }, 300),
 
     togglePin () {
       this.saveSettings(!this.isPinned)
