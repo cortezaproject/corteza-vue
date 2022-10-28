@@ -4,7 +4,8 @@
       <b-card-header header-class="p-0 rounded-sm">
         <editor-menu-bar
           :editor="editor"
-          v-slot="{ commands, isActive, getMarkAttrs, getNodeAttrs }">
+          v-slot="{ commands, isActive, getMarkAttrs, getNodeAttrs }"
+        >
 
         <r-toolbar
           :editor="editor"
@@ -21,8 +22,9 @@
 
       <b-card-body>
         <editor-content
+          :editor="editor"
           class="editor__content"
-          :editor="editor" />
+        />
 
       </b-card-body>
     </template>
@@ -97,6 +99,9 @@ export default {
       this.editor = new Editor({
         extensions: this.formats,
         content: this.value,
+        parseOptions: {
+          preserveWhitespace: 'full',
+        },
         onUpdate: this.onUpdate,
       })
 
