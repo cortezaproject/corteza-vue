@@ -125,18 +125,11 @@
         <div
           class="text-truncate"
         >
-        <div
+          <div
             v-if="!hideTotal"
             class="text-nowrap font-weight-bold"
           >
-            <span v-if="pagination.total > 1">
-              {{ $t(`${translations.showingPagination}`, getPagination) }}
-            </span>
-            <span
-              v-else
-            >
-              {{ $t(`${translations.singlePluralPagination}`, getPagination) }}
-            </span>
+            {{ getPagination }}
           </div>
         </div>
 
@@ -303,11 +296,13 @@ export default {
     getPagination () {
       const { total = 0, limit = 10, page = 1 } = this.pagination
 
-      return {
+      const pagination = {
         from: ((page - 1) * limit) + 1,
-        to: Math.min((page * limit), total),
-        total,
+        to: limit > 0 ? Math.min((page * limit), total) : total,
+        count: total,
       }
+
+      return this.$t(this.translations[total > limit ? 'showingPagination' : 'singlePluralPagination'], pagination)
     },
 
     hasPrevPage () {
